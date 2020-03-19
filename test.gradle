@@ -1,0 +1,9 @@
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+        exceptionFormat = 'full'
+    }
+}
+
+gradle.startParameter.continueOnFailure = true

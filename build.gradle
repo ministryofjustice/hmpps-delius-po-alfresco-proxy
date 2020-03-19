@@ -1,0 +1,39 @@
+plugins {
+    id 'java'
+    id 'idea'
+    id "io.spring.dependency-management" version "1.0.9.RELEASE"
+    id "org.springframework.boot" version "2.2.5.RELEASE"
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+apply from: 'dependencies.gradle'
+apply from: 'test.gradle'
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs << '-Xlint:unchecked'
+    options.deprecation = true
+    options.encoding = 'UTF-8'
+}
+
+bootJar {
+    mainClassName = 'uk.gov.gsi.justice.po.alfresco.proxy.ApplicationBootstrap'
+}
+
+springBoot {
+    buildInfo {
+        properties {
+            group = "groupName"
+            name = "projectName"
+            version = "1.0"
+        }
+    }
+}
+
+defaultTasks 'clean', 'test'
