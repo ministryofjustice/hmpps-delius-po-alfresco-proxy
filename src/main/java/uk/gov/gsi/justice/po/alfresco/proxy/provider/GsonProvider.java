@@ -18,7 +18,7 @@ public class GsonProvider {
 
     static public class InstantJsonSerializer implements JsonSerializer<Instant> {
         @Override
-        public JsonElement serialize(Instant src, Type typeOfSrc, JsonSerializationContext context) {
+        public JsonElement serialize(final Instant src, final Type typeOfSrc, final JsonSerializationContext context) {
             return new JsonPrimitive(src.toString());
         }
     }
