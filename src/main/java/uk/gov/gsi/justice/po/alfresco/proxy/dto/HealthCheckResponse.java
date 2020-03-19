@@ -15,7 +15,7 @@ public class HealthCheckResponse {
     @Expose()
     private final Instant timestamp;
 
-    public HealthCheckResponse(String name, String status, Dependencies dependencies, Instant timestamp) {
+    public HealthCheckResponse(final String name, final String status, final Dependencies dependencies, final Instant timestamp) {
         this.name = name;
         this.status = status;
         this.dependencies = dependencies;

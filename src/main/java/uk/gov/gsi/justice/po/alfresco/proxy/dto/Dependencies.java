@@ -11,7 +11,7 @@ public class Dependencies {
     @Expose()
     private final JsonObject clamAV;
 
-    public Dependencies(JsonObject alfresco, JsonObject clamAV) {
+    public Dependencies(final JsonObject alfresco, final JsonObject clamAV) {
         this.alfresco = alfresco;
         this.clamAV = clamAV;
     }
