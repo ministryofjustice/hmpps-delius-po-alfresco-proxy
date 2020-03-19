@@ -1,3 +1,14 @@
+sourceSets {
+    test {
+        java {
+            srcDirs = ['src/test/java', 'src/bdd-test/java']
+        }
+        resources {
+            srcDirs = ['src/test/resources', 'src/bdd-test/resources']
+        }
+    }
+}
+
 test {
     useJUnitPlatform()
     testLogging {
@@ -7,3 +18,11 @@ test {
 }
 
 gradle.startParameter.continueOnFailure = true
+
+cucumber {
+    glue = 'classpath:uk.gov.gsi.justice.po.alfresco.proxy.bdd'
+    plugin = ['pretty']
+    strict = 'please'
+    featurePath = 'src/bdd-test/resources'
+    main = 'io.cucumber.core.cli.Main'
+}
