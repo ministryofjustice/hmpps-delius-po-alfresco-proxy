@@ -1,0 +1,49 @@
+openapi: 3.0.1
+info:
+  title: SPG Tech Debt - PO-ALFRESCO-PROXY
+  description: 'This service is a REST proxy between POs and Alfresco.  It performs security checks and proxy the original rest call to alfrescon as is, including HTTP headers like "Real-UserName: Joe Bloggs"'
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: apiteam@swagger.io
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+externalDocs:
+  description: Find out more here
+  url: http://confluence.page.com
+tags:
+  - name: healthcheck
+    description: To chech the health status of the service.  This is in addition to Spring Boot 2's Actuator endpoints
+paths:
+  /healthcheck:
+    get:
+      tags:
+        - healthcheck
+      summary: Returns the service's status
+      description: This endpoint returns the status of the service and that of the services it depends on.
+      operationId: healthcheckStatus
+      responses:
+        200:
+          description: service status
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/Status'
+definitions:
+  Dependencies:
+    type: object
+    properties:
+      alfresco:
+        type: "object"
+      clamAV:
+        type: "object"
+  Status:
+    type: object
+    properties:
+      name:
+        type: string
+      status:
+        type: string
+      dependencies:
+        $ref: '#/definitions/Dependencies'
