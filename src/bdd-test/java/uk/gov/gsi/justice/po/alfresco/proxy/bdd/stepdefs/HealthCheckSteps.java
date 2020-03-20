@@ -21,10 +21,11 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
+import static uk.gov.gsi.justice.po.alfresco.proxy.model.ApiStatus.STABLE;
 
 @DirtiesContext
 public class HealthCheckSteps extends AbstractSteps implements En {
-    public static WireMockServer wiremock = new WireMockServer(WireMockSpring.options()
+    private static final WireMockServer wiremock = new WireMockServer(WireMockSpring.options()
             .port(6067)
             .notifier(new ConsoleNotifier(true)));
 
@@ -75,9 +76,8 @@ public class HealthCheckSteps extends AbstractSteps implements En {
         });
 
         Then("a JSON response per {string} should be returned", (String filename) -> {
-            final String statusText = "OK";
-            final Dependencies dependencies = new Dependencies(new JsonObject(), new JsonObject());
-            final HealthCheckResponse healthCheckResponse = new HealthCheckResponse(serviceName, statusText, dependencies, timestamp);
+            final Dependencies dependencies = new Dependencies(alfrescoNotificationStatus, new JsonObject());
+            final HealthCheckResponse healthCheckResponse = new HealthCheckResponse(serviceName, STABLE, dependencies, timestamp);
             final String expectedResponse = gson.toJson(healthCheckResponse);
 
             assertThat(healthCheckResponseEntity.getStatus(), is(HttpStatus.OK.value()));
@@ -85,7 +85,7 @@ public class HealthCheckSteps extends AbstractSteps implements En {
             assertThat(healthCheckResponseEntity.getHeaders().get("Content-Type"), hasItem(contentType.toString()));
             assertThat(healthCheckResponseEntity.getBody(), is(expectedResponse));
 
-            wiremock.verify(1, getRequestedFor(urlEqualTo(alfrescoHealthEndpoint)));
+            wiremock.verify(2, getRequestedFor(urlEqualTo(alfrescoHealthEndpoint)));
         });
     }
 }
