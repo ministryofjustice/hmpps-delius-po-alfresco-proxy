@@ -21,11 +21,13 @@ public abstract class AbstractBaseTest {
     @Inject
     protected TimestampProvider timestampProvider;
     protected final Instant timestamp = Instant.now();
+    protected final String stableText = "STABLE";
     protected final String alfrescoHealthEndpoint = "/alfresco/service/noms-spg/notificationStatus";
     protected JsonObject alfrescoNotificationStatus;
     protected final MediaType contentType = new MediaType(APPLICATION_JSON.getType(),
             APPLICATION_JSON.getSubtype(),
             StandardCharsets.UTF_8);
+    protected final String apiHealthEndpoint = "/api/healthcheck";
 
     protected JsonObject alfrescoHealthCheckSampleResponse() throws IOException {
         final String notificationStatus = "thirdparty/responses/NotificationStatus.json";

@@ -1,6 +1,7 @@
 package uk.gov.gsi.justice.po.alfresco.proxy.dto;
 
 import com.google.gson.annotations.Expose;
+import uk.gov.gsi.justice.po.alfresco.proxy.model.ApiStatus;
 
 import java.time.Instant;
 import java.util.Objects;
@@ -9,13 +10,13 @@ public class HealthCheckResponse {
     @Expose()
     private final String name;
     @Expose()
-    private final String status;
+    private final ApiStatus status;
     @Expose()
     private final Dependencies dependencies;
     @Expose()
     private final Instant timestamp;
 
-    public HealthCheckResponse(final String name, final String status, final Dependencies dependencies, final Instant timestamp) {
+    public HealthCheckResponse(final String name, final ApiStatus status, final Dependencies dependencies, final Instant timestamp) {
         this.name = name;
         this.status = status;
         this.dependencies = dependencies;
@@ -26,7 +27,7 @@ public class HealthCheckResponse {
         return name;
     }
 
-    public String getStatus() {
+    public ApiStatus getStatus() {
         return status;
     }
 
@@ -39,7 +40,7 @@ public class HealthCheckResponse {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         HealthCheckResponse that = (HealthCheckResponse) o;
