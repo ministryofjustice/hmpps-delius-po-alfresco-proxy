@@ -45,5 +45,8 @@ definitions:
         type: string
       status:
         type: string
+        enum:
+          - "STABLE"
+          - "UNSTABLE"
       dependencies:
         $ref: '#/definitions/Dependencies'
