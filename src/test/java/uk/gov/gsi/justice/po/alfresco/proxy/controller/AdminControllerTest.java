@@ -30,7 +30,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static uk.gov.gsi.justice.po.alfresco.proxy.model.ApiStatus.STABLE;
+import static uk.gov.gsi.justice.po.alfresco.proxy.dto.ApiStatus.STABLE;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(properties = {"alfresco.base.url=http://localhost:6067", "alfresco.health.endpoint=/alfresco/service/noms-spg/notificationStatus"},
