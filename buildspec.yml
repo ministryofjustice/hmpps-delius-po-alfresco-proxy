@@ -3,7 +3,7 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      java: openjdk8
+      java: corretto8
     commands:
       - ./gradlew build --dry-run --configure-on-demand --daemon
   build:
