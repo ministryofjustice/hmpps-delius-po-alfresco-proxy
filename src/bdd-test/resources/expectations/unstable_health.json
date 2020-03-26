@@ -1,0 +1,12 @@
+{
+  "name": "hmpps-po-alfresco-proxy",
+  "status": "UNSTABLE",
+  "dependencies": {
+    "alfresco": {
+      "httpStatusCode": 0,
+      "errorMessage": "unexpected end of stream on http://localhost:6067/..."
+    },
+    "clamAV": {}
+  },
+  "timestamp": "${time_stamp}"
+}

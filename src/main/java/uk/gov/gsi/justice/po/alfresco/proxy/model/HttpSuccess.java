@@ -29,7 +29,7 @@ public class HttpSuccess {
     public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        HttpSuccess that = (HttpSuccess) o;
+        final HttpSuccess that = (HttpSuccess) o;
         return code.equals(that.code) &&
                 message.equals(that.message) &&
                 body.equals(that.body);

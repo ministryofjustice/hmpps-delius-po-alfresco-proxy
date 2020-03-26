@@ -3,22 +3,16 @@ package uk.gov.gsi.justice.po.alfresco.proxy.model;
 import java.util.Objects;
 
 public class HttpFault {
-    private final Integer code;
-    private final String message;
+    private final Integer httpStatusCode;
     private final String errorMessage;
 
-    public HttpFault(final Integer code, final String message, final String errorMessage) {
-        this.code = code;
-        this.message = message;
+    public HttpFault(final Integer httpStatusCode, final String errorMessage) {
+        this.httpStatusCode = httpStatusCode;
         this.errorMessage = errorMessage;
     }
 
-    public Integer getCode() {
-        return code;
-    }
-
-    public String getMessage() {
-        return message;
+    public Integer getHttpStatusCode() {
+        return httpStatusCode;
     }
 
     public String getErrorMessage() {
@@ -29,22 +23,20 @@ public class HttpFault {
     public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        HttpFault httpFault = (HttpFault) o;
-        return Objects.equals(code, httpFault.code) &&
-                Objects.equals(message, httpFault.message) &&
+        final HttpFault httpFault = (HttpFault) o;
+        return Objects.equals(httpStatusCode, httpFault.httpStatusCode) &&
                 Objects.equals(errorMessage, httpFault.errorMessage);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(code, message, errorMessage);
+        return Objects.hash(httpStatusCode, errorMessage);
     }
 
     @Override
     public String toString() {
         return "HttpFault{" +
-                "code=" + code +
-                ", message='" + message + '\'' +
+                "httpStatusCode=" + httpStatusCode +
                 ", errorMessage='" + errorMessage + '\'' +
                 '}';
     }

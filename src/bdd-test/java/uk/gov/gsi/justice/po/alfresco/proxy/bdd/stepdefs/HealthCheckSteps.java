@@ -11,17 +11,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.contract.wiremock.WireMockSpring;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.annotation.DirtiesContext;
-import uk.gov.gsi.justice.po.alfresco.proxy.dto.Dependencies;
-import uk.gov.gsi.justice.po.alfresco.proxy.dto.HealthCheckResponse;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static com.github.tomakehurst.wiremock.http.Fault.EMPTY_RESPONSE;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
-import static uk.gov.gsi.justice.po.alfresco.proxy.model.ApiStatus.STABLE;
 
 @DirtiesContext
 public class HealthCheckSteps extends AbstractSteps implements En {
@@ -40,12 +38,6 @@ public class HealthCheckSteps extends AbstractSteps implements En {
             SECONDS.sleep(2);
 
             when(timestampProvider.getTimestamp()).thenReturn(timestamp);
-
-            alfrescoNotificationStatus = alfrescoHealthCheckSampleResponse();
-            wiremock.stubFor(get(urlEqualTo(alfrescoHealthEndpoint))
-                    .willReturn(aResponse()
-                            .withHeader("Content-Type", "application/json")
-                            .withBody(gson.toJson(alfrescoNotificationStatus))));
         });
 
         After(() -> {
@@ -53,7 +45,7 @@ public class HealthCheckSteps extends AbstractSteps implements En {
             SECONDS.sleep(2);
         });
 
-        Given("^the application is running$", () -> {
+        Given("^the PO Alfresco Proxy API is running$", () -> {
             final String statusUp = "expectations/actuator_health.json";
             final String jsonFile = jsonReader.readFile(statusUp);
             final JsonObject expectedActuatorHealth = JsonParser.parseString(jsonFile).getAsJsonObject();
@@ -65,19 +57,21 @@ public class HealthCheckSteps extends AbstractSteps implements En {
         });
 
         And("^alfresco is healthy$", () -> {
-            final HttpResponse<String> response = Unirest.get(alfrescoBaseUrl + alfrescoHealthEndpoint)
-                    .asString();
-            assertThat(response.getStatus(), is(200));
-            assertThat(response.getBody(), is(gson.toJson(alfrescoNotificationStatus)));
+            alfrescoNotificationStatus = alfrescoHealthCheckSampleResponse();
+            wiremock.stubFor(get(urlEqualTo(alfrescoHealthEndpoint))
+                    .willReturn(aResponse()
+                            .withHeader("Content-Type", "application/json")
+                            .withBody(gson.toJson(alfrescoNotificationStatus))));
         });
 
-        When("^I request it's health$", () -> {
-            healthCheckResponseEntity = Unirest.get(healthCheckEndpoint()).asString();
-        });
+        But("^alfresco is not healthy$", () -> wiremock.stubFor(get(urlEqualTo(alfrescoHealthEndpoint)).willReturn(aResponse().withFault(EMPTY_RESPONSE))));
 
-        Then("a JSON response per {string} should be returned", (String filename) -> {
-            final Dependencies dependencies = new Dependencies(alfrescoNotificationStatus, new JsonObject());
-            final HealthCheckResponse healthCheckResponse = new HealthCheckResponse(serviceName, STABLE, dependencies, timestamp);
+        When("^I request the health of the PO Alfresco Proxy API$", () -> healthCheckResponseEntity = Unirest.get(healthCheckEndpoint()).asString());
+
+        Then("^(?:a|an) (?:stable|unstable) response per the JSON \"([^\"]*)\" is returned$", (String filename) -> {
+            final String jsonFile = jsonReader.readFile(filename)
+                    .replace("${time_stamp}", timestamp.toString());
+            final JsonObject healthCheckResponse = JsonParser.parseString(jsonFile).getAsJsonObject();
             final String expectedResponse = gson.toJson(healthCheckResponse);
 
             assertThat(healthCheckResponseEntity.getStatus(), is(HttpStatus.OK.value()));
@@ -85,7 +79,7 @@ public class HealthCheckSteps extends AbstractSteps implements En {
             assertThat(healthCheckResponseEntity.getHeaders().get("Content-Type"), hasItem(contentType.toString()));
             assertThat(healthCheckResponseEntity.getBody(), is(expectedResponse));
 
-            wiremock.verify(2, getRequestedFor(urlEqualTo(alfrescoHealthEndpoint)));
+            wiremock.verify(getRequestedFor(urlEqualTo(alfrescoHealthEndpoint)));
         });
     }
 }

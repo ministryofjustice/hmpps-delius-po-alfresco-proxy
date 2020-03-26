@@ -20,7 +20,7 @@ public class Dependencies {
     public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Dependencies that = (Dependencies) o;
+        final Dependencies that = (Dependencies) o;
         return alfresco.equals(that.alfresco) &&
                 clamAV.equals(that.clamAV);
     }

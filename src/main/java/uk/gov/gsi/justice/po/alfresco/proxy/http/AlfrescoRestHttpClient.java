@@ -32,14 +32,24 @@ public class AlfrescoRestHttpClient implements RestHttpClient {
 
         try {
             final Response<ResponseBody> response = call.execute();
-
-            final String body = Optional.ofNullable(response.body())
-                    .map(ThrowingFunction.unchecked(ResponseBody::string))
-                    .orElse("");
-
-            return Either.right(new HttpSuccess(response.code(), response.message(), body));
+            return response.isSuccessful() ?
+                    handleSuccess(response.code(), response.message(), response.body()) :
+                    handleFailure(response.code(), response.message());
         } catch (IOException e) {
-            return Either.left(new HttpFault(0, "", e.getMessage()));
+            return handleFailure(0, e.getMessage());
         }
+    }
+
+    private Either<HttpFault, HttpSuccess> handleSuccess(final int code,
+                                                         final String message,
+                                                         final ResponseBody body) {
+        return Optional.ofNullable(body)
+                .map(ThrowingFunction.unchecked(ResponseBody::string))
+                .map(x -> Either.<HttpFault, HttpSuccess>right(new HttpSuccess(code, message, x)))
+                .orElse(handleFailure(code, message));
+    }
+
+    private Either<HttpFault, HttpSuccess> handleFailure(final int code, final String message) {
+        return Either.left(new HttpFault(code, message));
     }
 }

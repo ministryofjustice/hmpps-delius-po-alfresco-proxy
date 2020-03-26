@@ -20,11 +20,10 @@ import uk.gov.gsi.justice.po.alfresco.proxy.model.HttpSuccess;
 import javax.inject.Inject;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static com.github.tomakehurst.wiremock.http.Fault.*;
 import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertThat;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(properties = "alfresco.base.url=http://localhost:6067", webEnvironment = SpringBootTest.WebEnvironment.NONE)
@@ -70,7 +69,7 @@ class AlfrescoRestHttpClientTest extends AbstractBaseTest {
     }
 
     @Test
-    public void testSuccessfulCallToAlfrescoHealthEndpoint() {
+    public void testSuccessfulGetCallIntoAlfresco() {
         wiremock.stubFor(get(urlEqualTo(alfrescoHealthEndpoint))
                 .willReturn(aResponse()
                         .withHeader("Content-Type", "application/json")
@@ -84,5 +83,86 @@ class AlfrescoRestHttpClientTest extends AbstractBaseTest {
         assertThat(httpSuccess.getBody(), is(gson.toJson(alfrescoNotificationStatus)));
 
         wiremock.verify(1, getRequestedFor(urlEqualTo(alfrescoHealthEndpoint)));
+    }
+
+    @Test
+    public void testWhenGetCallIntoAlfrescoCanNotFindResource() {
+        wiremock.stubFor(get(urlEqualTo(alfrescoHealthEndpoint))
+                .willReturn(aResponse()
+                        .withHeader("Content-Type", "application/json")
+                        .withBody(gson.toJson(alfrescoNotificationStatus))));
+
+        final Either<HttpFault, HttpSuccess> either = sut.getResource("/bad/endpoint");
+
+        assertTrue(either.isLeft());
+        final HttpFault httpFailure = either.getLeft();
+        assertThat(httpFailure.getHttpStatusCode(), is(404));
+        assertThat(httpFailure.getErrorMessage(), is("Not Found"));
+    }
+
+    @Test
+    public void testWhenGetCallIntoAlfrescoReturnsMalformedResponse() {
+        wiremock.stubFor(get(urlEqualTo(alfrescoHealthEndpoint))
+                .willReturn(aResponse().withFault(MALFORMED_RESPONSE_CHUNK)));
+
+        final Either<HttpFault, HttpSuccess> either = sut.getResource(alfrescoHealthEndpoint);
+
+        assertTrue(either.isLeft());
+        final HttpFault httpFailure = either.getLeft();
+        assertThat(httpFailure.getHttpStatusCode(), is(0));
+        assertThat(httpFailure.getErrorMessage(), startsWith("unexpected end of stream"));
+    }
+
+    @Test
+    public void testWhenGetCallIntoAlfrescoReturnsConnectionErrors() {
+        wiremock.stubFor(get(urlEqualTo(alfrescoHealthEndpoint))
+                .willReturn(aResponse().withFault(RANDOM_DATA_THEN_CLOSE)));
+
+        final Either<HttpFault, HttpSuccess> either = sut.getResource(alfrescoHealthEndpoint);
+
+        assertTrue(either.isLeft());
+        final HttpFault httpFailure = either.getLeft();
+        assertThat(httpFailure.getHttpStatusCode(), is(0));
+        assertThat(httpFailure.getErrorMessage(), startsWith("unexpected end of stream"));
+    }
+
+    @Test
+    public void testWhenGetCallIntoAlfrescoReturnsAnEmptyResponse() {
+        wiremock.stubFor(get(urlEqualTo(alfrescoHealthEndpoint))
+                .willReturn(aResponse().withFault(EMPTY_RESPONSE)));
+
+        final Either<HttpFault, HttpSuccess> either = sut.getResource(alfrescoHealthEndpoint);
+
+        assertTrue(either.isLeft());
+        final HttpFault httpFailure = either.getLeft();
+        assertThat(httpFailure.getHttpStatusCode(), is(0));
+        assertThat(httpFailure.getErrorMessage(), startsWith("unexpected end of stream"));
+    }
+
+    @Test
+    public void testWhenGetCallIntoAlfrescoErrorsWithConnectionRest() {
+        wiremock.stubFor(get(urlEqualTo(alfrescoHealthEndpoint))
+                .willReturn(aResponse().withFault(CONNECTION_RESET_BY_PEER)));
+
+        final Either<HttpFault, HttpSuccess> either = sut.getResource(alfrescoHealthEndpoint);
+
+        assertTrue(either.isLeft());
+        final HttpFault httpFailure = either.getLeft();
+        assertThat(httpFailure.getHttpStatusCode(), is(0));
+        assertThat(httpFailure.getErrorMessage(), is("Connection reset"));
+    }
+
+    @Test
+    public void testWhenSocketTimesOutOnGetCallIntoAlfresco() {
+        final int tenMinutes = 10*60*1000;
+        wiremock.stubFor(get(urlEqualTo(alfrescoHealthEndpoint))
+                .willReturn(aResponse().withFixedDelay(tenMinutes)));
+
+        final Either<HttpFault, HttpSuccess> either = sut.getResource(alfrescoHealthEndpoint);
+
+        assertTrue(either.isLeft());
+        final HttpFault httpFailure = either.getLeft();
+        assertThat(httpFailure.getHttpStatusCode(), is(0));
+        assertThat(httpFailure.getErrorMessage(), is("timeout"));
     }
 }

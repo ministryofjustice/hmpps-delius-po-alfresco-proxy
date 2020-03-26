@@ -1,6 +1,7 @@
 package uk.gov.gsi.justice.po.alfresco.proxy.service;
 
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import io.vavr.control.Either;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,6 +20,7 @@ import uk.gov.gsi.justice.po.alfresco.proxy.dto.Dependencies;
 import uk.gov.gsi.justice.po.alfresco.proxy.dto.HealthCheckResponse;
 import uk.gov.gsi.justice.po.alfresco.proxy.http.RestHttpClient;
 import uk.gov.gsi.justice.po.alfresco.proxy.ioc.AppConfig;
+import uk.gov.gsi.justice.po.alfresco.proxy.model.HttpFault;
 import uk.gov.gsi.justice.po.alfresco.proxy.model.HttpSuccess;
 import uk.gov.gsi.justice.po.alfresco.proxy.provider.TimestampProvider;
 
@@ -28,7 +30,8 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static uk.gov.gsi.justice.po.alfresco.proxy.model.ApiStatus.STABLE;
+import static uk.gov.gsi.justice.po.alfresco.proxy.dto.ApiStatus.STABLE;
+import static uk.gov.gsi.justice.po.alfresco.proxy.dto.ApiStatus.UNSTABLE;
 
 @ActiveProfiles("HealthCheckServiceImplTest")
 @ExtendWith(SpringExtension.class)
@@ -54,19 +57,35 @@ class HealthCheckServiceImplTest extends AbstractBaseTest {
     private HealthCheckService sut;
 
     @BeforeEach
-    public void prepare() throws Exception {
-        sut = new HealthCheckServiceImpl(restHttpClient, timestampProvider, serviceName, alfrescoHealthEndpoint);
+    public void prepare() {
+        sut = new HealthCheckServiceImpl(restHttpClient, timestampProvider, serviceName, alfrescoHealthEndpoint, gson);
 
-        alfrescoNotificationStatus = alfrescoHealthCheckSampleResponse();
-        final HttpSuccess httpSuccess = new HttpSuccess(200, stableText, gson.toJson(alfrescoNotificationStatus));
-        when(restHttpClient.getResource(alfrescoHealthEndpoint)).thenReturn(Either.right(httpSuccess));
         when(timestampProvider.getTimestamp()).thenReturn(timestamp);
     }
 
     @Test
-    public void testHealthCheck() {
+    public void testHealthCheck() throws Exception {
+        alfrescoNotificationStatus = alfrescoHealthCheckSampleResponse();
+        final HttpSuccess httpSuccess = new HttpSuccess(200, stableText, gson.toJson(alfrescoNotificationStatus));
+        when(restHttpClient.getResource(alfrescoHealthEndpoint)).thenReturn(Either.right(httpSuccess));
+
         final Dependencies dependencies = new Dependencies(alfrescoNotificationStatus, new JsonObject());
         final HealthCheckResponse expectedResponse = new HealthCheckResponse(serviceName, STABLE, dependencies, timestamp);
+
+        final HealthCheckResponse actualResponse = sut.checkHealth();
+
+        assertThat(actualResponse, is(expectedResponse));
+    }
+ 
+    @Test
+    public void testHealthCheckWhenAlfrescoReturnsAnError() {
+        final HttpFault httpFault = new HttpFault(0, "unexpected end of stream some random text");
+        when(restHttpClient.getResource(alfrescoHealthEndpoint)).thenReturn(Either.left(httpFault));
+
+        final String json = gson.toJson(httpFault);
+        final JsonObject faultJson = JsonParser.parseString(json).getAsJsonObject();
+        final Dependencies dependencies = new Dependencies(faultJson, new JsonObject());
+        final HealthCheckResponse expectedResponse = new HealthCheckResponse(serviceName, UNSTABLE, dependencies, timestamp);
 
         final HealthCheckResponse actualResponse = sut.checkHealth();
 
