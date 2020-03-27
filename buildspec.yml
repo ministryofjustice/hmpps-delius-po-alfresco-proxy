@@ -6,4 +6,4 @@ phases:
       java: corretto8
   build:
     commands:
-      - docker run --rm -v "$PWD":/home/gradle/project -w /home/gradle/project gradle gradle clean test cucumber
+      - gradle clean test cucumber
