@@ -4,10 +4,6 @@ phases:
   install:
     runtime-versions:
       java: corretto8
-    commands:
-      - curl -O https://cdn.jsdelivr.net/npm/vue/dist/vue.js
-      - ./gradlew build --dry-run --configure-on-demand --daemon
   build:
     commands:
-      - rm -f vue.js
-      - ./gradlew clean test cucumber
+      - docker run --rm -v "$PWD":/home/gradle/project -w /home/gradle/project gradle gradle clean test cucumber
