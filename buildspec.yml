@@ -4,6 +4,8 @@ phases:
   install:
     runtime-versions:
       java: corretto8
+    commands:
+      - gradle build --dry-run --configure-on-demand --daemon
   build:
     commands:
       - gradle clean test cucumber
