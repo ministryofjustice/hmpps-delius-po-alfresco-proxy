@@ -1,0 +1,10 @@
+version: 0.2
+
+env:
+  variables:
+    AWS_REGION:  'eu-west-2'
+    environment_name: 'delius-core-sandpit'
+phases:
+  build:
+    commands:
+      - ./stack-plan.sh
