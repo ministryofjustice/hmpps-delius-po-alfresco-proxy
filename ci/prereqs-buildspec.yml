@@ -5,6 +5,9 @@ env:
     AWS_REGION:  'eu-west-2'
     environment_name: 'delius-core-sandpit'
 phases:
+  install:
+    commands:
+      - npm install terraform-plan-parser
   pre_build:
     commands:
       - rm -rf env_configs
