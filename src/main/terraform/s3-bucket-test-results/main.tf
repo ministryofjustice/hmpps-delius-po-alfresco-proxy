@@ -18,6 +18,6 @@ provider "aws" {
 
 module "s3_spg_ci_build_test_results_bucket" {
   source         = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//s3bucket//s3bucket_without_policy"
-  s3_bucket_name = "${var.environment_identifier}-${var.bucket_identifier}"
+  s3_bucket_name = "${var.short_environment_identifier}-${var.bucket_identifier}"
   tags           = "${var.tags}"
 }
