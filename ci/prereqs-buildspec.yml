@@ -14,4 +14,4 @@ phases:
   build:
     commands:
       - cd ${CODEBUILD_SRC_DIR}/src/main/terraform
-      - ./stack-plan.sh
+      - ${CODEBUILD_SRC_DIR}/stack-plan.sh
