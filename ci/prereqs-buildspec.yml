@@ -4,8 +4,8 @@ env:
   variables:
     AWS_REGION:  'eu-west-2'
     environment_name: 'delius-core-sandpit'
-    ENV_CONFIGS_DIR: ${CODEBUILD_SRC_DIR}/env_configs
-    CUSTOM_COMMON_PROPERTIES_DIR: ${CODEBUILD_SRC_DIR}/env_configs/common
+    ENV_CONFIGS_DIR: '${CODEBUILD_SRC_DIR}/env_configs'
+    CUSTOM_COMMON_PROPERTIES_DIR: '${CODEBUILD_SRC_DIR}/env_configs/common'
 phases:
   pre_build:
     commands:
