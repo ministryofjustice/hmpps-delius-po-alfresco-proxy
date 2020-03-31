@@ -11,10 +11,12 @@ function init_plan() {
     fi
     sleep 1
     terragrunt init
+    set +e
     terragrunt plan -detailed-exitcode --out ${environment_name}.plan > tf.plan.out
     exitcode="$?"
-    if [ "$exitcode" -ne 0 ]; then
-        exit "$exitcode"
+    set -e
+    if [ "$exitcode" == '1' ]; then
+        exit 1
     fi
 
     cat tf.plan.out
@@ -25,3 +27,5 @@ function init_plan() {
 for d in ./*/ ; do
     (cd "$d" && init_plan)
 done
+
+set -e
