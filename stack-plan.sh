@@ -20,8 +20,8 @@ function init_plan() {
     fi
 
     cat tf.plan.out
-
-    parse-terraform-plan -i tf.plan.out | jq '.changedResources[] | (.action != "update") or (.changedAttributes | to_entries | map(.key != "tags.source-hash") | reduce .[] as $item (false; . or $item))' | jq -e -s 'reduce .[] as $item (false; . or $item) == false'
+#
+#    parse-terraform-plan -i tf.plan.out | jq '.changedResources[] | (.action != "update") or (.changedAttributes | to_entries | map(.key != "tags.source-hash") | reduce .[] as $item (false; . or $item))' | jq -e -s 'reduce .[] as $item (false; . or $item) == false'
 }
 
 for d in ./*/ ; do
