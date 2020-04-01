@@ -14,4 +14,5 @@ phases:
       - export ENV_CONFIGS_DIR=${CODEBUILD_SRC_DIR}/env_configs
       - export CUSTOM_COMMON_PROPERTIES_DIR=${CODEBUILD_SRC_DIR}/env_configs/common
       - cd ${CODEBUILD_SRC_DIR}/src/main/terraform
-      - ${CODEBUILD_SRC_DIR}/stack-plan.sh
+      - ${CODEBUILD_SRC_DIR}/1-stack-plan.sh
+      - ${CODEBUILD_SRC_DIR}/2-stack-apply.sh

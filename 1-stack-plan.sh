@@ -5,7 +5,7 @@ source ${CODEBUILD_SRC_DIR}/env_configs/${environment_name}/${environment_name}.
 
 env | sort
 
-function init_plan() {
+function plan_stack() {
     if [ -d .terraform ]; then
         rm -rf .terraform
     fi
@@ -25,7 +25,7 @@ function init_plan() {
 }
 
 for d in ./*/ ; do
-    (cd "$d" && init_plan)
+    (cd "$d" && plan_stack)
 done
 
 set -e
