@@ -11,10 +11,10 @@ phases:
       - gradle build --dry-run --configure-on-demand --daemon
   build:
     commands:
-      - now=$(date +"%m-%d-%Y")
+#      - now=$(date +"%m-%d-%Y")
       - gradle clean test cucumber
-      - zip -r build/build-${BUILD_NUMBER}-test-results.zip build/reports
-      - aws s3 cp build/build-${BUILD_NUMBER}-test-results.zip s3://${test_results_bucket}/${now}/${project_name}/build-${BUILD_NUMBER}-test-results.zip
+#      - zip -r build/build-${BUILD_NUMBER}-test-results.zip build/reports
+#      - aws s3 cp build/build-${BUILD_NUMBER}-test-results.zip s3://${test_results_bucket}/${now}/${project_name}/build-${BUILD_NUMBER}-test-results.zip
 reports:
   POAlfrescoProxyTestReports:
     files:
