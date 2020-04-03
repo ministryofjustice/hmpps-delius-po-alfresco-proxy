@@ -4,7 +4,7 @@ env:
   variables:
     AWS_REGION:  'eu-west-2'
     test_results_bucket: 'tf-eu-west-2-hmpps-eng-dev-ci-test-results-s3bucket'
-    project_name: 'hmpps-po-alfresco-proxy'
+    project_name: 'hmpps-delius-po-alfresco-proxy'
 phases:
   pre_build:
     commands:
