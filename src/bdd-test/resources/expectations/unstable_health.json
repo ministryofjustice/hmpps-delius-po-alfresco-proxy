@@ -1,5 +1,5 @@
 {
-  "name": "hmpps-po-alfresco-proxy",
+  "name": "hmpps-delius-po-alfresco-proxy",
   "status": "UNSTABLE",
   "dependencies": {
     "alfresco": {

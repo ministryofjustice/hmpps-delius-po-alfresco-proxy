@@ -50,3 +50,5 @@ definitions:
           - "UNSTABLE"
       dependencies:
         $ref: '#/definitions/Dependencies'
+      timestamp:
+        type: string

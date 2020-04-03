@@ -30,6 +30,7 @@ dependencies {
     testImplementation group: 'io.cucumber', name: 'cucumber-spring', version: '5.5.0'
     testImplementation group: 'io.cucumber', name: 'cucumber-junit', version: '5.5.0'
     testImplementation group: 'io.cucumber', name: 'cucumber-java', version: '5.5.0'
+    testImplementation group: 'de.monochromata.cucumber', name: 'reporting-plugin', version: '4.0.39'
 
     testImplementation group: 'com.github.tomakehurst', name: 'wiremock-jre8', version: '2.26.3'
     testImplementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-contract-stub-runner', version: '2.2.2.RELEASE'

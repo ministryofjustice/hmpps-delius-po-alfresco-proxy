@@ -3,7 +3,7 @@ version: 0.2
 env:
   variables:
     AWS_REGION:  'eu-west-2'
-    test_results_bucket: 'tf-hmpps-dlc-sandpit-spg-test-results-s3bucket'
+    test_results_bucket: 'tf-eu-west-2-hmpps-eng-dev-ci-test-results-s3bucket'
     project_name: 'hmpps-po-alfresco-proxy'
 phases:
   pre_build:
@@ -16,7 +16,13 @@ phases:
 #      - zip -r build/build-${BUILD_NUMBER}-test-results.zip build/reports
 #      - aws s3 cp build/build-${BUILD_NUMBER}-test-results.zip s3://${test_results_bucket}/${now}/${project_name}/build-${BUILD_NUMBER}-test-results.zip
 reports:
-  SPGTestReports:
+  UnitTestReports:
     files:
       - '**/*'
     base-directory: 'build/test-results'
+    file-format: 'JunitXml'
+  IntegrationTestReports:
+    files:
+      - 'cucumber.json'
+    base-directory: 'build/cucumber'
+    file-format: 'CucumberJson'
