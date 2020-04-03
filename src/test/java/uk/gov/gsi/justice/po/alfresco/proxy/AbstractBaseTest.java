@@ -14,7 +14,7 @@ import java.time.Instant;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 public abstract class AbstractBaseTest {
-    protected final String serviceName = "hmpps-po-alfresco-proxy";
+    protected final String serviceName = "hmpps-delius-po-alfresco-proxy";
     protected final JsonReader jsonReader = new JsonReader();
     @Inject
     protected Gson gson;

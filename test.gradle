@@ -21,7 +21,7 @@ gradle.startParameter.continueOnFailure = true
 
 cucumber {
     glue = 'classpath:uk.gov.gsi.justice.po.alfresco.proxy.bdd'
-    plugin = ['pretty']
+    plugin = ['pretty', 'json:build/cucumber/cucumber.json', 'de.monochromata.cucumber.report.PrettyReports:build/cucumber']
     strict = 'please'
     featurePath = 'src/bdd-test/resources'
     main = 'io.cucumber.core.cli.Main'
