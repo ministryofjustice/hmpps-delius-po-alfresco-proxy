@@ -2,19 +2,16 @@ version: 0.2
 
 env:
   variables:
-    AWS_REGION:  'eu-west-2'
-    test_results_bucket: 'tf-eu-west-2-hmpps-eng-dev-ci-test-results-s3bucket'
-    project_name: 'hmpps-delius-po-alfresco-proxy'
+    APPLICATION_NAME: 'hmpps-delius-po-alfresco-proxy'
+    SPG_ALFRESCO_HEALTH_ENDPOINT: '/alfresco/service/noms-spg/notificationStatus'
+    SPG_ALFRESCO_BASE_URL: ''
 phases:
   pre_build:
     commands:
       - gradle build --dry-run --configure-on-demand --daemon
   build:
     commands:
-#      - now=$(date +"%m-%d-%Y")
       - gradle clean test cucumber
-#      - zip -r build/build-${BUILD_NUMBER}-test-results.zip build/reports
-#      - aws s3 cp build/build-${BUILD_NUMBER}-test-results.zip s3://${test_results_bucket}/${now}/${project_name}/build-${BUILD_NUMBER}-test-results.zip
 reports:
   UnitTestReports:
     files:
