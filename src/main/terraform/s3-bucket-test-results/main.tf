@@ -16,8 +16,10 @@ provider "aws" {
 # ### S3 bucket for ci build test results
 # #-------------------------------------------
 
-module "s3_spg_ci_build_test_results_bucket" {
-  source         = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//s3bucket//s3bucket_without_policy"
-  s3_bucket_name = "${var.short_environment_identifier}-${var.bucket_identifier}"
-  tags           = "${var.tags}"
+resource "aws_s3_bucket_object" "releases_folder" {
+  bucket       = "${data.terraform_remote_state.s3_ci_test_results_bucket}"
+  acl          = "private"
+  key          = "releases/"
+  source       = "/dev/null"
+  content_type = "application/x-directory"
 }

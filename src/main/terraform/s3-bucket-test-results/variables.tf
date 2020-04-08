@@ -17,3 +17,7 @@ variable "remote_state_bucket_name" {
 variable "bucket_identifier" {
   default = "spg-test-results"
 }
+
+variable "eng_remote_state_bucket_name" {}
+
+variable "eng_role_arn" {}
