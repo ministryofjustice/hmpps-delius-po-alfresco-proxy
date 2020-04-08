@@ -5,6 +5,7 @@ env:
     APPLICATION_NAME: 'SPG PO Alfresco Proxy'
     SPG_ALFRESCO_HEALTH_ENDPOINT: '/alfresco/service/noms-spg/notificationStatus'
     SPG_ALFRESCO_BASE_URL: ''
+    PROJECT_NAME: 'hmpps-po-alfresco-proxy'
 phases:
   pre_build:
     commands:
@@ -23,3 +24,7 @@ reports:
       - 'cucumber.json'
     base-directory: 'build/cucumber'
     file-format: 'CucumberJson'
+artifacts:
+  files:
+    - '**/*'
+  name: $Env:PROJECT_NAME-$(date +%Y-%m-%d-%H-%m-%S)
