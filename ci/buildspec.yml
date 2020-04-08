@@ -2,7 +2,7 @@ version: 0.2
 
 env:
   variables:
-    APPLICATION_NAME: 'hmpps-delius-po-alfresco-proxy'
+    APPLICATION_NAME: 'SPG PO Alfresco Proxy'
     SPG_ALFRESCO_HEALTH_ENDPOINT: '/alfresco/service/noms-spg/notificationStatus'
     SPG_ALFRESCO_BASE_URL: ''
 phases:
@@ -11,7 +11,7 @@ phases:
       - gradle build --dry-run --configure-on-demand --daemon
   build:
     commands:
-      - gradle clean test cucumber
+      - gradle clean test cucumber bootJar
 reports:
   UnitTestReports:
     files:
