@@ -30,8 +30,8 @@ bootJar {
 springBoot {
     buildInfo {
         properties {
-            group = "groupName"
-            name = "projectName"
+            group = "hmpps.delius.spg"
+            name = "po-alfresco-proxy"
             version = "1.0"
         }
     }

@@ -1,5 +1,5 @@
 {
-  "name": "hmpps-delius-po-alfresco-proxy",
+  "name": "SPG PO Alfresco Proxy",
   "status": "UNSTABLE",
   "dependencies": {
     "alfresco": {
