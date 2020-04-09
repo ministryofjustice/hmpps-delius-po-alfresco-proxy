@@ -26,5 +26,5 @@ phases:
       - docker push ${REPOSITORY_URI}:latest
       - echo Writing image definitions file...
       - printf '[{"name":"spgw-po-alfresco-proxy","imageUri":"%s"}]' ${REPOSITORY_URI}:latest > imagedefinitions.json
-  artifacts:
-    files: imagedefinitions.json
+artifacts:
+  files: imagedefinitions.json
