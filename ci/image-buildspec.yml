@@ -1,0 +1,30 @@
+version: 0.2
+
+env:
+  variables:
+    IMAGE_REGISTRY: '895523100917.dkr.ecr.eu-west-2.amazonaws.com'
+    IMAGE_NAME: 'hmpps/spgw-po-alfresco-proxy'
+phases:
+  install:
+    runtime-versions:
+      docker: 19
+  pre_build:
+    commands:
+      - aws sts get-caller-identity
+      - eval $(aws --region ${AWS_REGION} ecr get-login --no-include-email)
+      - aws sts get-caller-identity
+      - REPOSITORY_URI=${IMAGE_REGISTRY}/${IMAGE_NAME}
+  build:
+    commands:
+      - echo Docker image build started on `date`
+      - echo Building the Docker image...
+      - docker build -t $REPOSITORY_URI:latest --rm=true .
+  post_build:
+    commands:
+      - echo Docker image build completed on `date`
+      - echo Pushing the Docker image...
+      - docker push ${REPOSITORY_URI}:latest
+      - echo Writing image definitions file...
+      - printf '[{"name":"spgw-po-alfresco-proxy","imageUri":"%s"}]' ${REPOSITORY_URI}:latest > imagedefinitions.json
+  artifacts:
+    files: imagedefinitions.json
