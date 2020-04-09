@@ -14,7 +14,7 @@ phases:
       - eval $(aws --region ${AWS_REGION} ecr get-login --no-include-email)
       - aws sts get-caller-identity
       - REPOSITORY_URI=${IMAGE_REGISTRY}/${IMAGE_NAME}
-      - aws ecr describe-repositories --repository-names ${REPOSITORY_URI} || aws ecr create-repository --repository-name ${REPOSITORY_URI}
+      - aws ecr describe-repositories --repository-names ${IMAGE_NAME} || aws ecr create-repository --repository-name ${IMAGE_NAME}
   build:
     commands:
       - echo Docker image build started on `date`
