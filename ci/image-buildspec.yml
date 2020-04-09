@@ -25,6 +25,6 @@ phases:
       - echo Pushing the Docker image...
       - docker push ${REPOSITORY_URI}:latest
       - echo Writing image definitions file...
-      - printf '[{"name":"spgw-po-alfresco-proxy","imageUri":"%s"}]' ${REPOSITORY_URI}:latest > imagedefinitions.json
+      - printf '[{"name":"hmpps/spgw-po-alfresco-proxy","imageUri":"%s"}]' ${REPOSITORY_URI}:latest > ecs/imagedefinitions.json
 artifacts:
-  files: imagedefinitions.json
+  files: ecs/imagedefinitions.json

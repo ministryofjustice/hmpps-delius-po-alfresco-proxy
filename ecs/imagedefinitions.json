@@ -1,0 +1,21 @@
+{
+  "taskDefinition": {
+    "family": "hmpps/spgw-po-alfresco-proxy",
+    "containerDefinitions": [
+      {
+        "name": "hmpps/spgw-po-alfresco-proxy",
+        "image": "895523100917.dkr.ecr.eu-west-2.amazonaws.com/hmpps/spgw-po-alfresco-proxy:latest",
+        "cpu": 100,
+        "portMappings": [
+          {
+            "protocol": "tcp",
+            "containerPort": 80,
+            "hostPort": 80
+          }
+        ],
+        "memory": 128,
+        "essential": true
+      }
+    ]
+  }
+}
