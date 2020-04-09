@@ -1,9 +1,9 @@
 version: 0.2
 
 phases:
-  pre_build:
-    commands:
-      - dockerd
+  install:
+    runtime-versions:
+      docker: 19
   build:
     commands:
       - docker build --tag=spgw-po-alfresco-proxy --rm=true .
