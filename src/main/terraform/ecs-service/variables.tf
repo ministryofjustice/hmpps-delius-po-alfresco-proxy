@@ -42,14 +42,8 @@ variable "tags" {
   type = "map"
 }
 
-
 #load balancer account id - common accross all services within an environment
 variable "lb_account_id" {}
-
-
-
-
-
 
 variable "service_config_map" {
   description = "Config map for the service"

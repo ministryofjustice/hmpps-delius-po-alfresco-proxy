@@ -2,7 +2,6 @@ version: 0.2
 
 env:
   variables:
-    AWS_REGION:  'eu-west-2'
     environment_name: 'delius-core-sandpit'
 phases:
   pre_build:
@@ -11,8 +10,7 @@ phases:
       - git clone https://github.com/ministryofjustice/hmpps-env-configs.git env_configs
   build:
     commands:
-      - export ENV_CONFIGS_DIR=${CODEBUILD_SRC_DIR}/env_configs
       - export CUSTOM_COMMON_PROPERTIES_DIR=${CODEBUILD_SRC_DIR}/env_configs/common
       - cd ${CODEBUILD_SRC_DIR}/src/main/terraform
-      - ${CODEBUILD_SRC_DIR}/1-stack-plan.sh
-      - ${CODEBUILD_SRC_DIR}/2-stack-apply.sh
+      - ${CODEBUILD_SRC_DIR}/scripts/1-stack-plan.sh
+      - ${CODEBUILD_SRC_DIR}/scripts/2-stack-apply.sh
