@@ -17,8 +17,8 @@ targetCompatibility = 1.8
 apply from: 'dependencies.gradle'
 apply from: 'test.gradle'
 
-tasks.withType(JavaCompile) {
-    options.compilerArgs << '-Xlint:unchecked'
+compileJava {
+    options.compilerArgs += ['-Xdoclint:none', '-Xlint:unchecked']
     options.deprecation = true
     options.encoding = 'UTF-8'
 }
