@@ -10,6 +10,7 @@ phases:
       - git clone https://github.com/ministryofjustice/hmpps-env-configs.git env_configs
   build:
     commands:
+      - export HMPPS_BUILD_WORK_DIR=${CODEBUILD_SRC_DIR}
       - export CUSTOM_COMMON_PROPERTIES_DIR=${CODEBUILD_SRC_DIR}/env_configs/common
       - cd ${CODEBUILD_SRC_DIR}/src/main/terraform
       - ${CODEBUILD_SRC_DIR}/scripts/1-stack-plan.sh
