@@ -2,7 +2,7 @@ version: 0.2
 
 env:
   variables:
-    environment_name: 'delius-core-sandpit'
+    environment_name: 'delius-core-dev'
 phases:
   pre_build:
     commands:
