@@ -3,9 +3,6 @@
 //  value = "http://offenderapi.${data.terraform_remote_state.ecs_cluster.private_cluster_namespace["domain_name"]}:${var.conf["env_service_port"]}"
 //}
 //
-output "task_security_group_id" {
-  value = "${aws_security_group.task_security_group.id}"
-}
 //
 ////TODO this looks useful
 //output "secure_fqdn" {
