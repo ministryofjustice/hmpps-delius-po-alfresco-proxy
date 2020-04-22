@@ -32,17 +32,6 @@ data "terraform_remote_state" "security-groups-and-rules" {
   }
 }
 
-#SPG Common Stack Outputs
-data "terraform_remote_state" "common_stack" {
-  backend = "s3"
-
-  config {
-    bucket = "${var.remote_state_bucket_name}"
-    key    = "spg/common_stack/terraform.tfstate"
-    region = "${var.region}"
-  }
-}
-
 
 # Load in shared ECS cluster state file for target cluster arn
 data "terraform_remote_state" "ecs_cluster" {
@@ -50,7 +39,7 @@ data "terraform_remote_state" "ecs_cluster" {
 
   config {
     bucket = "${var.remote_state_bucket_name}"
-    key    = "spg/ecs-cluster/terraform.tfstate"
+    key    = "spg/common_stack/ecs-cluster/terraform.tfstate"
     region = "${var.region}"
   }
 }

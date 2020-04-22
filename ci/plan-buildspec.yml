@@ -3,11 +3,19 @@ version: 0.2
 env:
   variables:
     environment_name: 'delius-core-dev'
+    PROJECT_NAME: 'hmpps-po-alfresco-proxy'
 phases:
+  pre_build:
+    commands:
+      - rm -rf env_configs
+      - git clone https://github.com/ministryofjustice/hmpps-env-configs.git env_configs
   build:
     commands:
       - export HMPPS_BUILD_WORK_DIR=${CODEBUILD_SRC_DIR}
       - export CUSTOM_COMMON_PROPERTIES_DIR=${CODEBUILD_SRC_DIR}/env_configs/common
       - cd ${CODEBUILD_SRC_DIR}/src/main/terraform
       - ${CODEBUILD_SRC_DIR}/scripts/1-stack-plan.sh
-      - ${CODEBUILD_SRC_DIR}/scripts/2-stack-apply.sh
+artifacts:
+  files:
+    - '**/*'
+  name: $Env:PROJECT_NAME-$(date +%Y-%m-%d-%H-%m-%S)
