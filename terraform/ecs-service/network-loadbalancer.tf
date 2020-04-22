@@ -34,8 +34,6 @@ resource "aws_lb" "environment" {
 }
 
 
-
-
 resource "aws_lb_target_group" "environment" {
   name                 = "${local.service_name}-tg"
   port                 = "${var.service_config_map["env_service_port"]}"
@@ -44,8 +42,6 @@ resource "aws_lb_target_group" "environment" {
   deregistration_delay = "30"
   target_type          = "ip"
 
-
-
   #stickiness is only valid for ALBs. When NLB is used, it must be explicitly set to false as of 20/03/2019 otherwise terraform trips up
   #see https://github.com/terraform-providers/terraform-provider-aws/issues/2746
 
@@ -53,7 +49,6 @@ resource "aws_lb_target_group" "environment" {
     enabled = false
     type = "lb_cookie"
   }
-
 
   tags = "${merge(var.tags, map("Name", "${local.service_name}-tg"))}"
 }
