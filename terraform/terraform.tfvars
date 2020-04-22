@@ -24,13 +24,9 @@ terragrunt = {
       ]
 
       arguments = [
-        "-var-file=../../../../env_configs/${get_env("TG_COMMON_DIRECTORY","common")}/common.tfvars",
-        "-var-file=../../../../env_configs/${get_env("TG_ENVIRONMENT_NAME", "ENVIRONMENT")}/${get_env("TG_ENVIRONMENT_NAME", "ENVIRONMENT")}.tfvars",
-        "-var-file=../../../../env_configs/${get_env("TG_ENVIRONMENT_NAME", "ENVIRONMENT")}/sub-projects/parent-orgs.tfvars",
-
-
-        #  the old spg vars should end up in the local service-config dir
-        #  "-var-file=${get_parent_tfvars_dir()}/env_configs/${get_env("TG_ENVIRONMENT_NAME", "ENVIRONMENT")}/sub-projects/spg.tfvars",
+        "-var-file=../../env_configs/${get_env("TG_COMMON_DIRECTORY","common")}/common.tfvars",
+        "-var-file=../../env_configs/${get_env("TG_ENVIRONMENT_NAME", "ENVIRONMENT")}/${get_env("TG_ENVIRONMENT_NAME", "ENVIRONMENT")}.tfvars",
+        "-var-file=../../env_configs/${get_env("TG_ENVIRONMENT_NAME", "ENVIRONMENT")}/sub-projects/parent-orgs.tfvars",
         "-var-file=../../service-config/common.tfvars",
         "-var-file=../../service-config/${get_env("TG_ENVIRONMENT_NAME", "ENVIRONMENT")}.tfvars",
       ]
