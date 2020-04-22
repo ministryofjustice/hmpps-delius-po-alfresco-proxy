@@ -22,3 +22,6 @@ package:
 		-v $(PWD):/home/gradle/project \
 		-w /home/gradle/project \
 		gradle:6.3.0-jdk8 gradle clean test cucumber bootJar
+
+build-image:
+	docker build -t spgw-alfresco-proxy:latest --rm=true .
