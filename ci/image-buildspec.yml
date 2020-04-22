@@ -17,11 +17,8 @@ phases:
   build:
     commands:
       - echo Docker image build started on `date`
-      - echo Building the Docker image...
-      - docker build -t $REPOSITORY_URI:latest --rm=true .
+      - ${CODEBUILD_SRC_DIR}/scripts/build-docker-image.sh
   post_build:
     commands:
       - echo Docker image build completed on `date`
-      - echo Pushing the Docker image...
-      - docker push ${REPOSITORY_URI}:latest
-      - echo Writing image definitions file...
+      - ${CODEBUILD_SRC_DIR}/scripts/upload-docker-image.sh

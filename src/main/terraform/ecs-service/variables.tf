@@ -51,7 +51,7 @@ variable "service_config_map" {
 
   default = {
     #standard ECS task vars
-    image         = "895523100917.dkr.ecr.eu-west-2.amazonaws.com/hmpps/spgw-po-alfresco-proxy"
+    image         = "895523100917.dkr.ecr.eu-west-2.amazonaws.com/hmpps/spgw-alfresco-proxy"
     image_version = "latest"
     cpu           = "1024"
     memory        = "512"
