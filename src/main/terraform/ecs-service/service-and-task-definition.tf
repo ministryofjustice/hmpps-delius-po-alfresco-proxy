@@ -23,7 +23,9 @@ resource "aws_ecs_service" "service" {
     subnets = ["${local.private_subnet_ids}"]
 
     security_groups = [
-      "${aws_security_group.task_security_group.id}",
+      "${data.terraform_remote_state.common_stack.alfresco_proxy_task_security_group_id}",
+
+      #TODO remove this and add explicit outbound rules as part of security hardening ticket ALS-500
       "${data.terraform_remote_state.security-groups-and-rules.spg_common_outbound_sg_id}",
     ]
   }

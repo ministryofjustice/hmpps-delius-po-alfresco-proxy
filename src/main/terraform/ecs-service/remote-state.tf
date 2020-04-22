@@ -20,7 +20,8 @@ data "terraform_remote_state" "vpc_security_groups" {
   }
 }
 
-#SPG Common Security Groups & Rules
+#TODO remove this and add explicit outbound rules as part of security hardening ticket ALS-500
+#SPG Common Security Groups & Rules (Used for common outbound rules
 data "terraform_remote_state" "security-groups-and-rules" {
   backend = "s3"
 
@@ -30,6 +31,18 @@ data "terraform_remote_state" "security-groups-and-rules" {
     region = "${var.region}"
   }
 }
+
+#SPG Common Stack Outputs
+data "terraform_remote_state" "common_stack" {
+  backend = "s3"
+
+  config {
+    bucket = "${var.remote_state_bucket_name}"
+    key    = "spg/common_stack/terraform.tfstate"
+    region = "${var.region}"
+  }
+}
+
 
 # Load in shared ECS cluster state file for target cluster arn
 data "terraform_remote_state" "ecs_cluster" {
