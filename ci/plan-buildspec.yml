@@ -13,7 +13,7 @@ phases:
     commands:
       - export HMPPS_BUILD_WORK_DIR=${CODEBUILD_SRC_DIR}
       - export CUSTOM_COMMON_PROPERTIES_DIR=${CODEBUILD_SRC_DIR}/env_configs/common
-      - cd ${CODEBUILD_SRC_DIR}/src/main/terraform
+      - cd ${CODEBUILD_SRC_DIR}/terraform
       - ${CODEBUILD_SRC_DIR}/scripts/1-stack-plan.sh
 artifacts:
   files:
