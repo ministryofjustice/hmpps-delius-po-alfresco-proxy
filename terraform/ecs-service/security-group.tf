@@ -9,14 +9,14 @@ resource "aws_security_group_rule" "http_in_from_haproxy" {
 
 # Parses the created NLB for its private IP addresses
 data "aws_network_interface" "nlb_subnets" {
-  count = "${length(local.private_subnet_ids)}"
+  count = "${length(local.public_subnet_ids)}"
   filter = {
     name   = "description"
     values = ["ELB ${aws_lb.environment.arn_suffix}"]
   }
   filter = {
     name   = "subnet-id"
-    values = ["${element(local.private_subnet_ids, count.index)}"]
+    values = ["${element(local.public_subnet_ids, count.index)}"]
   }
 }
 
