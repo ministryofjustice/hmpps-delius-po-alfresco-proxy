@@ -27,8 +27,8 @@ terragrunt = {
         "-var-file=../../env_configs/${get_env("TG_COMMON_DIRECTORY","common")}/common.tfvars",
         "-var-file=../../env_configs/${get_env("TG_ENVIRONMENT_NAME", "ENVIRONMENT")}/${get_env("TG_ENVIRONMENT_NAME", "ENVIRONMENT")}.tfvars",
         "-var-file=../../env_configs/${get_env("TG_ENVIRONMENT_NAME", "ENVIRONMENT")}/sub-projects/parent-orgs.tfvars",
-        "-var-file=../../config/common.tfvars",
-        "-var-file=../../config/${get_env("TG_ENVIRONMENT_NAME", "ENVIRONMENT")}.tfvars",
+        "-var-file=../config/common.tfvars",
+        "-var-file=../config/${get_env("TG_ENVIRONMENT_NAME", "ENVIRONMENT")}.tfvars",
       ]
     }
   }
