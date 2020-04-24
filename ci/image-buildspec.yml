@@ -4,6 +4,7 @@ env:
   variables:
     IMAGE_REGISTRY: '895523100917.dkr.ecr.eu-west-2.amazonaws.com'
     IMAGE_NAME: 'hmpps/spgw-alfresco-proxy'
+    TAG: 'dev'
 phases:
   install:
     runtime-versions:
