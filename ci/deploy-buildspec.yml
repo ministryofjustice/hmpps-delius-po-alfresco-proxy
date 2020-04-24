@@ -8,6 +8,6 @@ phases:
     commands:
       - export HMPPS_BUILD_WORK_DIR=${CODEBUILD_SRC_DIR}
       - export CUSTOM_COMMON_PROPERTIES_DIR=${CODEBUILD_SRC_DIR}/env_configs/common
-      - cd ${CODEBUILD_SRC_DIR}/terraform
+      - cd ${CODEBUILD_SRC_DIR}/components/terraform
       - ${CODEBUILD_SRC_DIR}/scripts/1-stack-plan.sh
       - ${CODEBUILD_SRC_DIR}/scripts/2-stack-apply.sh
