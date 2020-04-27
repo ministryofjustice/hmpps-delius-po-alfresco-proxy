@@ -25,3 +25,6 @@ package:
 
 build-image:
 	docker build -t spgw-alfresco-proxy:latest --rm=true .
+
+terraform-plan:
+	scripts/local-terraform-builder.sh local-plan.sh
