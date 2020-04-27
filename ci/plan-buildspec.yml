@@ -3,7 +3,7 @@ version: 0.2
 env:
   variables:
     environment_name: 'delius-core-dev'
-    cluster_name: 'dlc-dev-spgw-ecs-cluster'
+    cluster_arn: 'arn:aws:ecs:eu-west-2:723123699647:cluster/dlc-dev-spgw-ecs-cluster'
     PROJECT_NAME: 'hmpps-po-alfresco-proxy'
 phases:
   pre_build:
