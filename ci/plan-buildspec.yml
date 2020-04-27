@@ -3,6 +3,7 @@ version: 0.2
 env:
   variables:
     environment_name: 'delius-core-dev'
+    cluster_name: 'dlc-dev-spgw-ecs-cluster'
     PROJECT_NAME: 'hmpps-po-alfresco-proxy'
 phases:
   pre_build:
@@ -13,6 +14,7 @@ phases:
     commands:
       - export HMPPS_BUILD_WORK_DIR=${CODEBUILD_SRC_DIR}
       - export CUSTOM_COMMON_PROPERTIES_DIR=${CODEBUILD_SRC_DIR}/env_configs/common
+      - ${CODEBUILD_SRC_DIR}/scripts/describe-tasks.sh
       - cd ${CODEBUILD_SRC_DIR}/terraform/components
       - ${CODEBUILD_SRC_DIR}/scripts/1-stack-plan.sh
 artifacts:
