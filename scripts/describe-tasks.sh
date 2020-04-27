@@ -1,3 +1,4 @@
 #!/usr/bin/env bash
 
-aws ecs describe-tasks --cluster $cluster_name
+taskArns=`aws ecs list-tasks --cluster $cluster_name | jq '.taskArns'`
+aws ecs describe-tasks --cluster $cluster_name --tasks $taskArns
