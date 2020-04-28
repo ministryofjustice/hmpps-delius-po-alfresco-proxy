@@ -10,6 +10,7 @@ docker run -it --rm \
     -e AWS_PROFILE=hmpps-token \
     -e TF_LOG=INFO \
     -e HMPPS_BUILD_WORK_DIR=/home/tools/data \
+    -e HMPPS_BASE_DIR=/home/tools/data/terraform \
     -e environment_name="${1}" \
     -e CUSTOM_COMMON_PROPERTIES_DIR=/home/tools/data/terraform/env_configs/common \
     -e "TERM=xterm-256color" \
