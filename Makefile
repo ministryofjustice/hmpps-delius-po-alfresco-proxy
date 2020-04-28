@@ -25,3 +25,6 @@ package:
 
 build-image:
 	docker build -t spgw-alfresco-proxy:latest --rm=true .
+
+sandpit-plan:
+	scripts/local-terraform-builder.sh delius-core-sandpit local-plan.sh
