@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-source ${HMPPS_BUILD_WORK_DIR}/terraform/env_configs/${environment_name}/${environment_name}.properties
+source ${HMPPS_BUILD_WORK_DIR}/env_configs/${environment_name}/${environment_name}.properties
 
 env | sort
 
