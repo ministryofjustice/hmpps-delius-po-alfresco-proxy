@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+# ${1} - the aws environment
+# ${2} - the script to run: plan or apply
+# See Makefile for usage
+
 docker run -it --rm \
     -v $(pwd):/home/tools/data \
     -v ~/.aws:/home/tools/.aws \
@@ -7,7 +11,7 @@ docker run -it --rm \
     -e TF_LOG=INFO \
     -e HMPPS_BUILD_WORK_DIR=/home/tools/data \
     -e environment_name="${1}" \
-    -e CUSTOM_COMMON_PROPERTIES_DIR=/home/tools/data/env_configs/common \
+    -e CUSTOM_COMMON_PROPERTIES_DIR=/home/tools/data/terraform/env_configs/common \
     -e "TERM=xterm-256color" \
     --entrypoint "scripts/${2}" \
     mojdigitalstudio/hmpps-terraform-builder-lite:latest
