@@ -24,7 +24,13 @@ package:
 		gradle:6.3.0-jdk8 gradle clean test cucumber bootJar
 
 build-image:
-	docker build -t spgw-alfresco-proxy:latest --rm=true .
+	scripts/build-sandpit-docker-image.sh
+
+upload-image:
+	scripts/upload-sandpit-docker-image.sh
 
 sandpit-plan:
-	scripts/local-terraform-builder.sh delius-core-sandpit local-plan.sh
+	scripts/local-terraform-builder.sh delius-core-sandpit terraform-sandpit-plan.sh
+
+sandpit-apply:
+	scripts/local-terraform-builder.sh delius-core-sandpit terraform-sandpit-apply.sh
