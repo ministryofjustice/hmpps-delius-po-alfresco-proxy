@@ -9,4 +9,6 @@ export AWS_SESSION_TOKEN=$(echo ${temp_role} | jq .Credentials.SessionToken | xa
 aws sts get-caller-identity
 
 taskArns=`aws ecs list-tasks --cluster ${cluster_arn} | jq '.taskArns'`
-aws ecs describe-tasks --cluster ${cluster_arn} --tasks "${taskArns}" | jq '.tasks[] | select( .group | contains("service:dlc-dev-spgw-alfproxy")) | {taskDefinitionArn: .taskDefinitionArn | split(":") | last, lastStatus: .lastStatus, healthStatus: .healthStatus}'
+if [ ! -z "${taskArns}" ]; then
+    aws ecs describe-tasks --cluster ${cluster_arn} --tasks "${taskArns}" | jq '.tasks[] | select( .group | contains("service:dlc-dev-spgw-alfproxy")) | {taskDefinitionArn: .taskDefinitionArn | split(":") | last, lastStatus: .lastStatus, healthStatus: .healthStatus}'
+fi
