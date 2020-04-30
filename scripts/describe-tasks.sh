@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
-sandpit_terraform_role_arn="arn:aws:iam::723123699647:role/terraform"
-
-temp_role=$(aws sts assume-role --role-arn ${sandpit_terraform_role_arn} --role-session-name alfresco-proxy-temp-ci-session --duration-seconds 900)
+temp_role=$(aws sts assume-role --role-arn ${terraform_role_arn} --role-session-name alfresco-proxy-temp-ci-session --duration-seconds 900)
 
 export AWS_ACCESS_KEY_ID=$(echo ${temp_role} | jq .Credentials.AccessKeyId | xargs)
 export AWS_SECRET_ACCESS_KEY=$(echo ${temp_role} | jq .Credentials.SecretAccessKey | xargs)
@@ -10,8 +8,8 @@ export AWS_SESSION_TOKEN=$(echo ${temp_role} | jq .Credentials.SessionToken | xa
 
 aws sts get-caller-identity
 
-taskArns=`aws ecs list-tasks --cluster $cluster_arn | jq '.taskArns[]' | awk 'NR > 1 { printf(",") } {printf "%s",$0}'`
+taskArns=`aws ecs list-tasks --cluster ${cluster_arn} | jq '.taskArns[]' | awk 'NR > 1 { printf(",") } {printf "%s",$0}'`
 echo "---------------------------------------------"
-echo $taskArns
+echo ${taskArns}
 echo "---------------------------------------------"
-aws ecs describe-tasks --cluster $cluster_arn --tasks $taskArns
+aws ecs describe-tasks --cluster ${cluster_arn} --tasks ${taskArns}
