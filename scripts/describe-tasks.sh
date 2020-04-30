@@ -10,5 +10,8 @@ export AWS_SESSION_TOKEN=$(echo ${temp_role} | jq .Credentials.SessionToken | xa
 
 aws sts get-caller-identity
 
-taskArns=`aws ecs list-tasks --cluster $cluster_arn | jq '.taskArns'`
+taskArns=`aws ecs list-tasks --cluster $cluster_arn | jq '.taskArns[]' | awk 'NR > 1 { printf(",") } {printf "%s",$0}'`
+echo "---------------------------------------------"
+echo $taskArns
+echo "---------------------------------------------"
 aws ecs describe-tasks --cluster $cluster_arn --tasks $taskArns
