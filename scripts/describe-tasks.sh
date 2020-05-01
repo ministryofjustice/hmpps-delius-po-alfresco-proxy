@@ -17,5 +17,5 @@ if [ ! -z "${taskArns}" ] && [ "${taskArns}" != "[]" ]; then
     echo ${describe_tasks_result} | jq '.'
     echo "--------------------------------------------------"
     current_task=`echo ${describe_tasks_result} | jq --arg TASKGROUP "${TASKGROUP}" '.tasks[] | select(.group==$TASKGROUP) | {taskDefVersion: .taskDefinitionArn | split(":") | last, lastStatus: .lastStatus, desiredStatus: .desiredStatus, healthStatus: .healthStatus}'`
-    echo ${current_task} | jq '.' > ${HMPPS_BUILD_WORK_DIR}/current_task.json
+    echo ${current_task} | jq '.' > ${HMPPS_BUILD_WORK_DIR}/current-task.json
 fi
