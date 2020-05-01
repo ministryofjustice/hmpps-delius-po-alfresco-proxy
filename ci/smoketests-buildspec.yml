@@ -7,6 +7,7 @@ env:
     task_group: 'service:dlc-dev-spgw-alfproxy'
     pre_deployment_taskdef_file: 'pre-deployment-taskdef.json'
     post_deployment_taskdef_file: 'post-deployment-taskdef.json'
+    DEPLOY_WAIT_TIME_OUT: 36000
 phases:
   pre_build:
     commands:
