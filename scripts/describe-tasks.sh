@@ -13,10 +13,10 @@ aws sts get-caller-identity
 
 taskArns=`aws ecs list-tasks --cluster ${cluster_arn} | jq '.taskArns'`
 if [ ! -z "${taskArns}" ] && [ "${taskArns}" != "[]" ]; then
-    echo "--------------------------------------------------"
     describe_tasks_result=`aws ecs describe-tasks --cluster ${cluster_arn} --tasks "${taskArns}"`
-    echo ${describe_tasks_result} | jq '.'
-    echo "--------------------------------------------------"
+#    echo "--------------------------------------------------"
+#    echo ${describe_tasks_result} | jq '.'
+#    echo "--------------------------------------------------"
     current_task=`echo ${describe_tasks_result} | jq --arg TASKGROUP "${TASKGROUP}" '.tasks[] | select(.group==$TASKGROUP) | {taskDefVersion: .taskDefinitionArn | split(":") | last, lastStatus: .lastStatus, desiredStatus: .desiredStatus, healthStatus: .healthStatus}'`
     echo ${current_task} | jq '.' > ${HMPPS_BUILD_WORK_DIR}/${OUTPUTFILE}
 fi
