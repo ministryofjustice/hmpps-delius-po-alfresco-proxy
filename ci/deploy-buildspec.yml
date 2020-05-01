@@ -3,11 +3,21 @@ version: 0.2
 env:
   variables:
     environment_name: 'delius-core-dev'
+    terraform_role_arn: 'arn:aws:iam::723123699647:role/terraform'
+    cluster_arn: 'arn:aws:ecs:eu-west-2:723123699647:cluster/dlc-dev-spgw-ecs-cluster'
+    task_group: 'service:dlc-dev-spgw-alfproxy'
+    pre_deployment_taskdef_file: 'pre-deployment-taskdef.json'
+    PROJECT_NAME: 'hmpps-po-alfresco-proxy'
 phases:
   build:
     commands:
       - export HMPPS_BUILD_WORK_DIR=${CODEBUILD_SRC_DIR}/terraform
       - export CUSTOM_COMMON_PROPERTIES_DIR=${CODEBUILD_SRC_DIR}/terraform/env_configs/common
       - cd ${CODEBUILD_SRC_DIR}/terraform/components
+      - ${CODEBUILD_SRC_DIR}/scripts/describe-tasks.sh ${task_group} ${pre_deployment_taskdef_file}
       - ${CODEBUILD_SRC_DIR}/scripts/1-stack-plan.sh
       - ${CODEBUILD_SRC_DIR}/scripts/2-stack-apply.sh
+artifacts:
+  files:
+    - '**/*'
+  name: $Env:PROJECT_NAME-$(date +%Y-%m-%d-%H-%m-%S)

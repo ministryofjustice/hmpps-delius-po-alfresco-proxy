@@ -7,6 +7,8 @@ history
 target
 .DS_Store
 
+**/*-deployment-taskdef.json
+
 # Compiled class file
 *.class
 

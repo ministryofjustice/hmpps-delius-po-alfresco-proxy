@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 TASKGROUP=${1}
+OUTPUTFILE=${2}
 
 temp_role=$(aws sts assume-role --role-arn ${terraform_role_arn} --role-session-name alfresco-proxy-temp-ci-session --duration-seconds 900)
 
@@ -17,5 +18,5 @@ if [ ! -z "${taskArns}" ] && [ "${taskArns}" != "[]" ]; then
     echo ${describe_tasks_result} | jq '.'
     echo "--------------------------------------------------"
     current_task=`echo ${describe_tasks_result} | jq --arg TASKGROUP "${TASKGROUP}" '.tasks[] | select(.group==$TASKGROUP) | {taskDefVersion: .taskDefinitionArn | split(":") | last, lastStatus: .lastStatus, desiredStatus: .desiredStatus, healthStatus: .healthStatus}'`
-    echo ${current_task} | jq '.' > ${HMPPS_BUILD_WORK_DIR}/current-task.json
+    echo ${current_task} | jq '.' > ${HMPPS_BUILD_WORK_DIR}/${OUTPUTFILE}
 fi

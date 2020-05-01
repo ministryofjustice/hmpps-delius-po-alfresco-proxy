@@ -1,0 +1,17 @@
+version: 0.2
+
+env:
+  variables:
+    terraform_role_arn: 'arn:aws:iam::723123699647:role/terraform'
+    cluster_arn: 'arn:aws:ecs:eu-west-2:723123699647:cluster/dlc-dev-spgw-ecs-cluster'
+    task_group: 'service:dlc-dev-spgw-alfproxy'
+    pre_deployment_taskdef_file: 'pre-deployment-taskdef.json'
+    post_deployment_taskdef_file: 'post-deployment-taskdef.json'
+phases:
+  pre_build:
+    commands:
+      - export HMPPS_BUILD_WORK_DIR=${CODEBUILD_SRC_DIR}/terraform
+      - ${CODEBUILD_SRC_DIR}/scripts/verify-deployment.sh ${task_group} ${pre_deployment_taskdef_file} ${post_deployment_taskdef_file}
+  build:
+    commands:
+      - echo "Starting SMOKE TESTS..........."
