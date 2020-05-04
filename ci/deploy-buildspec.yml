@@ -7,7 +7,11 @@ env:
 phases:
   pre_build:
     commands:
+      - echo "-----------------------------------------------"
+      - cat ${CODEBUILD_SRC_DIR}/image.json
+      - echo "==============================================="
       - image_tag=`cat ${CODEBUILD_SRC_DIR}/image.json | jq -r '.tag'`
+      - echo "image_tag = ${image_tag}"
       - export TF_VAR_service_config_map={image_version = "${image_tag}"}
   build:
     commands:
@@ -16,6 +20,9 @@ phases:
       - cd ${CODEBUILD_SRC_DIR}/terraform/components
       - ${CODEBUILD_SRC_DIR}/scripts/1-stack-plan.sh
       - ${CODEBUILD_SRC_DIR}/scripts/2-stack-apply.sh
+  post_build:
+    commands:
+      - echo "Clean up goes here"
 artifacts:
   files:
     - '**/*'
