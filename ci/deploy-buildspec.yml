@@ -12,7 +12,7 @@ phases:
       - echo "==============================================="
       - image_tag=`cat ${CODEBUILD_SRC_DIR}/image.json | jq -r '.tag'`
       - echo "image_tag = ${image_tag}"
-      - export TF_VAR_service_config_map='{ image_version = "$image_tag" }'
+      - export TF_VAR_service_config_map='{ image_version = "\"${image_tag}\"" }'
   build:
     commands:
       - export HMPPS_BUILD_WORK_DIR=${CODEBUILD_SRC_DIR}/terraform
