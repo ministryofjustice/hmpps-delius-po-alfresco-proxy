@@ -3,12 +3,12 @@ version: 0.2
 env:
   variables:
     environment_name: 'delius-core-dev'
-    cluster_arn: 'arn:aws:ecs:eu-west-2:723123699647:cluster/dlc-dev-spgw-ecs-cluster'
     PROJECT_NAME: 'hmpps-po-alfresco-proxy'
 phases:
   pre_build:
     commands:
-      - echo "-------------------> dev-${CODEBUILD_RESOLVED_SOURCE_VERSION}"
+      - TAG="dev-${CODEBUILD_RESOLVED_SOURCE_VERSION:0:7}"
+      - echo "-------------------> TAG = ${TAG}"
       - rm -rf terraform/env_configs
       - git clone https://github.com/ministryofjustice/hmpps-env-configs.git terraform/env_configs
   build:
