@@ -14,7 +14,9 @@ phases:
       - eval $(aws --region ${AWS_REGION} ecr get-login --no-include-email)
       - aws sts get-caller-identity
       - REPOSITORY_URI=${IMAGE_REGISTRY}/${IMAGE_NAME}
-      - echo "-----------------> CODEBUILD_RESOLVED_SOURCE_VERSION = ${CODEBUILD_RESOLVED_SOURCE_VERSION}"
+      - echo "==============================================="
+      - ls -al
+      - echo "==============================================="
       - shortened_hash=`cat ${CODEBUILD_SRC_DIR}/repo-details.json | jq '.shortenedHash'`
       - TAG="dev-${shortened_hash}"
   build:
