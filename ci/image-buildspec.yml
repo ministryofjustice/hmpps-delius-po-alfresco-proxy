@@ -14,7 +14,9 @@ phases:
       - eval $(aws --region ${AWS_REGION} ecr get-login --no-include-email)
       - aws sts get-caller-identity
       - REPOSITORY_URI=${IMAGE_REGISTRY}/${IMAGE_NAME}
-      - TAG="dev-${CODEBUILD_RESOLVED_SOURCE_VERSION:0:7}"
+      - echo "-----------------> CODEBUILD_RESOLVED_SOURCE_VERSION = ${CODEBUILD_RESOLVED_SOURCE_VERSION}"
+      - shortened_hash=`cat ${CODEBUILD_SRC_DIR}/repo-details.json | jq '.shortenedHash'`
+      - TAG="dev-${shortened_hash}"
   build:
     commands:
       - echo Docker image build started on `date`
