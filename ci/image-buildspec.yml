@@ -4,7 +4,6 @@ env:
   variables:
     IMAGE_REGISTRY: '895523100917.dkr.ecr.eu-west-2.amazonaws.com'
     IMAGE_NAME: 'hmpps/spgw-alfresco-proxy'
-    TAG: 'dev'
 phases:
   install:
     runtime-versions:
@@ -15,12 +14,16 @@ phases:
       - eval $(aws --region ${AWS_REGION} ecr get-login --no-include-email)
       - aws sts get-caller-identity
       - REPOSITORY_URI=${IMAGE_REGISTRY}/${IMAGE_NAME}
-      - echo "-------------------> dev-${CODEBUILD_RESOLVED_SOURCE_VERSION}"
+      - TAG="dev-${CODEBUILD_RESOLVED_SOURCE_VERSION:0:7}"
   build:
     commands:
       - echo Docker image build started on `date`
       - ${CODEBUILD_SRC_DIR}/scripts/build-docker-image.sh
+      - echo "{\"name\":\"${REPOSITORY_URI}\",\"tag\":\"${TAG}\"}" | jq '.' > ${CODEBUILD_SRC_DIR}/image.json
   post_build:
     commands:
+      - echo "==============================================="
+      - cat ${CODEBUILD_SRC_DIR}/image.json
+      - echo "==============================================="
       - echo Docker image build completed on `date`
       - ${CODEBUILD_SRC_DIR}/scripts/upload-docker-image.sh

@@ -7,8 +7,6 @@ env:
 phases:
   pre_build:
     commands:
-      - TAG="dev-${CODEBUILD_RESOLVED_SOURCE_VERSION:0:7}"
-      - echo "-------------------> TAG = ${TAG}"
       - rm -rf terraform/env_configs
       - git clone https://github.com/ministryofjustice/hmpps-env-configs.git terraform/env_configs
   build:
