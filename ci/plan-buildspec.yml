@@ -7,6 +7,7 @@ env:
 phases:
   pre_build:
     commands:
+      - echo "{shortenedHash:\"${CODEBUILD_RESOLVED_SOURCE_VERSION:0:7}\"}" | jq '.' > ${CODEBUILD_SRC_DIR}/repo-details.json
       - rm -rf terraform/env_configs
       - git clone https://github.com/ministryofjustice/hmpps-env-configs.git terraform/env_configs
   build:
@@ -15,6 +16,11 @@ phases:
       - export CUSTOM_COMMON_PROPERTIES_DIR=${CODEBUILD_SRC_DIR}/terraform/env_configs/common
       - cd ${CODEBUILD_SRC_DIR}/terraform/components
       - ${CODEBUILD_SRC_DIR}/scripts/1-stack-plan.sh
+  post_build:
+    commands:
+      - echo "==============================================="
+      - cat ${CODEBUILD_SRC_DIR}/repo-details.json
+      - echo "==============================================="
 artifacts:
   files:
     - '**/*'
