@@ -13,9 +13,6 @@ phases:
   build:
     commands:
       - gradle clean test cucumber bootJar
-  post_build:
-    commands:
-      - ${CODEBUILD_SRC_DIR}/scripts/repo-details.sh
 reports:
   UnitTestReports:
     files:
