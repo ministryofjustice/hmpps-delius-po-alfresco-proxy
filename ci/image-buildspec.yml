@@ -15,6 +15,7 @@ phases:
       - eval $(aws --region ${AWS_REGION} ecr get-login --no-include-email)
       - aws sts get-caller-identity
       - REPOSITORY_URI=${IMAGE_REGISTRY}/${IMAGE_NAME}
+      - echo "-------------------> dev-${CODEBUILD_RESOLVED_SOURCE_VERSION}"
   build:
     commands:
       - echo Docker image build started on `date`
