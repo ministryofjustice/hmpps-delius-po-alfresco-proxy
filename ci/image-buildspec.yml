@@ -4,6 +4,7 @@ env:
   variables:
     IMAGE_REGISTRY: '895523100917.dkr.ecr.eu-west-2.amazonaws.com'
     IMAGE_NAME: 'hmpps/spgw-alfresco-proxy'
+    PROJECT_NAME: 'hmpps-po-alfresco-proxy'
 phases:
   install:
     runtime-versions:
@@ -14,8 +15,6 @@ phases:
       - eval $(aws --region ${AWS_REGION} ecr get-login --no-include-email)
       - aws sts get-caller-identity
       - REPOSITORY_URI=${IMAGE_REGISTRY}/${IMAGE_NAME}
-      - echo "==============================================="
-      - ls -al
       - echo "-----------------------------------------------"
       - cat ${CODEBUILD_SRC_DIR}/repo-details.json
       - echo "==============================================="
@@ -30,3 +29,7 @@ phases:
       - echo Docker image build completed on `date`
       - ${CODEBUILD_SRC_DIR}/scripts/upload-docker-image.sh
       - ${CODEBUILD_SRC_DIR}/scripts/image-details.sh
+artifacts:
+  files:
+    - '**/*'
+  name: $Env:PROJECT_NAME-$(date +%Y-%m-%d-%H-%m-%S)
