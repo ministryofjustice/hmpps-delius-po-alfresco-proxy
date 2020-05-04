@@ -23,11 +23,8 @@ phases:
     commands:
       - echo Docker image build started on `date`
       - ${CODEBUILD_SRC_DIR}/scripts/build-docker-image.sh
-      - echo "{\"name\":\"${REPOSITORY_URI}\",\"tag\":\"${TAG}\"}" | jq '.' > ${CODEBUILD_SRC_DIR}/image.json
   post_build:
     commands:
-      - echo "==============================================="
-      - cat ${CODEBUILD_SRC_DIR}/image.json
-      - echo "==============================================="
       - echo Docker image build completed on `date`
       - ${CODEBUILD_SRC_DIR}/scripts/upload-docker-image.sh
+      - ${CODEBUILD_SRC_DIR}/scripts/image-details.sh
