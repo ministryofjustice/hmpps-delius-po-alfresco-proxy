@@ -16,8 +16,10 @@ phases:
       - REPOSITORY_URI=${IMAGE_REGISTRY}/${IMAGE_NAME}
       - echo "==============================================="
       - ls -al
+      - echo "-----------------------------------------------"
+      - cat ${CODEBUILD_SRC_DIR}/repo-details.json
       - echo "==============================================="
-      - shortened_hash=`cat ${CODEBUILD_SRC_DIR}/repo-details.json | jq '.shortenedHash'`
+      - shortened_hash=`cat ${CODEBUILD_SRC_DIR}/repo-details.json | jq -r '.shortenedHash'`
       - TAG="dev-${shortened_hash}"
   build:
     commands:
