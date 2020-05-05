@@ -52,7 +52,6 @@ variable "service_config_map" {
   default = {
     #standard ECS task vars
     image         = "895523100917.dkr.ecr.eu-west-2.amazonaws.com/hmpps/spgw-alfresco-proxy"
-    image_version = "latest"
     cpu           = "1024"
     memory        = "512"
 
@@ -68,6 +67,8 @@ variable "service_config_map" {
    }
 }
 
+variable "image_version" {}
+
 variable "application_name" {}
 variable "alfresco_health_endpoint" {}
 variable "alfresco_base_url" {}
@@ -76,4 +77,3 @@ variable "cloudwatch_log_retention" {
   description = "Cloudwatch logs data retention in days"
   default     = "14"
 }
-
