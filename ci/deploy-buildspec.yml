@@ -12,7 +12,7 @@ phases:
       - echo "==============================================="
       - image_tag=`cat ${CODEBUILD_SRC_DIR}/image.json | jq '.tag'`
       - echo "image_tag = ${image_tag}"
-      - var_service_config_map='{ image_version = "${image_tag}" }'
+      - var_service_config_map="\'{ image_version = "${image_tag}" }\'"
       - echo "${var_service_config_map}"
       - export TF_VAR_service_config_map=${var_service_config_map}
   build:
