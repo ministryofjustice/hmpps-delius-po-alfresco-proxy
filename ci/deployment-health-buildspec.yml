@@ -3,7 +3,6 @@ version: 0.2
 env:
   variables:
     environment_name: 'delius-core-dev'
-    cluster_name: 'dlc-dev-spgw-ecs-cluster'
     cluster_arn: 'arn:aws:ecs:eu-west-2:723123699647:cluster/dlc-dev-spgw-ecs-cluster'
     service_name: 'dlc-dev-spgw-alfproxy'
     terraform_role_arn: 'arn:aws:iam::723123699647:role/terraform'
@@ -13,9 +12,6 @@ env:
 phases:
   pre_build:
     commands:
-      - aws sts get-caller-identity
-      - eval $(aws --region ${AWS_REGION} ecr get-login --no-include-email)
-      - aws sts get-caller-identity
       - REPOSITORY_URI=${IMAGE_REGISTRY}/${IMAGE_NAME}
       - echo "-----------------------------------------------"
       - cat ${CODEBUILD_SRC_DIR}/image.json
