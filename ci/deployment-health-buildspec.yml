@@ -1,0 +1,27 @@
+version: 0.2
+
+env:
+  variables:
+    environment_name: 'delius-core-dev'
+    cluster_name: 'dlc-dev-spgw-ecs-cluster'
+    cluster_arn: 'arn:aws:ecs:eu-west-2:723123699647:cluster/dlc-dev-spgw-ecs-cluster'
+    service_name: 'dlc-dev-spgw-alfproxy'
+    terraform_role_arn: 'arn:aws:iam::723123699647:role/terraform'
+    IMAGE_REGISTRY: '895523100917.dkr.ecr.eu-west-2.amazonaws.com'
+    IMAGE_NAME: 'hmpps/spgw-alfresco-proxy'
+    PROJECT_NAME: 'hmpps-po-alfresco-proxy'
+phases:
+  pre_build:
+    commands:
+      - aws sts get-caller-identity
+      - eval $(aws --region ${AWS_REGION} ecr get-login --no-include-email)
+      - aws sts get-caller-identity
+      - REPOSITORY_URI=${IMAGE_REGISTRY}/${IMAGE_NAME}
+      - echo "-----------------------------------------------"
+      - cat ${CODEBUILD_SRC_DIR}/image.json
+      - echo "==============================================="
+      - image_tag=`cat ${CODEBUILD_SRC_DIR}/image.json | jq -r '.tag'`
+      - docker_image=${REPOSITORY_URI}:${image_tag}
+  build:
+    commands:
+      - /ecs-deploy --cluster ${cluster_arn} --service-name ${service_name} --image ${docker_image} --aws-assume-role ${terraform_role_arn} --desired-count 1 --version --verbose
