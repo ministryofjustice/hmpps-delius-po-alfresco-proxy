@@ -20,4 +20,4 @@ phases:
       - docker_image=${REPOSITORY_URI}:${image_tag}
   build:
     commands:
-      - /ecs-deploy --cluster ${cluster_arn} --service-name ${service_name} --image ${docker_image} --aws-assume-role ${terraform_role_arn} --desired-count 1 --version --verbose
+      - /ecs-deploy --cluster ${cluster_arn} --service-name ${service_name} --image ${docker_image} --aws-assume-role ${terraform_role_arn} --desired-count 5 --version --verbose
