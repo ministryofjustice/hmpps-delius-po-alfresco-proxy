@@ -43,7 +43,7 @@
                 "protocol": "tcp"
             }
         ],
-        "cpu": 0
+        "cpu": 0,
         "memory": 1024
     }
 ]
