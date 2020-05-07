@@ -3,8 +3,7 @@
 set -x
 
 /ecs-deploy \
-    --aws-access-key ${AWS_ACCESS_KEY_ID} \
-    --aws-secret-key ${AWS_SECRET_ACCESS_KEY} \
+    --aws-assume-role ${terraform_role_arn} \
     --region ${AWS_REGION} \
     --cluster ${cluster_arn} \
     --service-name ${service_name} \
