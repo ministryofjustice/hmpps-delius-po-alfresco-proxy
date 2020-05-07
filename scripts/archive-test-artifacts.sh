@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -ex
+
 test_results_bucket="tf-eu-west-2-hmpps-eng-dev-ci-test-results-s3bucket"
 project_name="hmpps-po-alfresco-proxy"
 now=$(date +"%m-%d-%Y")

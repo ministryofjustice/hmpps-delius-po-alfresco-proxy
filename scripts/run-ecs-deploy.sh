@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -x
+set -ex
 
 /ecs-deploy \
     --aws-assume-role ${terraform_role_arn} \
@@ -9,6 +9,5 @@ set -x
     --service-name ${service_name} \
     --image ${docker_image} \
     --desired-count ${desired_count} \
+    --timeout ${deployment_timeout} \
     --verbose
-
-set +x

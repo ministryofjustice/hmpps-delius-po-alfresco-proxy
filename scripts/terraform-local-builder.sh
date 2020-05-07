@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -ex
+
 # ${1} - the aws environment
 # ${2} - the script to run: plan or apply
 # See Makefile for usage
