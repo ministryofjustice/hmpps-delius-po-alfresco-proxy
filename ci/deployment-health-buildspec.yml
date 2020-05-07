@@ -2,7 +2,6 @@ version: 0.2
 
 env:
   variables:
-    cluster_name: 'dlc-dev-spgw-ecs-cluster'
     cluster_arn: 'arn:aws:ecs:eu-west-2:723123699647:cluster/dlc-dev-spgw-ecs-cluster'
     service_name: 'dlc-dev-spgw-alfproxy'
     terraform_role_arn: 'arn:aws:iam::723123699647:role/terraform'
@@ -17,6 +16,7 @@ phases:
       - echo "==============================================="
       - image_tag=`cat ${CODEBUILD_SRC_DIR}/image.json | jq -r '.tag'`
       - docker_image=${REPOSITORY_URI}:${image_tag}
+      - ${CODEBUILD_SRC_DIR}/scripts/assume-role.sh
   build:
     commands:
-      - /ecs-deploy --cluster ${cluster_name} --service-name ${service_name} --image ${docker_image} --aws-assume-role ${terraform_role_arn} --desired-count 2 --version --verbose
+      - /ecs-deploy --cluster ${cluster_arn} --service-name ${service_name} --image ${docker_image} --desired-count 2 --verbose
