@@ -6,6 +6,7 @@ env:
     service_name: 'dlc-dev-spgw-alfproxy'
     terraform_role_arn: 'arn:aws:iam::723123699647:role/terraform'
     desired_count: '2'
+    deployment_timeout: '36000'
     IMAGE_REGISTRY: '895523100917.dkr.ecr.eu-west-2.amazonaws.com'
     IMAGE_NAME: 'hmpps/spgw-alfresco-proxy'
 phases:
@@ -17,7 +18,6 @@ phases:
       - echo "==============================================="
       - image_tag=`cat ${CODEBUILD_SRC_DIR}/image.json | jq -r '.tag'`
       - docker_image=${REPOSITORY_URI}:${image_tag}
-      - ${CODEBUILD_SRC_DIR}/scripts/assume-role.sh
   build:
     commands:
       - scripts/run-ecs-deploy.sh
