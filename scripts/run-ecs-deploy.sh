@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -x
+
 /ecs-deploy \
     --aws-access-key ${AWS_ACCESS_KEY_ID} \
     --aws-secret-key ${AWS_SECRET_ACCESS_KEY} \
@@ -9,3 +11,5 @@
     --image ${docker_image} \
     --desired-count ${desired_count} \
     --verbose
+
+set +x
