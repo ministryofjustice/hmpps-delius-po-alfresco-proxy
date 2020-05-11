@@ -5,7 +5,7 @@ env:
     cluster_arn: 'arn:aws:ecs:eu-west-2:723123699647:cluster/dlc-dev-spgw-ecs-cluster'
     service_name: 'dlc-dev-spgw-alfproxy'
     terraform_role_arn: 'arn:aws:iam::723123699647:role/terraform'
-    desired_count: '2'
+    desired_count: '1'
     deployment_timeout: '36000'
     IMAGE_REGISTRY: '895523100917.dkr.ecr.eu-west-2.amazonaws.com'
     IMAGE_NAME: 'hmpps/spgw-alfresco-proxy'

@@ -1,21 +1,6 @@
 version: 0.2
 
-env:
-  variables:
-    environment_name: 'delius-core-dev'
-    PROJECT_NAME: 'hmpps-po-alfresco-proxy'
 phases:
-  pre_build:
-    commands:
-      - echo "-----------------------------------------------"
-      - cat ${CODEBUILD_SRC_DIR}/image.json
-      - echo "==============================================="
-      - image_tag=`cat ${CODEBUILD_SRC_DIR}/image.json | jq -r '.tag'`
-      - export TF_VAR_image_version=${image_tag}
   build:
     commands:
-      - export HMPPS_BUILD_WORK_DIR=${CODEBUILD_SRC_DIR}/terraform
-      - export CUSTOM_COMMON_PROPERTIES_DIR=${CODEBUILD_SRC_DIR}/terraform/env_configs/common
-      - cd ${CODEBUILD_SRC_DIR}/terraform/components
-      - ${CODEBUILD_SRC_DIR}/scripts/1-stack-plan.sh
-      - ${CODEBUILD_SRC_DIR}/scripts/2-stack-apply.sh
+      - echo "THIS STEP IS MARKED FOR DELETION"
