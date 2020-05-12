@@ -1,11 +1,5 @@
 #!/usr/bin/env bash
 
-set -e
-
-terraform_role_arn="arn:aws:iam::723123699647:role/terraform"
-cluster_arn="arn:aws:ecs:eu-west-2:723123699647:cluster/dlc-dev-spgw-ecs-cluster"
-service_name="dlc-dev-spgw-alfproxy"
-
 dtag="latest"
 
 temp_role=$(aws sts assume-role --role-arn ${terraform_role_arn} --role-session-name alfresco-proxy-temp-ci-session --duration-seconds 900)
@@ -15,6 +9,8 @@ export AWS_SECRET_ACCESS_KEY=$(echo ${temp_role} | jq .Credentials.SecretAccessK
 export AWS_SESSION_TOKEN=$(echo ${temp_role} | jq .Credentials.SessionToken | xargs)
 
 aws sts get-caller-identity
+
+set -e
 
 describe_service_results=`aws --output json ecs describe-services --services ${service_name} --cluster ${cluster_arn}`
 task_def_arn=`echo ${describe_service_results} | jq --arg SERVICE_NAME "${service_name}" -r '.services[] | select(.serviceName==$SERVICE_NAME) | .deployments[] | select(.status=="PRIMARY") | .taskDefinition'`
@@ -32,4 +28,4 @@ if [ ! -z "${taskArns}" ] && [ "${taskArns}" != "[]" ]; then
     fi
 fi
 
-echo "${dtag}"
+echo ${dtag}
