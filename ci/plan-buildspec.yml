@@ -13,7 +13,8 @@ phases:
       - ${CODEBUILD_SRC_DIR}/scripts/repo-details.sh
       - rm -rf terraform/env_configs
       - git clone https://github.com/ministryofjustice/hmpps-env-configs.git terraform/env_configs
-      - image_tag=$(${CODEBUILD_SRC_DIR}/scripts/get-deployed-image.sh)
+      - image_tag=$(${CODEBUILD_SRC_DIR}/scripts/get-deployed-image.sh) | tr -d '\n'
+      - echo "image_tag = ${image_tag}"
       - export TF_VAR_image_version=${image_tag}
   build:
     commands:
