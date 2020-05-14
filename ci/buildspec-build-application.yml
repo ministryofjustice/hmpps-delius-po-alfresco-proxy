@@ -11,9 +11,9 @@ env:
 phases:
   install:
     commands:
-      - apt update
-      - apt install jq
-      - apt install awscli
+      - apt-get update
+      - apt-get install jq -y
+      - apt-get install awscli -y
   pre_build:
     commands:
       - ${CODEBUILD_SRC_DIR}/scripts/repo-details.sh
