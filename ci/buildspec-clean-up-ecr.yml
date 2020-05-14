@@ -1,0 +1,18 @@
+version: 0.2
+
+env:
+  variables:
+    IMAGE_NAME: 'hmpps/spgw-alfresco-proxy'
+phases:
+  pre_build:
+    commands:
+      - aws sts get-caller-identity
+      - eval $(aws --region ${AWS_REGION} ecr get-login --no-include-email)
+      - aws sts get-caller-identity
+      - echo "-----------------------------------------------"
+      - cat ${CODEBUILD_SRC_DIR}/image.json
+      - echo "==============================================="
+      - image_tag=`cat ${CODEBUILD_SRC_DIR}/image.json | jq -r '.tag'`
+  build:
+    commands:
+      - ${CODEBUILD_SRC_DIR}/scripts/delete-undeployed-images.sh

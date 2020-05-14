@@ -20,4 +20,4 @@ phases:
       - docker_image=${REPOSITORY_URI}:${image_tag}
   build:
     commands:
-      - scripts/run-ecs-deploy.sh
+      - ${CODEBUILD_SRC_DIR}/scripts/run-ecs-deploy.sh
