@@ -1,6 +1,0 @@
-version: 0.2
-
-phases:
-  build:
-    commands:
-      - echo "THIS STEP IS MARKED FOR DELETION"

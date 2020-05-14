@@ -31,7 +31,7 @@ target
 *.rar
 
 #env configs are now pulled in from git env project
-env_configs
+**/env_configs
 
 # CMake
 cmake-build-debug/
