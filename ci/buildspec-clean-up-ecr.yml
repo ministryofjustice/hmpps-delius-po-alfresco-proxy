@@ -4,6 +4,12 @@ env:
   variables:
     IMAGE_NAME: 'hmpps/spgw-alfresco-proxy'
 phases:
+  install:
+    runtime-versions:
+      docker: 19
+    commands:
+      - apt-get update
+      - apt-get install jq -y
   pre_build:
     commands:
       - aws sts get-caller-identity
