@@ -8,9 +8,12 @@ env:
     test_results_bucket: 'tf-eu-west-2-hmpps-eng-dev-ci-test-results-s3bucket'
     project_name: 'hmpps-po-alfresco-proxy'
     PROJECT_NAME: 'hmpps-po-alfresco-proxy'
+    TZ: 'Europe/London'
 phases:
   install:
     commands:
+      - ln -snf /usr/share/zoneinfo/${TZ} /etc/localtime
+      - echo ${TZ} > /etc/timezone
       - apt-get update
       - apt-get install jq -y
       - apt-get install awscli -y
