@@ -30,7 +30,13 @@ upload-image:
 	scripts/upload-sandpit-docker-image.sh
 
 sandpit-plan:
-	scripts/terraform-local-builder.sh delius-core-sandpit terraform-local-plan.sh
+	scripts/terraform-local-builder.sh delius-core-dev terraform-local-plan.sh
 
 sandpit-apply:
 	scripts/terraform-local-builder.sh delius-core-sandpit terraform-local-apply.sh
+
+terragrunt-unlock:
+	scripts/terraform-local-builder.sh delius-core-dev terraform-local-unlock.sh
+
+terragrunt-refresh:
+	scripts/terraform-local-builder.sh delius-core-dev terraform-local-refresh.sh
