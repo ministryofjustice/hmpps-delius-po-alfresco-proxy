@@ -32,8 +32,7 @@
               "name": "SPG_ALFRESCO_BASE_URL",
               "value": "${alfresco_base_url}"
             }
-          ],
-
+        ],
         "volumesFrom": [],
         "mountPoints": [],
         "portMappings": [
