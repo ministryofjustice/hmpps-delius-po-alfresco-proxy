@@ -38,16 +38,3 @@ sandpit-plan:
 
 sandpit-apply:
 	scripts/terraform-local-builder.sh delius-core-sandpit terraform-local-apply.sh
-
-sandpit-terragrunt-unlock:
-	scripts/terraform-local-builder.sh delius-core-sandpit terraform-local-unlock.sh
-
-sandpit-terragrunt-refresh:
-	scripts/terraform-local-builder.sh delius-core-sandpit terraform-local-refresh.sh
-
-
-dev-terragrunt-unlock:
-	scripts/terraform-local-builder.sh delius-core-dev terraform-local-unlock.sh
-
-dev-terragrunt-refresh:
-	scripts/terraform-local-builder.sh delius-core-dev terraform-local-refresh.sh
