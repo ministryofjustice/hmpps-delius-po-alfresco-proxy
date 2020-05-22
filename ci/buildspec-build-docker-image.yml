@@ -16,10 +16,10 @@ phases:
       - aws sts get-caller-identity
       - REPOSITORY_URI=${IMAGE_REGISTRY}/${IMAGE_NAME}
       - echo "-----------------------------------------------"
-      - cat ${CODEBUILD_SRC_DIR}/repo-details.json
+      - cat ${CODEBUILD_SRC_DIR}/image-tag-postfix.json
       - echo "==============================================="
-      - shortened_hash=`cat ${CODEBUILD_SRC_DIR}/repo-details.json | jq -r '.shortenedHash'`
-      - TAG="dev-${shortened_hash}"
+      - tag_postfix=`cat ${CODEBUILD_SRC_DIR}/image-tag-postfix.json | jq -r '.tagPostfix'`
+      - TAG="dev-${tag_postfix}"
   build:
     commands:
       - echo Docker image build started on `date`
