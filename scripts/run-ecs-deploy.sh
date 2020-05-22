@@ -10,4 +10,5 @@ set -ex
     --image ${docker_image} \
     --desired-count ${desired_count} \
     --timeout ${deployment_timeout} \
+    --enable-rollback \
     --verbose
