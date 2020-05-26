@@ -23,11 +23,9 @@ package:
 		-w /home/gradle/project \
 		gradle:6.3.0-jdk8 gradle clean test cucumber bootJar
 
+# @Deprecated - consider using sandpit-ecs-deploy instead
 build-image:
 	scripts/build-sandpit-docker-image.sh
-
-upload-image:
-	scripts/upload-sandpit-docker-image.sh
 
 ##############
 # env builds #
@@ -38,3 +36,7 @@ sandpit-plan:
 
 sandpit-apply:
 	scripts/terraform-local-builder.sh delius-core-sandpit terraform-local-apply.sh
+
+# Builds the application, docker image, uploads image to ECR and deploys to ECS
+sandpit-ecs-deploy:
+	scripts/local-ecs-deployer.sh

@@ -7,7 +7,7 @@ history
 target
 .DS_Store
 
-**/*-deployment-taskdef.json
+*.patch
 
 # Compiled class file
 *.class

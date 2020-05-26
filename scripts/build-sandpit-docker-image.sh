@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# @Deprecated
+
 set -ex
 
 export IMAGE_REGISTRY="895523100917.dkr.ecr.eu-west-2.amazonaws.com"
