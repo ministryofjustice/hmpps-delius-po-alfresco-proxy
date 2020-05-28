@@ -10,7 +10,9 @@ export terraform_role_arn="arn:aws:iam::723123699647:role/terraform"
 export cluster_arn="arn:aws:ecs:eu-west-2:723123699647:cluster/dlc-sandpit-spgw-ecs-cluster"
 export service_name="dlc-sandpit-spgw-alfproxy"
 
-image_tag=$($(pwd)/scripts/get-deployed-image.sh) | tr -d '\n'
+$(pwd)/scripts/get-deployed-image.sh
+image_tag=`cat image.tag | tr -d '\n'`
+rm -f image.tag
 echo "image_tag = ${image_tag}"
 
 docker run -it --rm \

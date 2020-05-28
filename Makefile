@@ -40,3 +40,6 @@ sandpit-apply:
 # Builds the application, docker image, uploads image to ECR and deploys to ECS
 sandpit-ecs-deploy:
 	scripts/local-ecs-deployer.sh
+
+sandpit-ecr-clean:
+	scripts/clean-up-sandpit-images-from-ecr.sh
