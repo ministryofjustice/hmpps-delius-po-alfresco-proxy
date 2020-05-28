@@ -12,7 +12,11 @@ phases:
     commands:
       - rm -rf terraform/env_configs
       - git clone https://github.com/ministryofjustice/hmpps-env-configs.git terraform/env_configs
-      - image_tag=$(${CODEBUILD_SRC_DIR}/scripts/get-deployed-image.sh) | tr -d '\n'
+      - aws sts get-caller-identity
+      - eval $(aws --region ${AWS_REGION} ecr get-login --no-include-email)
+      - aws sts get-caller-identity
+      - ${CODEBUILD_SRC_DIR}/scripts/get-deployed-image.sh
+      - image_tag=`cat image.tag | tr -d '\n'`
       - echo "image_tag = ${image_tag}"
       - export TF_VAR_image_version=${image_tag}
   build:

@@ -11,11 +11,11 @@ echo "----------------------------------------------------------"
 echo Cleaning up undeployed images...
 
 aws ecr list-images --repository-name ${IMAGE_NAME} | \
-jq --arg IMAGE_TAG ${image_tag} -r '.imageIds[] | select(.imageTag | startswith("dev")) | select(.imageTag!=$IMAGE_TAG) | [.imageDigest] | @tsv' | \
+jq --arg IMAGE_TAG ${image_tag}  --arg MY_AWS_ENV ${my_aws_env} -r '.imageIds[] | select(.imageTag | startswith($MY_AWS_ENV)) | select(.imageTag!=$IMAGE_TAG) | [.imageDigest] | @tsv' | \
 while IFS=$'\t' read -r digest; do
     aws ecr batch-delete-image --repository-name ${IMAGE_NAME} --image-ids imageDigest=${digest}
 done
 
-echo "----------------------------------------------------------"
+echo "--------------------------- The following images were left intact ---------------------------"
 
 aws ecr list-images --repository-name ${IMAGE_NAME}

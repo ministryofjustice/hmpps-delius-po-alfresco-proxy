@@ -3,6 +3,7 @@ version: 0.2
 env:
   variables:
     IMAGE_NAME: 'hmpps/spgw-alfresco-proxy'
+    my_aws_env: 'dev'
 phases:
   install:
     runtime-versions:
