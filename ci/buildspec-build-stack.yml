@@ -2,9 +2,10 @@ version: 0.2
 
 env:
   variables:
-    terraform_role_arn: 'arn:aws:iam::723123699647:role/terraform'
+    ENV_TERRAFORM_IAM_ROLE_ARN: 'arn:aws:iam::723123699647:role/terraform'
     cluster_arn: 'arn:aws:ecs:eu-west-2:723123699647:cluster/dlc-dev-spgw-ecs-cluster'
     service_name: 'dlc-dev-spgw-alfproxy'
+    container_name: 'alfresco-proxy'
     environment_name: 'delius-core-dev'
     PROJECT_NAME: 'hmpps-po-alfresco-proxy'
 phases:
@@ -12,7 +13,6 @@ phases:
     commands:
       - rm -rf terraform/env_configs
       - git clone https://github.com/ministryofjustice/hmpps-env-configs.git terraform/env_configs
-      - source ${CODEBUILD_SRC_DIR}/scripts/assume-role.sh ${terraform_role_arn}
       - ${CODEBUILD_SRC_DIR}/scripts/get-deployed-image.sh
       - image_tag=`cat image.tag | tr -d '\n'`
       - echo "image_tag = ${image_tag}"

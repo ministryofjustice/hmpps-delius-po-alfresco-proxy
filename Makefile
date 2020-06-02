@@ -23,10 +23,6 @@ package:
 		-w /home/gradle/project \
 		gradle:6.3.0-jdk8 gradle clean test cucumber bootJar
 
-# @Deprecated - consider using sandpit-ecs-deploy instead
-build-image:
-	scripts/build-sandpit-docker-image.sh
-
 ##############
 # env builds #
 ##############
