@@ -9,6 +9,7 @@ function plan_stack() {
     if [ -d .terraform ]; then
         rm -rf .terraform
     fi
+    rm -f ${environment_name}.plan
     sleep 1
     terragrunt init
     terragrunt plan --out ${environment_name}.plan
