@@ -11,7 +11,7 @@ export service_name="dlc-sandpit-spgw-alfproxy"
 export container_name="alfresco-proxy"
 export IMAGE_NAME="hmpps/spgw-alfresco-proxy"
 export AWS_REGION="eu-west-2"
-export ENV_TERRAFORM_IAM_ROLE_ARN="arn:aws:iam::723123699647:role/terraform"
+export ENVIRONMENT_TERRAFORM_IAM_ROLE_ARN="arn:aws:iam::723123699647:role/terraform"
 export ENGINEERING_TERRAFORM_IAM_ROLE_ARN="arn:aws:iam::895523100917:role/terraform"
 export my_aws_env="sandpit"
 

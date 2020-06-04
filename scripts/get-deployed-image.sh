@@ -4,7 +4,7 @@ set -e
 
 dtag="latest"
 
-source $(pwd)/scripts/assume-role.sh ${ENV_TERRAFORM_IAM_ROLE_ARN}
+source $(pwd)/scripts/assume-role.sh ${ENVIRONMENT_TERRAFORM_IAM_ROLE_ARN}
 describe_service_results=`aws --output json ecs describe-services --services ${service_name} --cluster ${cluster_arn}`
 task_def_arn=`echo ${describe_service_results} | jq --arg SERVICE_NAME "${service_name}" -r '.services[] | select(.serviceName==$SERVICE_NAME) | .deployments[] | select(.status=="PRIMARY") | .taskDefinition'`
 

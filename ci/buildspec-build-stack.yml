@@ -3,7 +3,7 @@ version: 0.2
 env:
   variables:
     ENGINEERING_TERRAFORM_IAM_ROLE_ARN: 'arn:aws:iam::895523100917:role/terraform'
-    ENV_TERRAFORM_IAM_ROLE_ARN: 'arn:aws:iam::723123699647:role/terraform'
+    ENVIRONMENT_TERRAFORM_IAM_ROLE_ARN: 'arn:aws:iam::723123699647:role/terraform'
     cluster_arn: 'arn:aws:ecs:eu-west-2:723123699647:cluster/dlc-dev-spgw-ecs-cluster'
     service_name: 'dlc-dev-spgw-alfproxy'
     container_name: 'alfresco-proxy'
