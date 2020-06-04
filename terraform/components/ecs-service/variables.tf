@@ -55,6 +55,8 @@ variable "service_config_map" {
     cpu           = "1024"
     memory        = "512"
 
+    deployment_minimum_healthy_percent = 30
+
     # ECS Task App Autoscaling min and max thresholds
     ecs_scaling_min_capacity = 1
     ecs_scaling_max_capacity = 5

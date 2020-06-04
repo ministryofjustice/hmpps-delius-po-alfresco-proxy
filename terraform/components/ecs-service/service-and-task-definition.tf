@@ -31,7 +31,7 @@ resource "aws_ecs_service" "service" {
   }
   depends_on = ["aws_iam_role.task_role"]
 
-
+  deployment_minimum_healthy_percent = "${var.service_config_map["deployment_minimum_healthy_percent"]}"
 
   load_balancer {
     target_group_arn = "${aws_lb_target_group.environment.arn}"
