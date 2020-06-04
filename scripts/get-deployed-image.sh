@@ -18,10 +18,30 @@ if [ ! -z "${task_def_arn}" ]; then
     fi
 else
     source $(pwd)/scripts/assume-role.sh ${ENGINEERING_TERRAFORM_IAM_ROLE_ARN}
-    docker_image=`aws ecr describe-images \
-        --region ${AWS_REGION} \
-        --repository-name ${IMAGE_NAME} \
-        --query 'sort_by(imageDetails,& imagePushedAt)[-1].imageTags[0]'`
+
+    echo Cleaning up untagged images...
+    eval $(aws --region ${AWS_REGION} ecr get-login --no-include-email)
+    aws sts get-caller-identity
+    UNTAGGED_IMAGES=$(aws ecr list-images --region ${AWS_REGION} --repository-name ${IMAGE_NAME} --filter tagStatus=UNTAGGED --query 'imageIds[?type(imageTag)!=`string`].[imageDigest]' --output text)
+    for DIGEST in ${UNTAGGED_IMAGES[*]}; do
+        aws ecr batch-delete-image --repository-name ${IMAGE_NAME} --image-ids imageDigest=${DIGEST}
+    done
+
+    if [ ${my_aws_env} == "sandpit" ]; then
+        docker_image=$(aws ecr describe-images \
+            --region ${AWS_REGION} \
+            --repository-name ${IMAGE_NAME} \
+            --query 'sort_by(imageDetails[?starts_with(imageTags[0], `sandpit`) == `true`],& imagePushedAt)[-1].imageTags[0]')
+    elif [ ${my_aws_env} == "dev" ]; then
+        docker_image=$(aws ecr describe-images \
+            --region ${AWS_REGION} \
+            --repository-name ${IMAGE_NAME} \
+            --query 'sort_by(imageDetails[?starts_with(imageTags[0], `dev`) == `true`],& imagePushedAt)[-1].imageTags[0]')
+    else
+        echo "Unknown environment... exiting"
+        exit 1
+    fi
+
     if [ ! -z "${docker_image}" ] && [ ${docker_image} != null ]; then
         dtag=`echo ${docker_image}`
     fi
