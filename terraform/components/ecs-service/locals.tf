@@ -2,6 +2,8 @@ locals {
   service_name   = "${var.short_environment_name}-spgw-alfproxy"
   container_name = "alfresco-proxy"
 
+  task_placement_expression = "runningTasksCount==0"
+
   hmpps_asset_name_prefix        = "${var.short_environment_name}"
 
   private_subnet_ids = [
@@ -18,6 +20,4 @@ locals {
 
   public_zone_id  = "${data.terraform_remote_state.vpc.public_zone_id}"
   external_domain = "${data.terraform_remote_state.vpc.public_zone_name}"
-
-  public_certificate_arn = "${data.aws_acm_certificate.cert.arn}"
 }

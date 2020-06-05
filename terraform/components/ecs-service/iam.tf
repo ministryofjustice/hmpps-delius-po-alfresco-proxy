@@ -1,14 +1,14 @@
 # Task Execution Role for pulling the image and putting logs to cloudwatch
-resource "aws_iam_role" "execute_role" {
+resource "aws_iam_role" "ecs_execute_role" {
   name               = "${local.service_name}-ecs-execute-role"
   assume_role_policy = "${data.template_file.ecstasks_assumerole_template.rendered}"
 }
 
-resource "aws_iam_role_policy" "execute_policy" {
+resource "aws_iam_role_policy" "ecs_execute_policy" {
   name = "${local.service_name}-ecs-execute-policy"
-  role = "${aws_iam_role.execute_role.name}"
+  role = "${aws_iam_role.ecs_execute_role.name}"
 
-  policy = "${data.template_file.policy_template.rendered}"
+  policy = "${data.template_file.ecstask_execution_policy_template.rendered}"
 }
 
 
