@@ -7,7 +7,7 @@ data "template_file" "ecstasks_assumerole_template" {
   vars     = {}
 }
 
-data "template_file" "policy_template" {
+data "template_file" "ecstask_execution_policy_template" {
   template = "${file("${path.module}/templates/iam/ecstask_execution_policy.tpl")}"
 
   vars = {
@@ -39,7 +39,7 @@ data "template_file" "task_definition" {
   }
 }
 
-data "aws_acm_certificate" "cert" {
+data "aws_acm_certificate" "vpc_public_ssl_domain_certificate" {
   domain      = "${data.terraform_remote_state.vpc.public_ssl_domain}"
   types       = ["AMAZON_ISSUED"]
   most_recent = true
