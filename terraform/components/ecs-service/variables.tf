@@ -51,7 +51,6 @@ variable "service_config_map" {
 
   default = {
     #standard ECS task vars
-    image         = "895523100917.dkr.ecr.eu-west-2.amazonaws.com/hmpps/spgw-alfresco-proxy"
     cpu           = "1024"
     memory        = "512"
 
@@ -69,7 +68,15 @@ variable "service_config_map" {
    }
 }
 
+variable "docker_image" {
+  default = "895523100917.dkr.ecr.eu-west-2.amazonaws.com/hmpps/spgw-alfresco-proxy"
+}
+
 variable "image_version" {}
+
+variable "internal_health_endpoint" {
+  default = "http://localhost:8080/actuator/health"
+}
 
 variable "application_name" {}
 variable "alfresco_health_endpoint" {}

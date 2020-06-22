@@ -28,8 +28,9 @@ data "template_file" "task_definition" {
     environment_name = "${var.environment_name}"
     project_name     = "${var.project_name}"
     container_name   = "${local.container_name}"
-    image_url        = "${var.service_config_map["image"]}"
+    image_url        = "${var.docker_image}"
     image_version    = "${var.image_version}"
+    health_endpoint   = "${var.internal_health_endpoint}"
     env_service_port = "${var.service_config_map["env_service_port"]}"
     log_group_name   = "${aws_cloudwatch_log_group.task_log_group.name}"
 

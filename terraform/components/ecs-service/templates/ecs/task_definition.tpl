@@ -5,7 +5,7 @@
         "essential": true,
         "interactive": true,
         "healthCheck": {
-            "command": [ "CMD-SHELL", "curl -s http://localhost:8080/actuator/health" ],
+            "command": [ "CMD-SHELL", "curl -s ${health_endpoint}" ],
             "interval": 60,
             "retries": 2,
             "startPeriod": 60,
