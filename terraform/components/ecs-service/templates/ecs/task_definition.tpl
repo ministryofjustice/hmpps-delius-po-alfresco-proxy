@@ -5,7 +5,7 @@
         "essential": true,
         "interactive": true,
         "healthCheck": {
-            "command": [ "CMD-SHELL", "curl -s ${heath_endpoint}" ],
+            "command": [ "CMD-SHELL", "curl -s ${health_endpoint}" ],
             "interval": 60,
             "retries": 2,
             "startPeriod": 60,
