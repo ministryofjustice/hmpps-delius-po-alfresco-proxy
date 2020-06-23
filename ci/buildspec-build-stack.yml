@@ -13,6 +13,7 @@ phases:
       - rm -rf terraform/env_configs
       - git clone https://github.com/ministryofjustice/hmpps-env-configs.git terraform/env_configs
       - ${CODEBUILD_SRC_DIR}/scripts/${STACK_PRE_BUILD_COMMANDS}
+      - source ${CODEBUILD_SRC_DIR}/scripts/export-alfresco-proxy-version.sh
       - echo "-------------------------- PRE-BUILD --------------------------"
       - echo "Value of environment var TF_VAR_image_version=${TF_VAR_image_version}"
       - echo "----------------------------------------------------------"
