@@ -2,24 +2,17 @@ version: 0.2
 
 env:
   variables:
-    ENGINEERING_TERRAFORM_IAM_ROLE_ARN: 'arn:aws:iam::895523100917:role/terraform'
     ENVIRONMENT_TERRAFORM_IAM_ROLE_ARN: 'arn:aws:iam::723123699647:role/terraform'
     cluster_arn: 'arn:aws:ecs:eu-west-2:723123699647:cluster/dlc-dev-spgw-ecs-cluster'
     service_name: 'dlc-dev-spgw-alfproxy'
-    container_name: 'alfresco-proxy'
     environment_name: 'delius-core-dev'
-    IMAGE_NAME: 'hmpps/spgw-alfresco-proxy'
     PROJECT_NAME: 'hmpps-po-alfresco-proxy'
-    my_aws_env: 'dev'
 phases:
   pre_build:
     commands:
       - rm -rf terraform/env_configs
       - git clone https://github.com/ministryofjustice/hmpps-env-configs.git terraform/env_configs
-      - ${CODEBUILD_SRC_DIR}/scripts/get-deployed-image.sh
-      - image_tag=`cat image.tag | tr -d '\n'`
-      - echo "image_tag = ${image_tag}"
-      - export TF_VAR_image_version=${image_tag}
+      - ${CODEBUILD_SRC_DIR}/scripts/${STACK_PRE_BUILD_COMMANDS}
   build:
     commands:
       - export HMPPS_BUILD_WORK_DIR=${CODEBUILD_SRC_DIR}/terraform
@@ -27,6 +20,9 @@ phases:
       - cd ${CODEBUILD_SRC_DIR}/terraform/components
       - ${CODEBUILD_SRC_DIR}/scripts/1-stack-plan.sh
       - ${CODEBUILD_SRC_DIR}/scripts/2-stack-apply.sh
+  post_build:
+    commands:
+      - ${CODEBUILD_SRC_DIR}/scripts/${STACK_POST_BUILD_COMMANDS}
 artifacts:
   files:
     - '**/*'

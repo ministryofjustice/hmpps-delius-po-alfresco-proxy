@@ -17,7 +17,11 @@ if [ ! -z "${task_def_arn}" ]; then
         dtag=`echo "${docker_image}" | awk -F':' '{print $2}'`
     fi
 else
-    source $(pwd)/scripts/assume-role.sh ${ENGINEERING_TERRAFORM_IAM_ROLE_ARN}
+    source $(pwd)/scripts/unassume-role.sh
+
+    if [ -n "${ENGINEERING_TERRAFORM_IAM_ROLE_ARN}" ]; then
+        source $(pwd)/scripts/assume-role.sh ${ENGINEERING_TERRAFORM_IAM_ROLE_ARN}
+    fi
 
     echo Cleaning up untagged images...
     eval $(aws --region ${AWS_REGION} ecr get-login --no-include-email)
