@@ -18,6 +18,9 @@ phases:
       - export HMPPS_BUILD_WORK_DIR=${CODEBUILD_SRC_DIR}/terraform
       - export CUSTOM_COMMON_PROPERTIES_DIR=${CODEBUILD_SRC_DIR}/terraform/env_configs/common
       - cd ${CODEBUILD_SRC_DIR}/terraform/components
+      - image_tag=`[[ -f image.tag ]] && (cat image.tag | head -n 1 | tr -d '\n')`
+      - echo "image_tag = ${image_tag}"
+      - [[ -n "${image_tag}" ]] && export TF_VAR_image_version=${image_tag}
       - ${CODEBUILD_SRC_DIR}/scripts/1-stack-plan.sh
       - ${CODEBUILD_SRC_DIR}/scripts/2-stack-apply.sh
   post_build:
