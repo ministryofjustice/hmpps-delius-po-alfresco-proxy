@@ -86,3 +86,11 @@ variable "cloudwatch_log_retention" {
   description = "Cloudwatch logs data retention in days"
   default     = "14"
 }
+
+variable "eng_remote_state_bucket_name" {}
+
+variable "eng_role_arn" {}
+
+variable "is_wiremock" {
+  description = "indicator to show if an environment contains official data (prod,preprod etc)"
+}
