@@ -14,18 +14,11 @@ phases:
       - git clone https://github.com/ministryofjustice/hmpps-env-configs.git terraform/env_configs
       - ${CODEBUILD_SRC_DIR}/scripts/${STACK_PRE_BUILD_COMMANDS}
       - source ${CODEBUILD_SRC_DIR}/scripts/${STACK_PRE_BUILD_ENVIRONMENT}
-      - echo "-------------------------- PRE-BUILD --------------------------"
-      - echo "Value of environment var TF_VAR_image_version=${TF_VAR_image_version}"
-      - echo "----------------------------------------------------------"
   build:
     commands:
       - export HMPPS_BUILD_WORK_DIR=${CODEBUILD_SRC_DIR}/terraform
       - export CUSTOM_COMMON_PROPERTIES_DIR=${CODEBUILD_SRC_DIR}/terraform/env_configs/common
       - cd ${CODEBUILD_SRC_DIR}/terraform/components
-      - echo ""
-      - echo "-------------------------- BUILD --------------------------"
-      - echo "Value of environment var TF_VAR_image_version=${TF_VAR_image_version}"
-      - echo "----------------------------------------------------------"
       - ${CODEBUILD_SRC_DIR}/scripts/1-stack-plan.sh
       - ${CODEBUILD_SRC_DIR}/scripts/2-stack-apply.sh
   post_build:
