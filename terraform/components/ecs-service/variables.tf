@@ -93,4 +93,5 @@ variable "eng_role_arn" {}
 
 variable "is_wiremock" {
   description = "indicator to show if an environment contains official data (prod,preprod etc)"
+  default = false
 }
