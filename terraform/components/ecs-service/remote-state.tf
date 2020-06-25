@@ -20,6 +20,17 @@ data "terraform_remote_state" "vpc_security_groups" {
   }
 }
 
+data "terraform_remote_state" "engineering_nat" {
+  backend = "s3"
+
+  config {
+    bucket = "${var.eng_remote_state_bucket_name}"
+    key    = "natgateway/terraform.tfstate"
+    region = "${var.region}"
+    role_arn = "${var.eng_role_arn}"
+  }
+}
+
 #TODO remove this and add explicit outbound rules as part of security hardening ticket ALS-500
 #SPG Common Security Groups & Rules (Used for common outbound rules
 data "terraform_remote_state" "security-groups-and-rules" {
