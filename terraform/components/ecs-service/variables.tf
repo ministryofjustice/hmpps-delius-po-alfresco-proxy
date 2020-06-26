@@ -64,7 +64,7 @@ variable "service_config_map" {
     ecs_target_cpu = "60"
 
     # Task Def Env Vars
-    env_service_port               = 8080
+    env_service_port = 8080
    }
 }
 

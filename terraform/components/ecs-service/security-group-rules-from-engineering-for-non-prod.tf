@@ -7,7 +7,7 @@
 #8080
 resource "aws_security_group_rule" "8080_from_engineering_ingress" {
   count                    = "${var.is_wiremock ? 0 : 1}" # do not allow access if on official data enviro (prod, preprod etc)
-  security_group_id        = "${data.terraform_remote_state.ecs_cluster.haproxy_task_security_group_id}"
+  security_group_id        = "${data.terraform_remote_state.ecs_cluster.alfresco_proxy_task_security_group_id}"
   description              = "from engineeringNAT for use by CI/CD tests"
   type                     = "ingress"
   cidr_blocks              = [
