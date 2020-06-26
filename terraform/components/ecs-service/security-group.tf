@@ -39,7 +39,7 @@ resource "aws_security_group_rule" "all_traffic_from_nlb" {
 #-------------------------------------------------------------
 
 resource "aws_security_group_rule" "8080_from_mojVPN_ingress" {
-  count                    = "${var.is_wiremock ? 1 : 1}" # do not allow access if on official data enviro (prod, preprod etc)
+  count                    = "${var.is_wiremock ? 0 : 1}" # do not allow access if on official data enviro (prod, preprod etc)
   security_group_id        = "${data.terraform_remote_state.ecs_cluster.alfresco_proxy_task_security_group_id}"
   description              = "from moj VPN for use by spg developers"
   type                     = "ingress"
