@@ -1,10 +1,10 @@
 resource "aws_autoscaling_group" "ecs_asg" {
   name                 = "${local.service_name}-asg"
-  launch_configuration = "${data.terraform_remote_state.ecs_cluster.launch_configuration_id}"
+  launch_configuration = "${aws_launch_configuration.ecs_host_lc.id}"
 
   # Not setting desired count as that could cause scale in when deployment runs and lead to resource exhaustion
-  max_size = "${var.service_config_map["ecs_scaling_max_capacity"]}"
-  min_size = "${var.service_config_map["ecs_scaling_min_capacity"]}"
+  max_size = "${var.ecs_scaling_max_capacity}"
+  min_size = "${var.ecs_scaling_min_capacity}"
   health_check_grace_period = 0
   termination_policies= ["NewestInstance"]
   vpc_zone_identifier = [

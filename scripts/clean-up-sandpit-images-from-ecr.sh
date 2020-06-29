@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-export cluster_arn="arn:aws:ecs:eu-west-2:723123699647:cluster/dlc-sandpit-spgw-ecs-cluster"
 export service_name="dlc-sandpit-spgw-alfproxy"
+export cluster_arn="arn:aws:ecs:eu-west-2:723123699647:cluster/${service_name}"
 export project_name="alfresco-proxy"
 export AWS_REGION="eu-west-2"
 export IMAGE_NAME="hmpps/spgw-alfresco-proxy"
