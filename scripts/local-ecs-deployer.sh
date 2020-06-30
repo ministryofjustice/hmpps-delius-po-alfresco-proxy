@@ -27,8 +27,8 @@ $(pwd)/scripts/build-docker-image.sh
 $(pwd)/scripts/upload-sandpit-docker-image.sh
 
 terraform_role_arn="arn:aws:iam::723123699647:role/terraform"
-cluster_arn="arn:aws:ecs:eu-west-2:723123699647:cluster/dlc-sandpit-spgw-ecs-cluster"
 service_name="dlc-sandpit-spgw-alfproxy"
+cluster_arn="arn:aws:ecs:eu-west-2:723123699647:cluster/${service_name}"
 docker_image=${REPOSITORY_URI}:${TAG}
 desired_count=1
 deployment_timeout=900

@@ -15,10 +15,9 @@ resource "aws_ecs_task_definition" "task_definition" {
   }
 }
 
-
 resource "aws_ecs_service" "service" {
   name            = "${local.service_name}"
-  cluster         = "${data.terraform_remote_state.ecs_cluster.shared_ecs_cluster_id}"
+  cluster         = "${aws_ecs_cluster.ecs.id}"
   task_definition = "${aws_ecs_task_definition.task_definition.arn}"
 
   # TODO what does this mean?
@@ -26,7 +25,7 @@ resource "aws_ecs_service" "service" {
   # propagate_tags  = "TASK_DEFINITION"
 
   network_configuration = {
-    subnets = ["${local.private_subnet_ids}"]
+    subnets         = ["${local.private_subnet_ids}"]
 
     security_groups = [
       "${data.terraform_remote_state.ecs_cluster.alfresco_proxy_task_security_group_id}",
@@ -45,8 +44,5 @@ resource "aws_ecs_service" "service" {
     container_port   = "${var.service_config_map["env_service_port"]}"
   }
 
-  lifecycle {
-    ignore_changes = ["desired_count"]
-  }
+  desired_count = "${var.task_desired_count}"
 }
-

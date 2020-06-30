@@ -1,11 +1,9 @@
-
 resource "aws_appautoscaling_policy" "cpu_utilization_low_scaling_policy" {
   name               = "${local.service_name}-cpu-low-scaling-policy"
   policy_type        = "StepScaling"
   resource_id        = "${aws_appautoscaling_target.scaling_target.resource_id}"
   scalable_dimension = "${aws_appautoscaling_target.scaling_target.scalable_dimension}"
   service_namespace  = "${aws_appautoscaling_target.scaling_target.service_namespace}"
-
 
   step_scaling_policy_configuration {
     adjustment_type = "ChangeInCapacity"
@@ -26,7 +24,6 @@ resource "aws_appautoscaling_policy" "cpu_utilization_high_scaling_policy" {
   scalable_dimension = "${aws_appautoscaling_target.scaling_target.scalable_dimension}"
   service_namespace  = "${aws_appautoscaling_target.scaling_target.service_namespace}"
 
-
   step_scaling_policy_configuration {
     adjustment_type = "ChangeInCapacity"
     cooldown = 700
@@ -40,8 +37,8 @@ resource "aws_appautoscaling_policy" "cpu_utilization_high_scaling_policy" {
 }
 
 resource "aws_appautoscaling_target" "scaling_target" {
-  min_capacity       = "${var.service_config_map["ecs_scaling_min_capacity"]}"
-  max_capacity       = "${var.service_config_map["ecs_scaling_max_capacity"]}"
+  min_capacity       = "${var.ecs_scaling_min_capacity}"
+  max_capacity       = "${var.ecs_scaling_max_capacity}"
   resource_id        = "service/${data.terraform_remote_state.ecs_cluster.shared_ecs_cluster_name}/${aws_ecs_service.service.name}"
   role_arn           = "${aws_iam_role.ecs_execute_role.arn}"
   scalable_dimension = "ecs:service:DesiredCount"
@@ -73,7 +70,6 @@ resource "aws_cloudwatch_metric_alarm" "cpu_utilization_high" {
   alarm_actions     = ["${aws_appautoscaling_policy.cpu_utilization_high_scaling_policy.arn}",
     "${aws_autoscaling_policy.cpu_utilization_high_scaling_policy.arn}"] //We want to reuse this alarm for ASG scaling policy
 }
-
 
 resource "aws_cloudwatch_metric_alarm" "cpu_utilization_low" {
   alarm_name = "${local.service_name}-cpu-low-alarm"

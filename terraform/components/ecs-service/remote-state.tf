@@ -43,7 +43,6 @@ data "terraform_remote_state" "security-groups-and-rules" {
   }
 }
 
-
 # Load in shared ECS cluster state file for target cluster arn
 data "terraform_remote_state" "ecs_cluster" {
   backend = "s3"
@@ -55,13 +54,15 @@ data "terraform_remote_state" "ecs_cluster" {
   }
 }
 
-# Load in LDAP (apacheds) state for ldap connectivity details
-data "terraform_remote_state" "delius_ldap" {
+#-------------------------------------------------------------
+### Getting the IAM details
+#-------------------------------------------------------------
+data "terraform_remote_state" "iam" {
   backend = "s3"
 
   config {
     bucket = "${var.remote_state_bucket_name}"
-    key    = "delius-core/application/ldap/terraform.tfstate"
+    key    = "spg/iam/terraform.tfstate"
     region = "${var.region}"
   }
 }

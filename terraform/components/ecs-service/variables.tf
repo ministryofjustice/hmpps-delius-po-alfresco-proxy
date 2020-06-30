@@ -1,3 +1,8 @@
+variable "ecs_instance_type" {
+  description = "EC2 instance type for ECS Hosts"
+  default     = "t2.medium"
+}
+
 variable "environment_name" {
   type = "string"
 }
@@ -56,16 +61,25 @@ variable "service_config_map" {
 
     deployment_minimum_healthy_percent = 30
 
-    # ECS Task App Autoscaling min and max thresholds
-    ecs_scaling_min_capacity = 1
-    ecs_scaling_max_capacity = 5
-
     # ECS Task App AutoScaling will kick in above avg cpu util set here
     ecs_target_cpu = "60"
 
     # Task Def Env Vars
-    env_service_port               = 8080
+    env_service_port = 8080
    }
+}
+
+# ECS Task App Autoscaling min and max thresholds
+variable "ecs_scaling_min_capacity" {
+  default = 1
+}
+
+variable "ecs_scaling_max_capacity" {
+  default = 5
+}
+
+variable "task_desired_count" {
+  default = 1
 }
 
 variable "docker_image" {
@@ -95,3 +109,5 @@ variable "is_wiremock" {
   description = "indicator to show if an environment contains official data (prod,preprod etc)"
   default = false
 }
+
+variable "bastion_inventory" {}

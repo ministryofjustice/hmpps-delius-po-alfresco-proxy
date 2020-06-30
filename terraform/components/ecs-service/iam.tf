@@ -11,7 +11,6 @@ resource "aws_iam_role_policy" "ecs_execute_policy" {
   policy = "${data.template_file.ecstask_execution_policy_template.rendered}"
 }
 
-
 # Task role - TODO currently the old instance roles are being used for tasks, this will be used as part of ALS-473
 resource "aws_iam_role" "task_role" {
   name               = "${local.service_name}-ecs-task-role"
