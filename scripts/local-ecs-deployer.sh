@@ -15,10 +15,11 @@ else
     postfix=${md5:0:7}
 fi
 
+export my_aws_env="sandpit"
 export AWS_REGION="eu-west-2"
 export IMAGE_REGISTRY="895523100917.dkr.ecr.eu-west-2.amazonaws.com"
 export IMAGE_NAME="hmpps/spgw-alfresco-proxy"
-export TAG="sandpit-${postfix}"
+export TAG="${my_aws_env}-${postfix}"
 export REPOSITORY_URI=${IMAGE_REGISTRY}/${IMAGE_NAME}
 
 echo "image tag => ${TAG}"
@@ -27,7 +28,7 @@ $(pwd)/scripts/build-docker-image.sh
 $(pwd)/scripts/upload-sandpit-docker-image.sh
 
 terraform_role_arn="arn:aws:iam::723123699647:role/terraform"
-service_name="dlc-sandpit-spgw-alfproxy"
+service_name="dlc-${my_aws_env}-spgw-alfproxy"
 cluster_arn="arn:aws:ecs:eu-west-2:723123699647:cluster/${service_name}"
 docker_image=${REPOSITORY_URI}:${TAG}
 desired_count=1

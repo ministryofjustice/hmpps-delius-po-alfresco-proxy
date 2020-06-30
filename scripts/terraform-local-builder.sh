@@ -6,7 +6,7 @@ set -e
 # See Makefile for usage
 
 export my_aws_env="sandpit"
-export service_name="dlc-sandpit-spgw-alfproxy"
+export service_name="dlc-${my_aws_env}-spgw-alfproxy"
 export cluster_arn="arn:aws:ecs:eu-west-2:723123699647:cluster/${service_name}"
 export container_name="alfresco-proxy"
 export IMAGE_NAME="hmpps/spgw-alfresco-proxy"
