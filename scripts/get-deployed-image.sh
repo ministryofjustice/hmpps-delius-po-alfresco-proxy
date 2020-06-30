@@ -2,21 +2,7 @@
 
 set -e
 
-dtag="latest"
-
-source $(pwd)/scripts/assume-role.sh ${ENVIRONMENT_TERRAFORM_IAM_ROLE_ARN}
-describe_service_results=`aws --output json ecs describe-services --services ${service_name} --cluster ${cluster_arn}`
-task_def_arn=`echo ${describe_service_results} | jq --arg SERVICE_NAME "${service_name}" -r '.services[] | select(.serviceName==$SERVICE_NAME) | .deployments[] | select(.status=="PRIMARY") | .taskDefinition'`
-
-echo "=================================================="
-if [ ! -z "${task_def_arn}" ]; then
-    task_def_result=`aws ecs describe-task-definition --task-definition "${task_def_arn}"`
-
-    docker_image=`echo ${task_def_result} | jq --arg CONTAINER_NAME "${container_name}" -r '.taskDefinition | .containerDefinitions[] | select(.name==$CONTAINER_NAME) | .image'`
-    if [ ! -z "${docker_image}" ] && [ ${docker_image} != null ]; then
-        dtag=`echo "${docker_image}" | awk -F':' '{print $2}'`
-    fi
-else
+function getLatestImageTag() {
     source $(pwd)/scripts/unassume-role.sh
 
     if [ -n "${ENGINEERING_TERRAFORM_IAM_ROLE_ARN}" ]; then
@@ -47,8 +33,35 @@ else
     fi
 
     if [ ! -z "${docker_image}" ] && [ ${docker_image} != null ]; then
-        dtag=`echo ${docker_image}`
+        current_tag=`echo ${docker_image}`
     fi
+}
+
+alfresco_proxy_image="895523100917.dkr.ecr.eu-west-2.amazonaws.com/hmpps/spgw-alfresco-proxy"
+current_tag="latest"
+
+source $(pwd)/scripts/assume-role.sh ${ENVIRONMENT_TERRAFORM_IAM_ROLE_ARN}
+describe_service_results=`aws --output json ecs describe-services --services ${service_name} --cluster ${cluster_arn}`
+task_def_arn=`echo ${describe_service_results} | jq --arg SERVICE_NAME "${service_name}" -r '.services[] | select(.serviceName==$SERVICE_NAME) | .deployments[] | select(.status=="PRIMARY") | .taskDefinition'`
+
+echo "=================================================="
+if [ -n "${task_def_arn}" ]; then
+    task_def_result=`aws ecs describe-task-definition --task-definition "${task_def_arn}"`
+
+    docker_image=`echo ${task_def_result} | jq --arg CONTAINER_NAME "${container_name}" -r '.taskDefinition | .containerDefinitions[] | select(.name==$CONTAINER_NAME) | .image'`
+    if [ -n "${docker_image}" ] && [ ${docker_image} != null ]; then
+        current_image=`echo "${docker_image}" | awk -F':' '{print $1}'`
+        echo "current_image =======> ${current_image}"
+        if [ ${current_image} == ${alfresco_proxy_image} ]; then
+            current_tag=`echo "${docker_image}" | awk -F':' '{print $2}'`
+        else
+            getLatestImageTag
+        fi
+    else
+        getLatestImageTag
+    fi
+else
+    getLatestImageTag
 fi
 
-echo ${dtag} > image.tag
+echo ${current_tag} > image.tag

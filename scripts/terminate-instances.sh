@@ -31,4 +31,7 @@ ec2_instance_id=`aws ecs describe-container-instances \
     --container-instances ${container_instance_arn} | jq -r '.containerInstances[].ec2InstanceId'`
 
 aws ec2 terminate-instances --instance-ids ${ec2_instance_id}
+
+source $(pwd)/scripts/unassume-role.sh
+
 sleep 30

@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-export service_name="dlc-sandpit-spgw-alfproxy"
+export my_aws_env="sandpit"
+export service_name="dlc-${my_aws_env}-spgw-alfproxy"
 export cluster_arn="arn:aws:ecs:eu-west-2:723123699647:cluster/${service_name}"
 export project_name="alfresco-proxy"
 export AWS_REGION="eu-west-2"
@@ -13,12 +14,9 @@ export image_tag=`cat image.tag | tr -d '\n'`
 rm -f image.tag
 echo "image_tag = ${image_tag}"
 
-unset AWS_ACCESS_KEY_ID
-unset AWS_SECRET_ACCESS_KEY
-unset AWS_SESSION_TOKEN
+source $(pwd)/scripts/unassume-role.sh
 
 #--------------------------------------------------------------------------------
-export my_aws_env="sandpit"
 
 source $(pwd)/scripts/assume-role.sh ${ENGINEERING_TERRAFORM_IAM_ROLE_ARN}
 
