@@ -39,7 +39,7 @@ resource "aws_appautoscaling_policy" "cpu_utilization_high_scaling_policy" {
 resource "aws_appautoscaling_target" "scaling_target" {
   min_capacity       = "${var.ecs_scaling_min_capacity}"
   max_capacity       = "${var.ecs_scaling_max_capacity}"
-  resource_id        = "service/${data.terraform_remote_state.ecs_cluster.shared_ecs_cluster_name}/${aws_ecs_service.service.name}"
+  resource_id        = "service/${local.service_name}/${local.service_name}"
   role_arn           = "${aws_iam_role.ecs_execute_role.arn}"
   scalable_dimension = "ecs:service:DesiredCount"
   service_namespace  = "ecs"
@@ -63,7 +63,7 @@ resource "aws_cloudwatch_metric_alarm" "cpu_utilization_high" {
 
   dimensions {
     ServiceName = "${local.service_name}"
-    ClusterName = "${data.terraform_remote_state.ecs_cluster.shared_ecs_cluster_name}"
+    ClusterName = "${local.service_name}"
   }
 
   alarm_description = "This metric monitors ecs cpu utilization"
@@ -83,7 +83,7 @@ resource "aws_cloudwatch_metric_alarm" "cpu_utilization_low" {
 
   dimensions {
     ServiceName = "${local.service_name}"
-    ClusterName = "${data.terraform_remote_state.ecs_cluster.shared_ecs_cluster_name}"
+    ClusterName = "${local.service_name}"
 
   }
 
