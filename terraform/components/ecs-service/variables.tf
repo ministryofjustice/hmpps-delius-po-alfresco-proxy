@@ -88,8 +88,8 @@ variable "docker_image" {
 
 variable "image_version" {}
 
-variable "internal_health_endpoint" {
-  default = "http://localhost:8080/actuator/health"
+variable "internal_health_command" {
+  default = "curl -s http://localhost:8080/actuator/health"
 }
 
 variable "application_name" {}
