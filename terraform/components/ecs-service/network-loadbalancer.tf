@@ -79,9 +79,9 @@ resource "aws_route53_record" "dns_entry" {
 
 resource "aws_route53_record" "wiremock_public_dns_entry" {
   count                    = "${var.is_wiremock ? 1 : 0}" # do not allow access if on official data enviro (prod, preprod etc)
-  zone_id = "${data.terraform_remote_state.vpc.public_zone_id}"
-  name    = "wiremock-${local.service_name}"
-  type    = "A"
+  zone_id                  = "${data.terraform_remote_state.vpc.public_zone_id}"
+  name                     = "wiremock-${local.service_name}"
+  type                     = "A"
 
   alias {
     name                   = "${aws_lb.environment.dns_name}"

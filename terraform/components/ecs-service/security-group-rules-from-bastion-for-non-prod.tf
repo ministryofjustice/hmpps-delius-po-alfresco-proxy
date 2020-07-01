@@ -5,6 +5,6 @@ resource "aws_security_group_rule" "rule_8080_from_bastion" {
   from_port                = "8080"
   to_port                  = "8080"
   protocol                 = "tcp"
-  cidr_blocks             = [ "${values(data.terraform_remote_state.vpc.bastion_vpc_public_cidr)}" ]
-  description              = "from SPG developers' computers via bastion"
+  cidr_blocks              = ["${values(data.terraform_remote_state.vpc.bastion_vpc_public_cidr)}",]
+  description              = "from SPG developers computers via bastion"
 }
