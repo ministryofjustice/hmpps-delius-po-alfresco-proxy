@@ -32,6 +32,8 @@ ec2_instance_id=`aws ecs describe-container-instances \
 
 aws ec2 terminate-instances --instance-ids ${ec2_instance_id}
 
-source $(pwd)/scripts/unassume-role.sh
+unset AWS_ACCESS_KEY_ID
+unset AWS_SECRET_ACCESS_KEY
+unset AWS_SESSION_TOKEN
 
 sleep 30
