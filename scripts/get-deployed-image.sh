@@ -41,6 +41,17 @@ alfresco_proxy_image="895523100917.dkr.ecr.eu-west-2.amazonaws.com/hmpps/spgw-al
 current_tag="latest"
 
 source $(pwd)/scripts/assume-role.sh ${ENVIRONMENT_TERRAFORM_IAM_ROLE_ARN}
+
+# Check if the cluster exists at all
+cluster_results=`aws ecs describe-clusters --cluster "${cluster_arn}" | jq -r '.failures'`
+cluster_results_errors=`echo "${cluster_results}" | jq '. | length'`
+if [[ ${cluster_results_errors} > 0 ]]; then
+    printf "============> ecs describe-clusters has errors:\n%s\n---------------------------\n" "${cluster_results}"
+    echo ${current_tag} > image.tag
+    exit 0
+fi
+
+# Cluster exists. Get the latest image and tag
 describe_service_results=`aws --output json ecs describe-services --services ${service_name} --cluster ${cluster_arn}`
 task_def_arn=`echo ${describe_service_results} | jq --arg SERVICE_NAME "${service_name}" -r '.services[] | select(.serviceName==$SERVICE_NAME) | .deployments[] | select(.status=="PRIMARY") | .taskDefinition'`
 
