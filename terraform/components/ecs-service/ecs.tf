@@ -8,7 +8,7 @@ resource "aws_ecs_cluster" "ecs" {
 resource "aws_launch_configuration" "ecs_host_lc" {
   name_prefix                 = "${local.service_name}"
   associate_public_ip_address = false
-  iam_instance_profile        = "${data.terraform_remote_state.iam.iam_policy_iso_ext_app_instance_profile_name}"
+  iam_instance_profile        = "${aws_iam_instance_profile.iam_instance_profile.name}"
   image_id                    = "${data.terraform_remote_state.ecs_cluster.ecs_ami_id}"
   instance_type               = "${var.ecs_instance_type}"
 
