@@ -1,0 +1,20 @@
+version: 0.2
+
+env:
+  variables:
+    ENVIRONMENT_TERRAFORM_IAM_ROLE_ARN: 'arn:aws:iam::723123699647:role/terraform'
+    my_aws_env: 'dev'
+    service_name: 'dlc-dev-spgw-alfproxy'
+    cluster_arn: 'arn:aws:ecs:eu-west-2:723123699647:cluster/dlc-dev-spgw-alfproxy'
+    environment_name: 'delius-core-dev'
+    container_name: 'alfresco-proxy'
+    IMAGE_NAME: 'hmpps/spgw-alfresco-proxy'
+    PROJECT_NAME: 'hmpps-po-alfresco-proxy'
+phases:
+  build:
+    commands:
+      - ${CODEBUILD_SRC_DIR}/scripts/get-deployed-image.sh
+artifacts:
+  files:
+    - '**/*'
+  name: $Env:PROJECT_NAME-$(date +%Y-%m-%d-%H-%m-%S)
