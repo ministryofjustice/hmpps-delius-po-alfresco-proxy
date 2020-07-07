@@ -7,4 +7,3 @@ date
 echo "Waiting for wiremock to start up (12 minutes)"
 sleep 720
 date
-curl -sS http://wiremock-dlc-dev-spgw-alfproxy.dev.delius-core.probation.hmpps.dsd.io:8080/__admin/mappings
