@@ -3,8 +3,19 @@ data "terraform_remote_state" "vpc" {
   backend = "s3"
 
   config {
-    bucket = "${var.remote_state_bucket_name}"
+    bucket = "${var.network_and_legacy_spg_remote_state_bucket_name}"
     key    = "vpc/terraform.tfstate"
+    region = "${var.region}"
+  }
+}
+
+# Load in sub VPC state data for custom domains
+data "terraform_remote_state" "sub_vpc" {
+  backend = "s3"
+
+  config {
+    bucket = "${var.remote_state_bucket_name}"
+    key    = "hosted-zones-for-additional-sandpit-environments-only/terraform.tfstate"
     region = "${var.region}"
   }
 }
@@ -14,7 +25,7 @@ data "terraform_remote_state" "vpc_security_groups" {
   backend = "s3"
 
   config {
-    bucket = "${var.remote_state_bucket_name}"
+    bucket = "${var.network_and_legacy_spg_remote_state_bucket_name}"
     key    = "security-groups/terraform.tfstate"
     region = "${var.region}"
   }
@@ -37,7 +48,7 @@ data "terraform_remote_state" "security-groups-and-rules" {
   backend = "s3"
 
   config {
-    bucket = "${var.remote_state_bucket_name}"
+    bucket = "${var.network_and_legacy_spg_remote_state_bucket_name}"
     key    = "spg/security-groups-and-rules/terraform.tfstate"
     region = "${var.region}"
   }
@@ -74,7 +85,7 @@ data "terraform_remote_state" "common" {
   backend = "s3"
 
   config {
-    bucket = "${var.remote_state_bucket_name}"
+    bucket = "${var.network_and_legacy_spg_remote_state_bucket_name}"
     key    = "spg/common/terraform.tfstate"
     region = "${var.region}"
   }
@@ -84,7 +95,7 @@ data "terraform_remote_state" "kms" {
   backend = "s3"
 
   config {
-    bucket = "${var.remote_state_bucket_name}"
+    bucket = "${var.network_and_legacy_spg_remote_state_bucket_name}"
     key    = "spg/kms-certificates-spg/terraform.tfstate"
     region = "${var.region}"
   }

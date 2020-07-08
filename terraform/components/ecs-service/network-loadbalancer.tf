@@ -65,7 +65,23 @@ resource "aws_lb_listener" "environment_no_https" {
   }
 }
 
+#uses special sub vpc when on sandpit-2
+resource "aws_route53_record" "dns_entry_sandpit_2" {
+  count   = "${var.environment_name=="delius-core-sandpit-2" ? 1 : 0}"
+  zone_id = "${data.terraform_remote_state.sub_vpc.private_zone_id}"
+  name    = "${local.service_name}"
+  type    = "A"
+
+  alias {
+    name                   = "${aws_lb.environment.dns_name}"
+    zone_id                = "${aws_lb.environment.zone_id}"
+    evaluate_target_health = false
+  }
+}
+
+#uses regular vpc when not on sandpit-2
 resource "aws_route53_record" "dns_entry" {
+  count   = "${var.environment_name=="delius-core-sandpit-2" ? 0 : 1}"
   zone_id = "${data.terraform_remote_state.vpc.private_zone_id}"
   name    = "${local.service_name}"
   type    = "A"
@@ -77,8 +93,10 @@ resource "aws_route53_record" "dns_entry" {
   }
 }
 
+
+#ASSUMES WIREMOCE WILL NOT BE USED IN SANDPIT-2  (if this changes, repeat the conditional pattern above)
 resource "aws_route53_record" "wiremock_public_dns_entry" {
-  count                    = "${var.is_wiremock ? 1 : 0}" # do not allow access if on official data enviro (prod, preprod etc)
+  count                    = "${var.is_wiremock ? 1 : 0}"
   zone_id                  = "${data.terraform_remote_state.vpc.public_zone_id}"
   name                     = "wiremock-${local.service_name}"
   type                     = "A"

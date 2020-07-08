@@ -22,6 +22,11 @@ function getLatestImageTag() {
             --region ${AWS_REGION} \
             --repository-name ${IMAGE_NAME} \
             --query 'sort_by(imageDetails[?starts_with(imageTags[0], `sandpit`) == `true`],& imagePushedAt)[-1].imageTags[0]')
+    elif [ ${my_aws_env} == "sandpit-2" ]; then
+        docker_image=$(aws ecr describe-images \
+            --region ${AWS_REGION} \
+            --repository-name ${IMAGE_NAME} \
+            --query 'sort_by(imageDetails[?starts_with(imageTags[0], `sandpit-2`) == `true`],& imagePushedAt)[-1].imageTags[0]')
     elif [ ${my_aws_env} == "dev" ]; then
         docker_image=$(aws ecr describe-images \
             --region ${AWS_REGION} \

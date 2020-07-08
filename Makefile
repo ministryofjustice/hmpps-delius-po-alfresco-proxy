@@ -28,14 +28,30 @@ package:
 ##############
 
 sandpit-plan:
-	scripts/terraform-local-builder.sh terraform-local-plan.sh
+	scripts/terraform-local-builder.sh delius-core-sandpit terraform-local-plan.sh
 
 sandpit-apply:
-	scripts/terraform-local-builder.sh terraform-local-apply.sh
+	scripts/terraform-local-builder.sh delius-core-sandpit terraform-local-apply.sh
 
 # Builds the application, docker image, uploads image to ECR and deploys to ECS
 sandpit-ecs-deploy:
-	scripts/local-ecs-deployer.sh
+	scripts/local-ecs-deployer.sh sandpit
 
 sandpit-ecr-clean:
-	scripts/clean-up-sandpit-images-from-ecr.sh
+	scripts/clean-up-sandpit-images-from-ecr.sh sandpit
+
+
+
+########## sandpit 2 ######
+sandpit-2-plan:
+	scripts/terraform-local-builder.sh delius-core-sandpit-2 terraform-local-plan.sh
+
+sandpit-2-apply:
+	scripts/terraform-local-builder.sh delius-core-sandpit-2 terraform-local-apply.sh
+
+# Builds the application, docker image, uploads image to ECR and deploys to ECS
+sandpit-2-ecs-deploy:
+	scripts/local-ecs-deployer.sh sandpit-2
+
+sandpit-2-ecr-clean:
+	scripts/clean-up-sandpit-images-from-ecr.sh sandpit-2
