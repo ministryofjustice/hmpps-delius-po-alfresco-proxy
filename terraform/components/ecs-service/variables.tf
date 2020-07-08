@@ -31,6 +31,11 @@ variable "remote_state_bucket_name" {
   description = "Terraform remote state bucket name"
 }
 
+variable "network_and_legacy_spg_remote_state_bucket_name" {
+  description = "Terraform remote state bucket name"
+}
+
+
 variable "environment_identifier" {
   description = "resource label or name"
 }

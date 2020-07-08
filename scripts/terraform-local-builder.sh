@@ -4,8 +4,8 @@ set -e
 
 # ${1} - the script to run: plan or apply
 # See Makefile for usage
-
-export my_aws_env="sandpit"
+#TODO pass this in so that sandpit-2 can work
+my_aws_env=$1
 export service_name="dlc-${my_aws_env}-spgw-alfproxy"
 export cluster_arn="arn:aws:ecs:eu-west-2:723123699647:cluster/${service_name}"
 export container_name="alfresco-proxy"
@@ -25,9 +25,9 @@ docker run -it --rm \
     -e AWS_PROFILE=hmpps-token \
     -e TF_LOG=INFO \
     -e HMPPS_BUILD_WORK_DIR=/home/tools/data/terraform \
-    -e environment_name="delius-core-${my_aws_env}" \
+    -e environment_name="${my_aws_env}" \
     -e TF_VAR_image_version="${image_tag}" \
     -e CUSTOM_COMMON_PROPERTIES_DIR=/home/tools/data/terraform/env_configs/common \
     -e "TERM=xterm-256color" \
-    --entrypoint "scripts/${1}" \
+    --entrypoint "scripts/${2}" \
     mojdigitalstudio/hmpps-terraform-builder-lite:latest
