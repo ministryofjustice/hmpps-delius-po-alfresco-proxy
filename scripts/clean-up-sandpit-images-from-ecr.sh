@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-
-export my_aws_env=$1
+set -e
+export my_aws_env=${1}
 export service_name="dlc-${my_aws_env}-spgw-alfproxy"
 export cluster_arn="arn:aws:ecs:eu-west-2:723123699647:cluster/${service_name}"
 export project_name="alfresco-proxy"

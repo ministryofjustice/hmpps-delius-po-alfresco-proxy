@@ -15,7 +15,7 @@ else
     postfix=${md5:0:7}
 fi
 
-export my_aws_env=$1
+export my_aws_env=${1}
 export AWS_REGION="eu-west-2"
 export IMAGE_REGISTRY="895523100917.dkr.ecr.eu-west-2.amazonaws.com"
 export IMAGE_NAME="hmpps/spgw-alfresco-proxy"
