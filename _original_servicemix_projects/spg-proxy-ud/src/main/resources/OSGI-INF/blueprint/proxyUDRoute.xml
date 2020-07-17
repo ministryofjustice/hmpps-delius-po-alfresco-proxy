@@ -1,0 +1,207 @@
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0"
+	xmlns:cxf="http://camel.apache.org/schema/blueprint/cxf"
+	xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+  						http://camel.apache.org/schema/blueprint/cxf http://camel.apache.org/schema/blueprint/cxf/camel-cxf.xsd">
+
+	<!-- Configure the configuration file to load properties from (needs v1.1.0
+		of blueprint-cm) -->
+	<cm:property-placeholder persistent-id="spg.proxy.ud" update-strategy="reload">
+		<cm:default-properties>
+			<cm:property name="oauth.protocol" value="https" />
+		</cm:default-properties>
+	</cm:property-placeholder>
+
+	<bean id="proxyUDDebugProcessor" class="uk.gov.gsi.justice.spg.ProxyUDDebugProcessor" />
+	<bean id="proxyUDDebugOutInterceptor" class="uk.gov.gsi.justice.spg.ProxyUDDebugOutInterceptor" />
+	<bean id="AuthUtils" class="uk.gov.gsi.justice.spg.utils.AuthUtils" />
+
+	<bean id="propertyResolver" class="uk.gov.gsi.justice.spg.utils.PropertyResolver"
+		scope="prototype">
+		<argument value="etc/spg.proxy.cfg" />
+	</bean>
+
+
+
+
+
+
+
+
+
+
+
+
+	<camelContext streamCache="{{stream.caching.enable}}"
+		xmlns="http://camel.apache.org/schema/blueprint" id="crc-rest-proxy"
+		trace="{{context.tracer}}">
+		<!-- To ensure the SPGUnstructuredService acts as a proxy, make sure the
+			"to" part of the route is configured to use the cxf clientProxyAPI by setting
+			httpClientAPI to false. This ensures that any errors returned by the service
+			we are forwarding to are sent back to the calling client and not intercepted
+			by the cxf default FaultHandler and translated to an http 500 error -->
+
+
+		<streamCaching id="cacheConfig" spoolThreshold="{{stream.caching.spool.threshold}}" />
+
+        <route id="unstructuredDataProxyRoute">
+            <from uri="cxfrs://bean://drProxyServer"/>
+            <!--<to uri="log:TEST?showAll=true" />-->
+            <bean ref="proxyUDDebugProcessor"/>
+            <choice>
+                <when>
+                    <simple>${header.operationName} == "ping"</simple>
+                    <setBody>
+                        <constant>{"message" : "proxy - ping"}</constant>
+                    </setBody>
+                </when>
+                <otherwise>
+                    <to uri="cxfrs://bean://drProxyClient?httpClientAPI=false"/>
+                </otherwise>
+            </choice>
+        </route>
+    </camelContext>
+
+
+
+
+
+
+    <!-- Our REST Proxy Server that external clients will call (defined as a
+        cxfrs:Server so we can route) -->
+    <!-- <cxf:rsServer id="drProxyServer" address="http://localhost:8282/cxf/spg-proxy-ud"
+        serviceClass="uk.gov.gsi.justice.spg.SPGUnstructuredService"> -->
+    <cxf:rsServer id="drProxyServer"
+                  address="${spg.unstructured.proxy.inbound.address}"
+                  serviceClass="uk.gov.gsi.justice.spg.SPGUnstructuredService">
+        <cxf:providers>
+            <!-- jsonProviders used by rest service to marshall/unmarshall the rest
+                payload data -->
+            <ref component-id="cxfJsonProvider"/>
+            <ref component-id="jaxbProvider"/>
+            <ref component-id="mapProviderWriter"/>
+            <ref component-id="mapProviderReader"/>
+            <!-- authorizationFilter ensures the incoming rest call is checked for
+                validation of the oauth signature -->
+            <ref component-id="authorizationFilter"/>
+            <bean class="uk.gov.gsi.justice.spg.ProxyUDWadlGenerator">
+                <argument value="${spg.unstructured.proxy.published.wadl.address}"/>
+            </bean>
+            <ref component-id="exceptionHandler"/>
+        </cxf:providers>
+
+
+        <!-- Interceptor required just prior to drClient being invoked to make
+            sure the mime boundary string is not duplicated on POST/PUT calls for multiparts -->
+        <cxf:inInterceptors>
+            <bean class="uk.gov.gsi.justice.spg.PreInvokeInterceptor"/>
+
+            <bean class="uk.gov.gsi.justice.spg.UDLoggingInInterceptor">
+                <!-- logs the file coming in, security info and creates an audit record -->
+                <!-- this interceptor is also used in the client server - is one of them a duplicate? -->
+                <property name="auditLogService" ref="auditLogService"/>
+                <property name="timestampGenerator" ref="timestampGenerator"/>
+                <property name="headerBlacklist" value="${header.blacklist}"/>
+                <property name="displayPayload" value="${display.payload}"/>
+            </bean>
+
+            <bean class="uk.gov.gsi.justice.spg.av.AntiVirusInterceptor">
+                <property name="auditLogService" ref="auditLogService"/>
+                <property name="antivirusScanner" ref="antivirusScanner"/>
+                <property name="scanForViruses" value="${spg.unstructured.proxy.clamav.scanForViruses}"/>
+            </bean>
+        </cxf:inInterceptors>
+
+        <cxf:outInterceptors>
+            <!-- audit logs start of the stream response-->
+            <bean class="uk.gov.gsi.justice.spg.UDPreStreamInterceptor">
+                <property name="auditLogService" ref="auditLogService"/>
+                <property name="timestampGenerator" ref="timestampGenerator"/>
+            </bean>
+            <!-- audit logs end of the stream response with timings-->
+            <bean class="uk.gov.gsi.justice.spg.UDPostStreamInterceptor">
+                <property name="auditLogService" ref="auditLogService"/>
+                <property name="timestampGenerator" ref="timestampGenerator"/>
+            </bean>
+
+
+        </cxf:outInterceptors>
+</cxf:rsServer>
+
+
+
+
+
+
+
+
+
+
+    <!-- Our REST Proxy Client - will make the call to the real (or stub) alfresco service
+        which is specified in the address property -->
+    <cxf:rsClient id="drProxyClient"
+                  address="${spg.unstructured.proxy.outbound.address}"
+                  serviceClass="uk.gov.gsi.justice.spg.SPGUnstructuredService">
+        <cxf:providers>
+            <ref component-id="cxfJsonProvider"/>
+            <ref component-id="jaxbProvider"/>
+            <ref component-id="mapProviderWriter"/>
+            <ref component-id="mapProviderReader"/>
+            <bean class="uk.gov.gsi.justice.spg.ProxyUDClientRequestFilter"/>
+            <ref component-id="exceptionHandler"/>
+        </cxf:providers>
+        <cxf:inInterceptors>
+            <bean class="uk.gov.gsi.justice.spg.UDLoggingInInterceptor">
+                <!-- this interceptor is also used in the proxy server - is one of them a duplicate? -->
+                <property name="headerBlacklist" value="${header.blacklist}"/>
+                <property name="auditLogService" ref="auditLogService"/>
+                <property name="timestampGenerator" ref="timestampGenerator"/>
+                <property name="displayPayload" value="${display.payload}"/>
+            </bean>
+        </cxf:inInterceptors>
+
+
+	</cxf:rsClient>
+
+
+
+
+
+
+
+
+
+
+
+
+
+	<!-- The bean services -->
+	<bean id="cxfJsonProvider" class="org.apache.cxf.jaxrs.provider.json.JSONProvider"/>
+	<bean id="jaxbProvider" class="org.apache.cxf.jaxrs.provider.JAXBElementProvider"/>
+
+	<bean id="mapProviderWriter" class="uk.gov.gsi.justice.spg.MapToJsonBodyWriter"/>
+	<bean id="mapProviderReader" class="uk.gov.gsi.justice.spg.JsonToMapBodyReader"/>
+
+	<bean id="authorizationFilter" class="uk.gov.gsi.justice.spg.OAuthRequestFilter">
+		<argument value="${oauth.protocol}" />
+        <property name="logSecurity" value="${log.security}"/>
+		<property name="propertyResolver" ref="propertyResolver" />
+		<property name="trustStoreFile" value="${spg.unstructured.proxy.trustStoreFile}" />
+		<property name="trustStorePassword" value="${spg.unstructured.proxy.trustStore.password}" />
+		<property name="auditLogService" ref="auditLogService" />
+		<property name="timestampGenerator" ref="timestampGenerator" />
+        <property name="headerBlacklist" value="${header.blacklist}" />
+    </bean>
+
+	<bean id="timestampGenerator" class="uk.gov.gsi.justice.spg.utils.TimestampGenerator"/>
+
+	<bean id="auditLogService" class="uk.gov.gsi.justice.spg.audit.UDInterchangeAuditLogService"/>
+
+	<bean id="antivirusScanner" class="uk.gov.gsi.justice.spg.av.AntivirusScanner">
+		<argument value="${spg.unstructured.proxy.clamav.address}"/>
+		<argument value="${spg.unstructured.proxy.clamav.port}"/>
+		<argument value="${spg.unstructured.proxy.clamav.timeout}"/>
+	</bean>
+
+    <bean id="exceptionHandler" class="uk.gov.gsi.justice.spg.ProxyUDExceptionHandler"/>
+</blueprint>

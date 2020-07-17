@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>uk.gov.gsi.justice.spg</groupId>
+    <artifactId>spg-parent</artifactId>
+    <version>2.6.1.1</version>
+    <name>SPG Parent (Top Level)</name>
+    <packaging>pom</packaging>
+
+    <properties>
+        <camel.version>2.15.2</camel.version>
+        <cxf.version>3.0.4</cxf.version>
+        <activemq.version>5.11.1</activemq.version>
+        <osgi.version>4.3.0</osgi.version>
+        <wss4j.version>2.0.3</wss4j.version>
+        <slf4j.version>1.7.12</slf4j.version>
+        <log4j.version>1.2.17</log4j.version>
+        <commons.logging.version>1.2</commons.logging.version>
+        <cloning.version>1.9.2</cloning.version>
+        <jaxb.api.version>2.2</jaxb.api.version>
+        <jackson.version>2.6.7</jackson.version>
+        <guava.version>21.0</guava.version>
+        <es.version>1.7.0</es.version>
+        <powermock.version>1.6.2</powermock.version>
+        <checker.version>2.3.0</checker.version>
+    </properties>
+
+    <!-- Managed dependencies -->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-parent</artifactId>
+                <version>${camel.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.activemq</groupId>
+                <artifactId>activemq-all</artifactId>
+                <version>${activemq.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-transports-http</artifactId>
+                <version>${cxf.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-frontend-jaxws</artifactId>
+                <version>${cxf.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.elasticsearch</groupId>
+                <artifactId>elasticsearch</artifactId>
+                <version>${es.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.12</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-all</artifactId>
+                <version>1.10.19</version>
+                <scope>test</scope>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.3</version>
+                    <configuration>
+                        <source>1.8</source>
+                        <target>1.8</target>
+                        <encoding>UTF-8</encoding>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>2.4.3</version>
+                    <configuration>
+                        <encoding>UTF-8</encoding>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>maven-bundle-plugin</artifactId>
+                    <version>2.5.3</version>
+                    <extensions>true</extensions>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>cobertura-maven-plugin</artifactId>
+                    <version>2.2</version>
+                    <configuration>
+                        <formats>
+                            <format>xml</format>
+                        </formats>
+                    </configuration>
+                    <!--executions> <execution> <phase>package</phase> <goals> <goal>cobertura</goal>
+                        </goals> </execution> </execution -->
+                </plugin>
+            </plugins>
+
+        </pluginManagement>
+    </build>
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+                <version>3.0.2</version>
+            </plugin>
+        </plugins>
+    </reporting>
+
+    <modules>
+        <module>spg-common</module>
+        <module>spg-healthcheck</module>
+
+        <module>spg-core</module>
+        <module>spg-sequence</module>
+
+        <module>spg-proxy</module>
+<!--        <module>spg-proxy-ud</module>-->
+        <!-- Unstructured Data Modules -->
+<!--        <module>spg-dr-stub</module>-->
+<!--        <module>crc-dr-test</module>-->
+
+        <module>spg-delius-stub</module>
+        <module>crc-test-stub</module>
+
+
+
+
+        <!--DO NOT INCLUDE SPG-TESTS-->
+        <!-- <module>spg-tests</module>-->
+
+        <!--Deprecated Modules-->
+        <!--<module>crc-security-proxy</module>-->
+        <!--<module>hawtio-spg-plugin</module>-->
+        <!--<module>spg-database</module> -->
+        <!--<module>spg-mbean-logger</module>-->
+    </modules>
+
+</project>
