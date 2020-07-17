@@ -1,0 +1,289 @@
+<?xml version="1.0"?>
+<project
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+        xmlns="http://maven.apache.org/POM/4.0.0">
+	<parent>
+		<relativePath>../pom-spg-tests.xml</relativePath>
+		<groupId>uk.gov.gsi.justice.spg</groupId>
+		<artifactId>spg-parent</artifactId>
+		<version>2.6.1.1</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>spg-tests</artifactId>
+	<name>spg-tests</name>
+
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+
+<!--
+    This profile is run for fast tests set the -D to dontRunFastTests if you don't want it
+-->
+    <profiles>
+        <profile>
+            <id>fast-tests</id>
+            <activation>
+                <property>
+                    <name>runFastTests</name>
+                </property>
+				<activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>2.18</version>
+                        <executions>
+                            <execution>
+                                <id>fast-tests-sf</id>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <groups>uk.gov.gsi.justice.spg.test.util.helper.INoConfig</groups>
+                            <properties>
+                                <property>
+                                    <name>listener</name>
+                                    <value>uk.gov.gsi.justice.spg.test.util.helper.ElkTestListener</value>
+                                </property>
+                            </properties>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+
+
+        </profile>
+
+<!--
+    This profile is run for running the slow tests set the -D to runSlowTests if you want it
+-->
+        <profile>
+            <id>slow-tests</id>
+            <activation>
+                <property>
+                    <name>!dontRunSlowTests</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>2.18</version>
+                        <executions>
+                            <execution>
+                                <id>slow-tests-sf</id>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <groups>uk.gov.gsi.justice.spg.test.util.helper.IWithConfig</groups>
+                            <properties>
+                                <property>
+                                    <name>listener</name>
+                                    <value>uk.gov.gsi.justice.spg.test.util.helper.ElkTestListener</value>
+                                </property>
+                            </properties>
+                        </configuration>
+                    </plugin>
+                </plugins>
+
+            </build>
+        </profile>
+
+		<!--
+            This profile is run for running the performance tests.
+            Set the -D to runPerformanceTests if you want it
+        -->
+		<profile>
+			<id>performance-tests</id>
+			<activation>
+				<property>
+					<name>runPerformanceTests</name>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<version>2.18</version>
+						<executions>
+							<execution>
+								<id>performance-tests-sf</id>
+							</execution>
+						</executions>
+						<configuration>
+							<groups>uk.gov.gsi.justice.spg.test.util.helper.IPerformanceTester</groups>
+							<properties>
+								<property>
+									<name>listener</name>
+									<value>uk.gov.gsi.justice.spg.test.util.helper.ElkTestListener</value>
+								</property>
+							</properties>
+						</configuration>
+					</plugin>
+				</plugins>
+
+			</build>
+		</profile>
+    </profiles>
+
+
+    <dependencies>
+        <!-- spg -->
+
+
+        <!--  this should import the main libraries, but isn't working for some reason -->
+        <dependency>
+            <groupId>uk.gov.gsi.justice.spg</groupId>
+            <artifactId>spg-parent</artifactId>
+            <version>${project.parent.version}</version>
+            <type>pom</type>
+        </dependency>
+
+		<dependency>
+			<groupId>uk.gov.gsi.justice.spg</groupId>
+			<artifactId>spg-common</artifactId>
+			<version>${project.parent.version}</version>
+			<type>jar</type>
+		</dependency>
+
+		<dependency>
+			<groupId>uk.gov.gsi.justice.spg</groupId>
+			<artifactId>spg-healthcheck</artifactId>
+			<version>${project.parent.version}</version>
+			<type>jar</type>
+		</dependency>
+
+		<dependency>
+			<groupId>uk.gov.homeoffice</groupId>
+			<artifactId>virtuoso</artifactId>
+			<version>1.4.1.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.hierynomus</groupId>
+			<artifactId>sshj</artifactId>
+			<version>0.13.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.ws.security</groupId>
+			<artifactId>wss4j</artifactId>
+			<version>1.6.18</version>
+		</dependency>
+
+		<dependency>
+			<groupId>net.sf.expectit</groupId>
+			<artifactId>expectit-core</artifactId>
+			<version>0.8.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-crypto</artifactId>
+			<version>${camel.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>1.10.19</version>
+		</dependency>
+
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-all</artifactId>
+            <version>${activemq.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.9.0.pr2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.4</version>
+		</dependency>
+		<!-- dependency>
+			<groupId>uk.gov.gsi.justice.spg</groupId>
+			<artifactId>spg-healthcheck</artifactId>
+			<version>2.4.5.1</version>
+		</dependency -->
+		<dependency>
+			<groupId>org.apache.servicemix.bundles</groupId>
+			<artifactId>org.apache.servicemix.bundles.elasticsearch</artifactId>
+			<version>2.3.5_2</version>
+		</dependency>
+        <dependency>
+            <groupId>uk.gov.gsi.justice.spg</groupId>
+            <artifactId>spg-core</artifactId>
+            <version>2.6.1.1</version>
+            <scope>test</scope>
+        </dependency>
+
+<!--        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>1.10.19</version>
+            <scope>test</scope>
+        </dependency>-->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>2.7.5</version>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.3</version>
+					<configuration>
+						<source>1.8</source>
+						<target>1.8</target>
+						<encoding>UTF-8</encoding>
+					</configuration>
+				</plugin>
+
+
+
+<!--removed as causing conflicts with junit-->
+			<!--<plugin>-->
+					<!--<groupId>org.apache.maven.plugins</groupId>-->
+					<!--<artifactId>maven-surefire-plugin</artifactId>-->
+					<!--<version>2.19.1</version>-->
+					<!--<configuration>-->
+						<!--<trimStackTrace>false</trimStackTrace>-->
+						<!--<useFile>false</useFile>-->
+						<!--<debugForkedProcess>true</debugForkedProcess>-->
+						<!--&lt;!&ndash;<excludes>&ndash;&gt;-->
+							<!--&lt;!&ndash;<exclude>**/Test_Sending_Multiple_SOAP_Messages_To_Proxy.java</exclude>&ndash;&gt;-->
+						<!--&lt;!&ndash;</excludes>&ndash;&gt;-->
+					<!--</configuration>-->
+				<!--</plugin>-->
+			</plugins>
+		</pluginManagement>
+	</build>
+
+</project>
