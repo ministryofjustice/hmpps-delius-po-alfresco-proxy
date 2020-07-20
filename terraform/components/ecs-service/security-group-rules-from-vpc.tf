@@ -5,7 +5,7 @@
 #-------------------------------------------------------------
 
 #8080
-resource "aws_security_group_rule" "rule_8080_from_engineering_ingress" {
+resource "aws_security_group_rule" "rule_8080_from_vpc_ingress" {
   count                    = "${var.is_wiremock ? 1 : 0}" # do not allow access if not in test mode
   security_group_id        = "${data.terraform_remote_state.ecs_cluster.alfresco_proxy_task_security_group_id}"
   description              = "from the VPC when running performance tests"
