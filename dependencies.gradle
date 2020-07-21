@@ -23,6 +23,21 @@ dependencies {
 
     implementation group: 'io.vavr', name: 'vavr', version: '0.10.2'
 
+    //Proxy ud
+    compile group: 'log4j', name: 'log4j', version: '1.2.17'
+//    implementation group: 'org.apache.cxf', name: 'cxf-rt-frontencamel-cxfd-jaxrs', version: '3.0.2'
+    compile group: 'org.apache.cxf', name: 'cxf-rt-rs-service-description', version: '3.0.2'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.6.7'
+//    implementation group: 'javax.servlet', name: 'javax.servlet-api', version: '2.5'
+    compile group: 'org.apache.camel', name: 'camel-cxf', version: '2.18.0'
+    compile group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2'
+    //Spring boot camel
+//    compile group: 'org.apache.camel', name: 'camel-spring-boot', version: '2.18.0'
+//    compile group: 'org.apache.camel', name: 'camel-spring-boot-starter', version: '2.18.0'
+
+
+
+
     // Testing
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.6.0'
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
@@ -31,6 +46,7 @@ dependencies {
     testImplementation group: 'io.cucumber', name: 'cucumber-junit', version: '5.5.0'
     testImplementation group: 'io.cucumber', name: 'cucumber-java', version: '5.5.0'
     testImplementation group: 'de.monochromata.cucumber', name: 'reporting-plugin', version: '4.0.39'
+
 
     testImplementation group: 'com.github.tomakehurst', name: 'wiremock-jre8', version: '2.26.3'
     testImplementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-contract-stub-runner', version: '2.2.2.RELEASE'
