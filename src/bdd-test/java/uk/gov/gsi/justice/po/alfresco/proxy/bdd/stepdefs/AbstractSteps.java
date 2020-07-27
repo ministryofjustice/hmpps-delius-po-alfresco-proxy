@@ -1,18 +1,23 @@
 package uk.gov.gsi.justice.po.alfresco.proxy.bdd.stepdefs;
 
+import kong.unirest.HttpResponse;
+import kong.unirest.Unirest;
 import org.springframework.boot.web.server.LocalServerPort;
 import uk.gov.gsi.justice.po.alfresco.proxy.AbstractBaseTest;
+import uk.gov.gsi.justice.po.alfresco.proxy.bdd.util.World;
 
 public abstract class AbstractSteps extends AbstractBaseTest {
-    private final String serverUrl = "http://localhost";
     @LocalServerPort
     private int port;
 
-    protected String healthCheckEndpoint() {
-        return serverUrl + ":" + port + apiHealthEndpoint;
+    protected World world = World.INSTANCE;
+
+    protected String baseUrl() {
+        return "http://localhost:" + port;
     }
 
-    protected String statusEndpoint() {
-        return serverUrl + ":" + port + "/actuator/health";
+    protected void sendRequest(final String path) {
+        final HttpResponse<String> healthCheckResponseEntity = Unirest.get(baseUrl() + path).asString();
+        world.setResponseEntity(healthCheckResponseEntity);
     }
 }

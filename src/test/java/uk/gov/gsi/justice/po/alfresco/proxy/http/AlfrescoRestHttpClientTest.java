@@ -30,7 +30,7 @@ import static org.junit.Assert.*;
 @ContextConfiguration(classes = {AppConfig.class, TestConfig.class})
 @DirtiesContext
 class AlfrescoRestHttpClientTest extends AbstractBaseTest {
-    private static WireMockServer wiremock = new WireMockServer(WireMockSpring.options()
+    private static final WireMockServer WIREMOCK = new WireMockServer(WireMockSpring.options()
             .port(6067)
             .notifier(new ConsoleNotifier(true)));
     @Inject
@@ -42,7 +42,7 @@ class AlfrescoRestHttpClientTest extends AbstractBaseTest {
 
     @BeforeAll
     static void setup() {
-        wiremock.start();
+        WIREMOCK.start();
     }
 
     @BeforeEach
@@ -53,12 +53,12 @@ class AlfrescoRestHttpClientTest extends AbstractBaseTest {
 
     @AfterEach
     void after() {
-        wiremock.resetAll();
+        WIREMOCK.resetAll();
     }
 
     @AfterAll
     static void clean() throws Exception {
-        wiremock.shutdown();
+        WIREMOCK.shutdown();
         SECONDS.sleep(2);
     }
 
@@ -70,7 +70,7 @@ class AlfrescoRestHttpClientTest extends AbstractBaseTest {
 
     @Test
     public void testSuccessfulGetCallIntoAlfresco() {
-        wiremock.stubFor(get(urlEqualTo(alfrescoHealthEndpoint))
+        WIREMOCK.stubFor(get(urlEqualTo(alfrescoHealthEndpoint))
                 .willReturn(aResponse()
                         .withHeader("Content-Type", "application/json")
                         .withBody(gson.toJson(alfrescoNotificationStatus))));
@@ -82,12 +82,12 @@ class AlfrescoRestHttpClientTest extends AbstractBaseTest {
         assertThat(httpSuccess.getCode(), is(200));
         assertThat(httpSuccess.getBody(), is(gson.toJson(alfrescoNotificationStatus)));
 
-        wiremock.verify(1, getRequestedFor(urlEqualTo(alfrescoHealthEndpoint)));
+        WIREMOCK.verify(1, getRequestedFor(urlEqualTo(alfrescoHealthEndpoint)));
     }
 
     @Test
     public void testWhenGetCallIntoAlfrescoCanNotFindResource() {
-        wiremock.stubFor(get(urlEqualTo(alfrescoHealthEndpoint))
+        WIREMOCK.stubFor(get(urlEqualTo(alfrescoHealthEndpoint))
                 .willReturn(aResponse()
                         .withHeader("Content-Type", "application/json")
                         .withBody(gson.toJson(alfrescoNotificationStatus))));
@@ -102,7 +102,7 @@ class AlfrescoRestHttpClientTest extends AbstractBaseTest {
 
     @Test
     public void testWhenGetCallIntoAlfrescoReturnsMalformedResponse() {
-        wiremock.stubFor(get(urlEqualTo(alfrescoHealthEndpoint))
+        WIREMOCK.stubFor(get(urlEqualTo(alfrescoHealthEndpoint))
                 .willReturn(aResponse().withFault(MALFORMED_RESPONSE_CHUNK)));
 
         final Either<HttpFault, HttpSuccess> either = sut.getResource(alfrescoHealthEndpoint);
@@ -115,7 +115,7 @@ class AlfrescoRestHttpClientTest extends AbstractBaseTest {
 
     @Test
     public void testWhenGetCallIntoAlfrescoReturnsConnectionErrors() {
-        wiremock.stubFor(get(urlEqualTo(alfrescoHealthEndpoint))
+        WIREMOCK.stubFor(get(urlEqualTo(alfrescoHealthEndpoint))
                 .willReturn(aResponse().withFault(RANDOM_DATA_THEN_CLOSE)));
 
         final Either<HttpFault, HttpSuccess> either = sut.getResource(alfrescoHealthEndpoint);
@@ -128,7 +128,7 @@ class AlfrescoRestHttpClientTest extends AbstractBaseTest {
 
     @Test
     public void testWhenGetCallIntoAlfrescoReturnsAnEmptyResponse() {
-        wiremock.stubFor(get(urlEqualTo(alfrescoHealthEndpoint))
+        WIREMOCK.stubFor(get(urlEqualTo(alfrescoHealthEndpoint))
                 .willReturn(aResponse().withFault(EMPTY_RESPONSE)));
 
         final Either<HttpFault, HttpSuccess> either = sut.getResource(alfrescoHealthEndpoint);
@@ -141,7 +141,7 @@ class AlfrescoRestHttpClientTest extends AbstractBaseTest {
 
     @Test
     public void testWhenGetCallIntoAlfrescoErrorsWithConnectionRest() {
-        wiremock.stubFor(get(urlEqualTo(alfrescoHealthEndpoint))
+        WIREMOCK.stubFor(get(urlEqualTo(alfrescoHealthEndpoint))
                 .willReturn(aResponse().withFault(CONNECTION_RESET_BY_PEER)));
 
         final Either<HttpFault, HttpSuccess> either = sut.getResource(alfrescoHealthEndpoint);
@@ -155,7 +155,7 @@ class AlfrescoRestHttpClientTest extends AbstractBaseTest {
     @Test
     public void testWhenSocketTimesOutOnGetCallIntoAlfresco() {
         final int tenMinutes = 10*60*1000;
-        wiremock.stubFor(get(urlEqualTo(alfrescoHealthEndpoint))
+        WIREMOCK.stubFor(get(urlEqualTo(alfrescoHealthEndpoint))
                 .willReturn(aResponse().withFixedDelay(tenMinutes)));
 
         final Either<HttpFault, HttpSuccess> either = sut.getResource(alfrescoHealthEndpoint);
