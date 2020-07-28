@@ -7,8 +7,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import uk.gov.gsi.justice.po.alfresco.proxy.provider.TimestampProvider;
 
-import javax.inject.Inject;
-
 import static org.mockito.Mockito.mock;
 
 @Configuration

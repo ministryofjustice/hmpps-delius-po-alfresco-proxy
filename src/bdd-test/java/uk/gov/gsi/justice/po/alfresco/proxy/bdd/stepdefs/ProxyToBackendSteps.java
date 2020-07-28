@@ -11,27 +11,34 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 public class ProxyToBackendSteps extends AbstractSteps implements En {
-    private final String cxfPath = "/cxf/test";
+    private String requestPath;
 
     public ProxyToBackendSteps() {
-        Given("^a running backend$", () -> {
-            world.getWireMockServer().stubFor(get(urlEqualTo(baseUrl() + cxfPath))
+        Given("^a document is available on the backend at \"([^\"]*)\"$", (final String path) -> {
+            requestPath = path;
+            world.getWireMockServer().stubFor(get(urlEqualTo(baseUrl() + path))
                     .willReturn(aResponse()
                             .withHeader("Content-Type", "application/json")
                             .withBody(gson.toJson(alfrescoNotificationStatus))));
         });
 
-        When("^I request data from the backend$", () -> {
-            sendRequest(cxfPath);
-        });
+        When("^I request \"([^\"]*)\" from the backend$", (final String path) -> sendRequest(path));
 
-        Then("^a response should be returned$", () -> {
+        Then("^a successful response should be returned$", () -> {
             assertThat(world.getResponseEntity().getStatus(), is(HttpStatus.OK.value()));
             assertTrue(world.getResponseEntity().getHeaders().containsKey("Content-Type"));
             assertThat(world.getResponseEntity().getHeaders().get("Content-Type"), hasItem(contentType.toString()));
             assertNotNull(world.getResponseEntity().getBody());
 
-            world.getWireMockServer().verify(getRequestedFor(urlEqualTo(cxfPath)));
+            world.getWireMockServer().verify(getRequestedFor(urlEqualTo(requestPath)));
+        });
+
+        When("^I post data to \"([^\"]*)\"$", (final String path) -> {
+        });
+
+        Then("^my data should be successfully delivered to the backend$", () -> {
+        });
+        Given("^a running backend$", () -> {
         });
     }
 }

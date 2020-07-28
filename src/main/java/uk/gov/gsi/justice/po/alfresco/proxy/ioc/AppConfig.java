@@ -11,11 +11,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import uk.gov.gsi.justice.po.alfresco.proxy.http.CxfClientInterface;
+import uk.gov.gsi.justice.po.alfresco.proxy.http.CxfHttpInterface;
 import uk.gov.gsi.justice.po.alfresco.proxy.http.RestClient;
 import uk.gov.gsi.justice.po.alfresco.proxy.provider.GsonProvider;
-import uk.gov.gsi.justice.po.alfresco.proxy.service.CxfClientInterface;
-import uk.gov.gsi.justice.po.alfresco.proxy.service.CxfServerInterface;
-import uk.gov.gsi.justice.po.alfresco.proxy.spg.example.hello1.HelloServiceImpl1;
+import uk.gov.gsi.justice.po.alfresco.proxy.service.CxfServerHandler;
 
 import javax.inject.Inject;
 
@@ -55,17 +55,15 @@ public class AppConfig {
     }
 
     @Bean
-    public CxfServerInterface provideCxfServerInterface() {
-        return new CxfServerInterface(provideCxfClient());
+    public CxfServerHandler provideCxfServerInterface() {
+        return new CxfServerHandler(provideCxfClient());
     }
 
     @Bean
     public Server provideCxfRsServer() {
-        JAXRSServerFactoryBean serverFactoryBean = new JAXRSServerFactoryBean();
+        final JAXRSServerFactoryBean serverFactoryBean = new JAXRSServerFactoryBean();
         serverFactoryBean.setBus(bus);
-        serverFactoryBean.setAddress("/");
         serverFactoryBean.setServiceBeans(singletonList(provideCxfServerInterface()));
-
         return serverFactoryBean.create();
     }
 

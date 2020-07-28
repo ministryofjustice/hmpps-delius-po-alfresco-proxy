@@ -10,6 +10,6 @@
         <AsyncRoot level="info" additivity="false">
             <AppenderRef ref="console"/>
         </AsyncRoot>
-        <!-- AsyncLogger name="org.springframework" level="debug"/ -->
+        <AsyncLogger name="org.springframework" level="debug"/>
     </Loggers>
 </Configuration>
