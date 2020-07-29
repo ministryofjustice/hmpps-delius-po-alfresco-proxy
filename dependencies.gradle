@@ -24,19 +24,19 @@ dependencies {
 
     implementation group: 'io.vavr', name: 'vavr', version: '0.10.2'
 
-    //Proxy ud
-    compile group: 'log4j', name: 'log4j', version: '1.2.17'
+    implementation group: 'org.apache.cxf', name: 'cxf-rt-rs-service-description', version: '3.3.7'
+    implementation group: 'org.apache.cxf', name: 'cxf-spring-boot-starter-jaxrs', version: '3.3.7'
+    implementation group: 'org.apache.cxf', name: 'cxf-rt-rs-extension-providers', version: '3.3.7'
+    implementation group: 'org.codehaus.jettison', name: 'jettison', version: '1.4.1'
+
+//    compile group: 'org.springframework.boot', name: 'spring-boot-devtools', version: '2.3.1.RELEASE'
 //    implementation group: 'org.apache.cxf', name: 'cxf-rt-frontencamel-cxfd-jaxrs', version: '3.0.2'
-    compile group: 'org.apache.cxf', name: 'cxf-rt-rs-service-description', version: '3.0.2'
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.6.7'
-    compile group: 'org.apache.camel', name: 'camel-cxf', version: '2.18.0'
-    compile group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2'
+//    compile group: 'org.apache.camel', name: 'camel-cxf', version: '2.18.0'
+//    compile group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2'
     //Spring boot camel
 //    compile group: 'org.apache.camel', name: 'camel-spring-boot', version: '2.18.0'
 //    compile group: 'org.apache.camel', name: 'camel-spring-boot-starter', version: '2.18.0'
 //    compile group: 'org.apache.camel', name: 'camel-servlet', version: '2.18.0'
-    compile group: 'org.apache.cxf', name: 'cxf-spring-boot-starter-jaxrs', version: '3.3.7' //DONE
-    compile group: 'org.springframework.boot', name: 'spring-boot-devtools', version: '2.3.1.RELEASE'
 
 
 

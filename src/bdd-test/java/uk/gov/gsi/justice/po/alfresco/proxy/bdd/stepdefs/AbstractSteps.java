@@ -17,7 +17,7 @@ public abstract class AbstractSteps extends AbstractBaseTest {
     }
 
     protected void sendRequest(final String path) {
-        final HttpResponse<String> healthCheckResponseEntity = Unirest.get(baseUrl() + path).asString();
-        world.setResponseEntity(healthCheckResponseEntity);
+        final HttpResponse<String> responseEntity = Unirest.get(baseUrl() + path).asString();
+        world.setResponseEntity(responseEntity);
     }
 }

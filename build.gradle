@@ -23,6 +23,12 @@ compileJava {
     options.encoding = 'UTF-8'
 }
 
+bootRun {
+    systemProperty("APPLICATION_NAME", "SPG PO Alfresco Proxy")
+    systemProperty("SPG_ALFRESCO_HEALTH_ENDPOINT", "/alfresco/service/noms-spg/notificationStatus")
+    systemProperty("SPG_ALFRESCO_BASE_URL", "http://localhost:9090")
+}
+
 bootJar {
     mainClassName = 'uk.gov.gsi.justice.po.alfresco.proxy.ApplicationBootstrap'
 }

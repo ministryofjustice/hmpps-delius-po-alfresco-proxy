@@ -1,4 +1,4 @@
-package uk.gov.gsi.justice.po.alfresco.proxy.http;
+package uk.gov.gsi.justice.po.alfresco.proxy.cxf;
 
 import org.apache.cxf.jaxrs.ext.multipart.MultipartBody;
 
