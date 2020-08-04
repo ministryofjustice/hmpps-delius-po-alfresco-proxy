@@ -49,7 +49,7 @@ public class HealthCheckSteps extends AbstractSteps implements En {
         But("^alfresco is not healthy$", () -> world.getWireMockServer().stubFor(get(urlEqualTo(alfrescoHealthEndpoint)).willReturn(aResponse().withFault(EMPTY_RESPONSE))));
 
         When("^I request the health of the PO Alfresco Proxy API$", () -> {
-            sendRequest(apiHealthEndpoint);
+            sendGetRequest(apiHealthEndpoint);
         });
 
         Then("^(?:a|an) (?:stable|unstable) response per the JSON \"([^\"]*)\" is returned$", (String filename) -> {

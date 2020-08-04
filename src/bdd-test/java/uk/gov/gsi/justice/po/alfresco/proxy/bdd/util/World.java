@@ -22,7 +22,7 @@ public enum World {
         return responseEntity;
     }
 
-    public void setResponseEntity(HttpResponse<String> responseEntity) {
+    public void setResponseEntity(final HttpResponse<String> responseEntity) {
         this.responseEntity = responseEntity;
     }
 }
