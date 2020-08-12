@@ -10,5 +10,6 @@
         <AsyncRoot level="info" additivity="false">
             <AppenderRef ref="console"/>
         </AsyncRoot>
+        <AsyncLogger name="uk.gov.gsi.justice.alfresco.proxy" level="debug"/>
     </Loggers>
 </Configuration>
