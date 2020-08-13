@@ -6,10 +6,10 @@ import org.apache.cxf.message.Message;
 
 import javax.ws.rs.core.UriInfo;
 import java.util.List;
+import java.util.Optional;
 
 public class ProxyUDWadlGenerator extends WadlGenerator {
-    public static final String PUBLISHED_WADL_ADDRESS_PROPERTY_NAME = "spg.unstructured.proxy.published.wadl.address";
-    public static final String PUBLISHED_WADL_ADDRESS_PROPERTY_PLACEHOLDER = "${" + PUBLISHED_WADL_ADDRESS_PROPERTY_NAME + "}";
+    public static final String PUBLISHED_WADL_ADDRESS_PROPERTY_PLACEHOLDER = "${spg.alfresco.proxy.published.wadl.address}";
 
     private final String publishedWadlAddress;
 
@@ -23,9 +23,9 @@ public class ProxyUDWadlGenerator extends WadlGenerator {
                                       boolean isJson,
                                       Message m,
                                       UriInfo ui) {
-        if (publishedWadlAddress != null && !publishedWadlAddress.isEmpty() && !publishedWadlAddress.equals(PUBLISHED_WADL_ADDRESS_PROPERTY_PLACEHOLDER))
-            return super.generateWADL(publishedWadlAddress, cris, isJson, m, ui);
-        else
-            return super.generateWADL(baseURI, cris, isJson, m, ui);
+        return Optional.ofNullable(publishedWadlAddress)
+                .map(x -> x.equals(PUBLISHED_WADL_ADDRESS_PROPERTY_PLACEHOLDER))
+                .map(y -> super.generateWADL(baseURI, cris, isJson, m, ui))
+                .orElse(super.generateWADL(publishedWadlAddress, cris, isJson, m, ui));
     }
 }

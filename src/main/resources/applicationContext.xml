@@ -56,9 +56,9 @@
             <!-- authorizationFilter ensures the incoming rest call is checked for
                 validation of the oauth signature -->
             <!-- ref bean="authorizationFilter"/ -->
-            <!-- bean class="uk.gov.gsi.justice.alfresco.proxy.spg.ProxyUDWadlGenerator">
-                <constructor-arg value="${spg.unstructured.proxy.published.wadl.address}"/>
-            </bean -->
+            <bean class="uk.gov.gsi.justice.alfresco.proxy.service.ProxyUDWadlGenerator">
+                <constructor-arg value="${spg.alfresco.proxy.published.wadl.address}"/>
+            </bean>
             <ref bean="exceptionHandler"/>
         </cxf:providers>
 
