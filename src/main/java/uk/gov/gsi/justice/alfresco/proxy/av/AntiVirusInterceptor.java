@@ -8,9 +8,9 @@ import org.apache.cxf.message.Attachment;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.AbstractPhaseInterceptor;
 import org.apache.cxf.phase.Phase;
-import uk.gov.gsi.justice.alfresco.proxy.interceptor.UDLoggingInInterceptor;
 import uk.gov.gsi.justice.alfresco.proxy.audit.UDInterchangeAuditLogService;
 import uk.gov.gsi.justice.alfresco.proxy.audit.UDSPGLogFields;
+import uk.gov.gsi.justice.alfresco.proxy.interceptor.UDLoggingInInterceptor;
 import uk.gov.gsi.justice.alfresco.proxy.utils.TimestampGenerator;
 
 import javax.ws.rs.core.Response;
@@ -59,8 +59,7 @@ public class AntiVirusInterceptor extends AbstractPhaseInterceptor<Message> {
 
             throw createFaultException(antivirusResponse, FORBIDDEN);
         } else if (antivirusResponse.getStatus() == ERROR) {
-
-            auditLogService.createUDAlertRecord(SCANNING_ERROR +  antivirusResponse);
+            auditLogService.createUDAlertRecord(SCANNING_ERROR + antivirusResponse);
 
             logError(message, antivirusResponse.toString(), AV_ERROR_HTTP_CODE);
 
@@ -68,9 +67,7 @@ public class AntiVirusInterceptor extends AbstractPhaseInterceptor<Message> {
         }
     }
 
-
-    void logError(Message message, String antivirusResponse, int code)
-    {
+    void logError(Message message, String antivirusResponse, int code) {
         message.put(message.RESPONSE_CODE, code);
         message.put(UDSPGLogFields.UD_ERRDESC.toString(), antivirusResponse);
         String crn = getContentPayLoad(message);
@@ -101,11 +98,8 @@ public class AntiVirusInterceptor extends AbstractPhaseInterceptor<Message> {
         this.scanForViruses = scanForViruses;
     }
 
-
-
-    public String getContentPayLoad(Message message)
-    {
-        String soapMessage=null;
+    public String getContentPayLoad(Message message) {
+        String soapMessage = null;
         try {
             List<MultipartBody> messageContentsList = message.getContent(List.class);
             if (messageContentsList.size() > 0) {
@@ -119,13 +113,10 @@ public class AntiVirusInterceptor extends AbstractPhaseInterceptor<Message> {
                 String docType = body.getAttachmentObject("docType", String.class);*/
                 soapMessage = crnId;
             }
-        }
-        catch(Exception e)
-        {
-            auditLogService.createUDAlertRecord("Problem extracting CRN from multipart: " +  e);
+        } catch (Exception e) {
+            auditLogService.createUDAlertRecord("Problem extracting CRN from multipart: " + e);
         }
 
-        return soapMessage==null ? "" : soapMessage;
+        return soapMessage == null ? "" : soapMessage;
     }
-
 }
