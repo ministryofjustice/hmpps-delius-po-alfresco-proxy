@@ -21,9 +21,9 @@ public class HealthCheckSteps extends AbstractSteps implements En {
     private String alfrescoBaseUrl;
 
     public HealthCheckSteps() {
-        Before(() -> {
-            when(timestampProvider.getTimestamp()).thenReturn(timestamp);
-        });
+//        Before(() -> {
+//            when(timestampProvider.getTimestamp()).thenReturn(timestamp);
+//        });
 
         Given("^the PO Alfresco Proxy API is running$", () -> {
             final String statusUp = "expectations/actuator_health.json";

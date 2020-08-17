@@ -14,8 +14,8 @@ public abstract class AbstractBaseTest {
     protected final JsonReader jsonReader = new JsonReader();
     @Inject
     protected Gson gson;
-    @Inject
-    protected TimestampProvider timestampProvider;
+//    @Inject
+//    protected TimestampProvider timestampProvider;
     protected final Instant timestamp = Instant.now();
     protected final String stableText = "STABLE";
     protected final String alfrescoHealthEndpoint = "/alfresco/service/noms-spg/notificationStatus";

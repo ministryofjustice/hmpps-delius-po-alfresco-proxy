@@ -47,4 +47,6 @@ dependencies {
     testImplementation group: 'com.github.tomakehurst', name: 'wiremock-jre8-standalone', version: '2.21.0'
 
     testImplementation group: 'com.konghq', name: 'unirest-java', version: '3.6.01'
+
+    testImplementation group: 'org.testcontainers', name: 'testcontainers', version: '1.14.3'
 }

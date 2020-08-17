@@ -32,12 +32,6 @@
 
     <bean id="auditLogService" class="uk.gov.gsi.justice.alfresco.proxy.audit.UDInterchangeAuditLogService"/>
 
-    <!-- bean id="antivirusScanner" class="uk.gov.gsi.justice.spg.av.AntivirusScanner">
-        <constructor-arg value="${spg.unstructured.proxy.clamav.address}"/>
-        <constructor-arg value="${spg.unstructured.proxy.clamav.port}"/>
-        <constructor-arg value="${spg.unstructured.proxy.clamav.timeout}"/>
-    </bean -->
-
     <bean id="exceptionHandler" class="uk.gov.gsi.justice.alfresco.proxy.service.ProxyUDExceptionHandler"/>
 
 
@@ -76,11 +70,11 @@
                 <property name="displayPayload" value="${display.payload}"/>
             </bean>
 
-            <!-- bean class="uk.gov.gsi.justice.alfresco.proxy.av.AntiVirusInterceptor">
+            <bean class="uk.gov.gsi.justice.alfresco.proxy.av.AntiVirusInterceptor">
                 <property name="auditLogService" ref="auditLogService"/>
                 <property name="antivirusScanner" ref="antivirusScanner"/>
-                <property name="scanForViruses" value="${spg.unstructured.proxy.clamav.scanForViruses}"/>
-            </bean -->
+                <property name="scanForViruses" value="${spg.alfresco.proxy.clamav.scanForViruses}"/>
+            </bean>
         </cxf:inInterceptors>
 
         <cxf:outInterceptors>
