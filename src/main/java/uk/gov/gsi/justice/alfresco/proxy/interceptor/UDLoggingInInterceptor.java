@@ -134,7 +134,7 @@ public class UDLoggingInInterceptor extends LoggingInInterceptor {
         }
     }
 
-	static String getSecurityAuditRecordText(Map<String, String> securityData) {
+	public static String getSecurityAuditRecordText(Map<String, String> securityData) {
 		StringBuilder securityAuditLogRecord = new StringBuilder();
 		List<String> securityAuditFields = Arrays.asList(headerBlacklist.split(","));
 		for (Map.Entry<String, String> securityField : securityData.entrySet()) {

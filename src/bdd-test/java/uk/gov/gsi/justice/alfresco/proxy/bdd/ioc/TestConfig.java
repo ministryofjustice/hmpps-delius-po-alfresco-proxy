@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Primary;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
 import uk.gov.gsi.justice.alfresco.proxy.av.AntivirusScanner;
+import uk.gov.gsi.justice.alfresco.proxy.service.OAuthRequestFilter;
 import uk.gov.gsi.justice.alfresco.proxy.utils.TimestampProvider;
 
 import javax.annotation.PreDestroy;
@@ -39,6 +40,13 @@ public class TestConfig {
         final String clamAVAddress = "localhost";
         final int clamAVTimeout = 60000;
         return new AntivirusScanner(clamAVAddress, clamAV.getFirstMappedPort(), clamAVTimeout);
+    }
+
+    @Bean(name = "authorizationFilter")
+    @Primary
+    public OAuthRequestFilter provideOAuthRequestFilter() {
+        final String oauthProtocol = "http";
+        return new OAuthRequestFilter(oauthProtocol);
     }
 
     @Bean
