@@ -4,11 +4,11 @@ import com.github.tomakehurst.wiremock.client.WireMock;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
 import org.springframework.beans.factory.annotation.Value;
+import org.testcontainers.shaded.com.google.common.collect.ImmutableMap;
 import uk.gov.gsi.justice.alfresco.proxy.AbstractBaseTest;
 import uk.gov.gsi.justice.alfresco.proxy.bdd.util.World;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
-import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -30,7 +30,19 @@ public abstract class AbstractSteps extends AbstractBaseTest {
     }
 
     protected void sendPostRequest(final String path) {
-        final HttpResponse<String> responseEntity = Unirest.post(baseUrl + path).asString();
+        final HttpResponse<String> responseEntity = Unirest.post(baseUrl + path)
+                .multiPartContent()
+                .asString();
+
+        world.setResponseEntity(responseEntity);
+    }
+
+    protected void sendMultideletePostRequest(final String path) {
+        final HttpResponse<String> responseEntity = Unirest.post(baseUrl + path)
+                .header("Content-Type", "application/json")
+                .body(ImmutableMap.of("DOCUMENT_IDS", "1,2,3"))
+                .asString();
+
         world.setResponseEntity(responseEntity);
     }
 
@@ -83,7 +95,7 @@ public abstract class AbstractSteps extends AbstractBaseTest {
         assertThat(world.getResponseEntity().getHeaders().get("Content-Type"), hasItem("application/json"));
         assertNotNull(world.getResponseEntity().getBody());
 
-        world.getWireMockServer().verify(getRequestedFor(urlEqualTo(path)));
+        world.getWireMockServer().verify(anyRequestedFor(urlEqualTo(path)));
     }
 
     public void setPath(final String path) {

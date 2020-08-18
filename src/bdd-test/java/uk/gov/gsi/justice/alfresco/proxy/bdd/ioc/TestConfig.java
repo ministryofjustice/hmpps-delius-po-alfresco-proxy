@@ -23,7 +23,7 @@ public class TestConfig {
     private final GenericContainer clamAV = new GenericContainer<>(clamAVImage)
             .withExposedPorts(clamAVPort)
             .waitingFor(Wait.forListeningPort()
-                    .withStartupTimeout(Duration.ofMinutes(2)));
+                    .withStartupTimeout(Duration.ofMinutes(5)));
 
     public TestConfig() {
         clamAV.start();

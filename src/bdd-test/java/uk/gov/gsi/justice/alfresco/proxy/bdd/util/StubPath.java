@@ -13,11 +13,17 @@ public enum StubPath {
     UNDELETE_PATH("/undelete/123"),
     UPDATE_METADATA_PATH("/updatemetadata/456"),
     LOCK_PATH("/lock/1234"),
+    FETCH_AND_RESERVE_PATH("/fetchandreserve/1234"),
     NOTIFICATION_STATUS_PATH("/notificationStatus");
 
     private final String path;
 
      StubPath(final String path) {
         this.path = path;
+    }
+
+    @Override
+    public String toString() {
+        return path;
     }
 }

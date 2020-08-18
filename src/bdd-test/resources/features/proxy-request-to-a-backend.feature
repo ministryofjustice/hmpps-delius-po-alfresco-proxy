@@ -16,7 +16,7 @@ Feature: Test CXF route
     Then a successful response should be returned
 
   Scenario: fetch and reserve document by doc id from alfresco
-    Given a document is available at "/fetchandreserve/1234"
+    Given I want to fetch and reserve a document from alfresco
     When I fetch and reserve document using "/fetchandreserve/1234" from alfresco
     Then a successful response should be returned
 
@@ -50,7 +50,42 @@ Feature: Test CXF route
     When I delete all documents for CRN using "/deleteall/1234" from alfresco
     Then a successful response should be returned
 
-  Scenario: Test POST request via CXF to a backend
-    Given a running backend
-    When I post data to "/uploadnew"
-    Then my data should be successfully delivered to the backend
+  Scenario: delete hard document by document id from alfresco
+    Given I want to hard delete document from alfresco
+    When I delete document using "/deletehard/1234" from alfresco
+    Then a successful response should be returned
+
+  Scenario: multi delete documents from alfresco
+    Given I want to delete multiple documents from alfresco
+    When I delete multiple documents using "/multidelete" from alfresco
+    Then a successful response should be returned
+
+  Scenario: move document in alfresco
+    Given I want to move document
+    When I move the document using "/movedocument/123/456" from alfresco
+    Then a successful response should be returned
+
+  Scenario: undelete document in alfresco
+    Given I want to undelete a document from alfresco
+    When I undelete the document using "/undelete/123" from alfresco
+    Then a successful response should be returned
+
+  Scenario: Update document metadata in alfresco
+    Given I want to update document metadata
+    When I update the document metadata "/updatemetadata/456" from alfresco
+    Then a successful response should be returned
+
+  Scenario: lock document by doc_id from alfresco
+    Given I want to lock document in alfresco
+    When I lock document using "/lock/1234" from alfresco
+    Then a successful response should be returned
+
+  Scenario: get document details from alfresco
+    Given a document is available at "/details/1234"
+    When I request "/details/1234" from alfresco
+    Then a successful response should be returned
+
+  Scenario: get alfresco notifications
+    Given I want to get alfresco notification status
+    When I request "/notificationStatus" from alfresco
+    Then a successful response should be returned
