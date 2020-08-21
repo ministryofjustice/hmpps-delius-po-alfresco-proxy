@@ -65,10 +65,10 @@ resource "aws_lb_listener" "environment_no_https" {
   }
 }
 
-#uses special sub vpc when on sandpit-2
+//#uses special sub vpc when on sandpit-2
 resource "aws_route53_record" "dns_entry_sandpit_2" {
   count   = "${var.environment_name=="delius-core-sandpit-2" ? 1 : 0}"
-  zone_id = "${data.terraform_remote_state.sub_vpc.outputs.private_zone_id}"
+  zone_id = "${data.terraform_remote_state.sub_vpc[0].outputs.private_zone_id}"
   name    = "${local.service_name}"
   type    = "A"
 

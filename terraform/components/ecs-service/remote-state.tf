@@ -11,6 +11,7 @@ data "terraform_remote_state" "vpc" {
 
 # Load in sub VPC state data for custom domains
 data "terraform_remote_state" "sub_vpc" {
+  count   = "${var.environment_name=="delius-core-sandpit-2" ? 1 : 0}"
   backend = "s3"
 
   config = {
