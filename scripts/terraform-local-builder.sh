@@ -30,4 +30,4 @@ docker run -it --rm \
     -e CUSTOM_COMMON_PROPERTIES_DIR=/home/tools/data/terraform/env_configs/common \
     -e "TERM=xterm-256color" \
     --entrypoint "scripts/${1}" \
-    mojdigitalstudio/hmpps-terraform-builder-lite:latest
+    mojdigitalstudio/hmpps-terraform-builder-0-12:latest

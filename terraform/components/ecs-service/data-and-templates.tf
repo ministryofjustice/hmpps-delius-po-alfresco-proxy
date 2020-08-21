@@ -22,7 +22,7 @@ data "template_file" "ecstask_execution_policy_template" {
 data "template_file" "task_definition" {
   template = "${file("templates/ecs/task_definition.tpl")}"
 
-  vars {
+  vars = {
     region           = "${var.region}"
     aws_account_id   = "${data.aws_caller_identity.current.account_id}"
     environment_name = "${var.environment_name}"
@@ -31,7 +31,7 @@ data "template_file" "task_definition" {
     image_url        = "${var.docker_image}"
     image_version    = "${var.image_version}"
     health_command   = "${var.internal_health_command}"
-    env_service_port = "${var.service_config_map["env_service_port"]}"
+    env_service_port = var.service_config_service_port
     log_group_name   = "${aws_cloudwatch_log_group.task_log_group.name}"
 
     application_name         = "${var.application_name}"
@@ -41,7 +41,7 @@ data "template_file" "task_definition" {
 }
 
 data "aws_acm_certificate" "vpc_public_ssl_domain_certificate" {
-  domain      = "${data.terraform_remote_state.vpc.public_ssl_domain}"
+  domain      = data.terraform_remote_state.vpc.outputs.public_ssl_domain
   types       = ["AMAZON_ISSUED"]
   most_recent = true
 }

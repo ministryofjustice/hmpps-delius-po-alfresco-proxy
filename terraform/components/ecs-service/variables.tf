@@ -4,11 +4,11 @@ variable "ecs_instance_type" {
 }
 
 variable "environment_name" {
-  type = "string"
+  type = string
 }
 
 variable "short_environment_name" {
-  type = "string"
+  type = string
 }
 
 variable "project_name" {
@@ -49,29 +49,35 @@ variable "dependencies_bucket_arn" {
 }
 
 variable "tags" {
-  type = "map"
+  type = map(string)
 }
 
 #load balancer account id - common accross all services within an environment
 variable "lb_account_id" {}
 
-variable "service_config_map" {
-  description = "Config map for the service"
-  type        = "map"
+variable "service_config_cpu" {
+  type = string
+  default = "1024"
+}
 
-  default = {
-    #standard ECS task vars
-    cpu           = "1024"
-    memory        = "512"
+variable "service_config_memory" {
+  type = string
+  default = "512"
+}
 
-    deployment_minimum_healthy_percent = 30
+variable "service_config_deployment_minimum_healthy_percent" {
+  type = number
+  default = 30
+}
 
-    # ECS Task App AutoScaling will kick in above avg cpu util set here
-    ecs_target_cpu = "60"
+variable "service_config_ecs_target_cpu" {
+  type = string
+  default = "60"
+}
 
-    # Task Def Env Vars
-    env_service_port = 8080
-   }
+variable "service_config_service_port" {
+  type = number
+  default = 8080
 }
 
 # ECS Task App Autoscaling min and max thresholds

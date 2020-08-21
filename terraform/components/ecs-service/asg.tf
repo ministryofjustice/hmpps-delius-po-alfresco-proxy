@@ -7,13 +7,13 @@ resource "aws_autoscaling_group" "ecs_asg" {
   min_size = "${var.ecs_scaling_min_capacity}"
   health_check_grace_period = 0
   termination_policies= ["NewestInstance"]
-  vpc_zone_identifier = [
-    "${local.private_subnet_ids}",
-  ]
+  vpc_zone_identifier = "${local.private_subnet_ids}"
 
   lifecycle {
     create_before_destroy = true
-    ignore_changes        = ["desired_capacity"]
+    ignore_changes        = [
+      "desired_capacity",
+    ]
   }
 
   tags = [

@@ -2,7 +2,7 @@
 data "template_file" "ecs_host_userdata_template" {
   template = "${file("${path.module}/templates/bootstrap/ecs-host-userdata.tpl")}"
 
-  vars {
+  vars = {
     ecs_cluster_name         = "${local.service_name}"
     region                   = "${var.region}"
     log_group_name           = "${var.environment_name}/spg-ecs-cluster"

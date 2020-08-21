@@ -39,7 +39,7 @@ resource "aws_iam_role_policy" "alf_iam_policy" {
 data "template_file" "iam_policy_app_alf_ext" {
   template = "${file("${path.module}/policies/${local.alfresco_external_policy_file}")}"
 
-  vars {
+  vars = {
     backups-bucket               = "${local.backups-bucket-name}"
     s3-certificates-bucket       = "${local.s3-certificates-bucket}"
     decryptable_certificate_keys = "${jsonencode(local.keys_decrytable_by_alf_proxy)}"
@@ -63,7 +63,7 @@ resource "aws_iam_role_policy" "environment" {
 data "template_file" "iam_policy_ecs_ext" {
   template = "${file("${path.module}/policies/${local.ecs_role_policy_file}")}"
 
-  vars {
+  vars = {
     aws_lb_arn = "*"
   }
 }

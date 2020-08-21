@@ -25,13 +25,13 @@ resource "aws_appautoscaling_policy" "cpu_utilization_high_scaling_policy" {
   service_namespace  = "${aws_appautoscaling_target.scaling_target.service_namespace}"
 
   step_scaling_policy_configuration {
-    adjustment_type = "ChangeInCapacity"
-    cooldown = 700
+    adjustment_type         = "ChangeInCapacity"
+    cooldown                = 700
     metric_aggregation_type = "Average"
 
     step_adjustment {
       metric_interval_lower_bound = 0
-      scaling_adjustment = 1
+      scaling_adjustment          = 1
     }
   }
 }
@@ -47,7 +47,9 @@ resource "aws_appautoscaling_target" "scaling_target" {
   # Use lifecycle rule as workaround for role_arn being changed every time due to
   # role_arn being required field but AWS will always switch this to the auto created service role
   lifecycle {
-    ignore_changes = "role_arn"
+    ignore_changes = [
+      "role_arn",
+    ]
   }
 }
 
@@ -61,34 +63,36 @@ resource "aws_cloudwatch_metric_alarm" "cpu_utilization_high" {
   statistic           = "Average"
   threshold           = "70"
 
-  dimensions {
+  dimensions = {
     ServiceName = "${local.service_name}"
     ClusterName = "${local.service_name}"
   }
 
   alarm_description = "This metric monitors ecs cpu utilization"
-  alarm_actions     = ["${aws_appautoscaling_policy.cpu_utilization_high_scaling_policy.arn}",
-    "${aws_autoscaling_policy.cpu_utilization_high_scaling_policy.arn}"] //We want to reuse this alarm for ASG scaling policy
+  alarm_actions     = [
+    "${aws_appautoscaling_policy.cpu_utilization_high_scaling_policy.arn}",
+    "${aws_autoscaling_policy.cpu_utilization_high_scaling_policy.arn}"
+  ] //We want to reuse this alarm for ASG scaling policy
 }
 
 resource "aws_cloudwatch_metric_alarm" "cpu_utilization_low" {
-  alarm_name = "${local.service_name}-cpu-low-alarm"
+  alarm_name          = "${local.service_name}-cpu-low-alarm"
   comparison_operator = "LessThanOrEqualToThreshold"
-  evaluation_periods = "1"
-  metric_name = "CPUUtilization"
-  namespace = "AWS/ECS"
-  period = "120"
-  statistic = "Average"
-  threshold = "30"
+  evaluation_periods  = "1"
+  metric_name         = "CPUUtilization"
+  namespace           = "AWS/ECS"
+  period              = "120"
+  statistic           = "Average"
+  threshold           = "30"
 
-  dimensions {
+  dimensions = {
     ServiceName = "${local.service_name}"
     ClusterName = "${local.service_name}"
-
   }
 
   alarm_description = "This metric monitors ecs cpu utilization"
-  alarm_actions = [
+  alarm_actions     = [
     "${aws_appautoscaling_policy.cpu_utilization_low_scaling_policy.arn}",
-    "${aws_autoscaling_policy.cpu_utilization_low_scaling_policy.arn}"] //We want to reuse this alarm for ASG scaling policy
+    "${aws_autoscaling_policy.cpu_utilization_low_scaling_policy.arn}"
+  ] //We want to reuse this alarm for ASG scaling policy
 }
