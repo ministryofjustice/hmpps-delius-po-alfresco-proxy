@@ -2,7 +2,8 @@ package uk.gov.gsi.justice.alfresco.proxy.bdd.util;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.common.ConsoleNotifier;
-import kong.unirest.HttpResponse;
+
+import javax.ws.rs.core.Response;
 
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
 
@@ -13,17 +14,17 @@ public enum World {
             .port(6067)
             .notifier(new ConsoleNotifier(true)));
 
-    private HttpResponse<String> responseEntity;
+    private Response response;
 
     public WireMockServer getWireMockServer() {
         return wireMockServer;
     }
 
-    public HttpResponse<String> getResponseEntity() {
-        return responseEntity;
+    public Response getResponse() {
+        return response;
     }
 
-    public void setResponseEntity(final HttpResponse<String> responseEntity) {
-        this.responseEntity = responseEntity;
+    public void setResponse(final Response response) {
+        this.response = response;
     }
 }

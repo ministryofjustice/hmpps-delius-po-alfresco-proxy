@@ -1,7 +1,7 @@
 package uk.gov.gsi.justice.alfresco.proxy.service;
 
-import net.oauth.*;
 import net.oauth.OAuth.Parameter;
+import net.oauth.*;
 import net.oauth.signature.RSA_SHA1;
 import org.apache.cxf.interceptor.LoggingMessage;
 import org.apache.cxf.jaxrs.ext.MessageContext;
@@ -20,6 +20,7 @@ import uk.gov.gsi.justice.alfresco.proxy.utils.AuthUtils;
 import uk.gov.gsi.justice.alfresco.proxy.utils.PropertyResolver;
 import uk.gov.gsi.justice.alfresco.proxy.utils.TimestampGenerator;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
@@ -27,9 +28,9 @@ import javax.ws.rs.container.PreMatching;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
-
 import java.net.ConnectException;
-import java.security.*;
+import java.security.KeyStore;
+import java.security.PublicKey;
 import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
 import java.util.*;
@@ -58,20 +59,18 @@ public class OAuthRequestFilter extends AbstractAuthFilter implements ContainerR
     private static final String HEADER_REAL_USER = "X-DocRepository-Real-Remote-User";
     private static final String HEADER_NOT_FOUND = "Not Found";
 
-    private final String oauthProtocol;
-    private String trustStoreFile;
-    private String trustStorePassword;
     private String headerBlacklist;
     private boolean logSecurity;
 
-	public OAuthRequestFilter(String oauthProtocol) {
-		this.oauthProtocol = oauthProtocol;
-	}
+    @Inject
+    private KeyStore keyStore;
+
 
     public void filter(ContainerRequestContext context) {
 		Map<String, String> securityData = new LinkedHashMap<>();
 		String senderId = null;
 		Message message = null;
+
 
         try {
             message = JAXRSUtils.getCurrentMessage();
@@ -157,21 +156,7 @@ public class OAuthRequestFilter extends AbstractAuthFilter implements ContainerR
 //				log.info("oauthparam "+parameter.getKey()+" = "+parameter.getValue());
 			}
 
-
-
-			// For some reason the protocol in the request url might be changed to http even if the original request was made to a loadbalancer via
-			// to a loadbalancer via https. This means the signature verification won't work as the client would have signed with the https
-			// version of the url but we are verifying with a http url. So we allow the user to force the url we verify with
-			// to be either the https (default) or http version.
 			String requestURL = req.getRequestURL().toString();
-			if (this.oauthProtocol == null || this.oauthProtocol.trim().isEmpty() || this.oauthProtocol.equalsIgnoreCase("https")) {
-				// assume protocol is https
-				requestURL = requestURL.replaceFirst("http://", "https://");
-			}
-            else {
-				requestURL = requestURL.replaceFirst("https://", "http://");
-			}
-
 
             //we also need to mix and match psn address vs non psn addresses, the spg is expecting signatures signed against
 			// spgw-ext(.subdomain).probation.service.justice.gov.uk
@@ -190,11 +175,10 @@ public class OAuthRequestFilter extends AbstractAuthFilter implements ContainerR
             OAuthConsumer consumer = new OAuthConsumer(null, oauthMessage.getConsumerKey(), null, serviceProvider);
 
 			log.info("Getting certificate");
-            Certificate certificate = AuthUtils.getCertificate(trustStoreFile, trustStorePassword, oauthMessage.getConsumerKey());
+			final Certificate certificate = keyStore.getCertificate(oauthMessage.getConsumerKey());
             PublicKey publicKey = certificate.getPublicKey();
 			log.info("Getting Common Name");
 			String commonName = getFieldValueFromCertificateSubjectDN("CN", (X509Certificate)certificate);
-
 			log.info("Determining from PSN by common name "+commonName);
 			String proxyUrlRewritePattern = getProxyUrlRewritePattern(commonName);
 
@@ -316,20 +300,6 @@ public class OAuthRequestFilter extends AbstractAuthFilter implements ContainerR
 	}
 	public void setAuditLogService(UDInterchangeAuditLogService auditLogService) {
 		this.auditLogService = auditLogService;
-	}
-
-	public String getTrustStoreFile() {
-		return trustStoreFile;
-	}
-	public void setTrustStoreFile(String trustStoreFile) {
-		this.trustStoreFile = trustStoreFile;
-	}
-
-	public String getTrustStorePassword() {
-		return trustStorePassword;
-	}
-	public void setTrustStorePassword(String trustStorePassword) {
-		this.trustStorePassword = trustStorePassword;
 	}
 
 	public PropertyResolver getPropertyResolver() {

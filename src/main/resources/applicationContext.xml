@@ -16,17 +16,16 @@
 
     <bean id="mapProviderWriter" class="uk.gov.gsi.justice.alfresco.proxy.provider.MapToJsonBodyWriter"/>
     <bean id="mapProviderReader" class="uk.gov.gsi.justice.alfresco.proxy.provider.JsonToMapBodyReader"/>
+    <bean id="propertyResolver" class="uk.gov.gsi.justice.alfresco.proxy.utils.PropertyResolver" />
 
-    <!-- bean id="authorizationFilter" class="uk.gov.gsi.justice.spg.OAuthRequestFilter">
-        <constructor-arg value="${oauth.protocol}" />
+
+    <bean id="authorizationFilter" class="uk.gov.gsi.justice.alfresco.proxy.service.OAuthRequestFilter">
         <property name="logSecurity" value="${log.security}"/>
         <property name="propertyResolver" ref="propertyResolver" />
-        <property name="trustStoreFile" value="${spg.unstructured.proxy.trustStoreFile}" />
-        <property name="trustStorePassword" value="${spg.unstructured.proxy.trustStore.password}" />
         <property name="auditLogService" ref="auditLogService" />
         <property name="timestampGenerator" ref="timestampGenerator" />
         <property name="headerBlacklist" value="${header.blacklist}" />
-    </bean -->
+    </bean>
 
     <bean id="timestampGenerator" class="uk.gov.gsi.justice.alfresco.proxy.utils.TimestampGenerator"/>
 
@@ -49,7 +48,7 @@
             <ref bean="mapProviderReader"/>
             <!-- authorizationFilter ensures the incoming rest call is checked for
                 validation of the oauth signature -->
-            <!-- ref bean="authorizationFilter"/ -->
+             <ref bean="authorizationFilter"/>
             <bean class="uk.gov.gsi.justice.alfresco.proxy.service.ProxyUDWadlGenerator">
                 <constructor-arg value="${spg.alfresco.proxy.published.wadl.address}"/>
             </bean>

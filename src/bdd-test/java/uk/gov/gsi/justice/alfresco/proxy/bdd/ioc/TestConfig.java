@@ -6,10 +6,11 @@ import org.springframework.context.annotation.Primary;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
 import uk.gov.gsi.justice.alfresco.proxy.av.AntivirusScanner;
-import uk.gov.gsi.justice.alfresco.proxy.service.OAuthRequestFilter;
+import uk.gov.gsi.justice.alfresco.proxy.bdd.security.KeyStoreGenerator;
 import uk.gov.gsi.justice.alfresco.proxy.utils.TimestampProvider;
 
 import javax.annotation.PreDestroy;
+import java.security.KeyStore;
 import java.time.Duration;
 
 import static org.mockito.Mockito.mock;
@@ -42,16 +43,15 @@ public class TestConfig {
         return new AntivirusScanner(clamAVAddress, clamAV.getFirstMappedPort(), clamAVTimeout);
     }
 
-    @Bean(name = "authorizationFilter")
-    @Primary
-    public OAuthRequestFilter provideOAuthRequestFilter() {
-        final String oauthProtocol = "http";
-        return new OAuthRequestFilter(oauthProtocol);
-    }
-
     @Bean
     @Primary
     public TimestampProvider provideTimestampProvider() {
         return mock(TimestampProvider.class);
+    }
+
+    @Bean
+    @Primary
+    public KeyStore provideKeyStore() throws Exception {
+        return new KeyStoreGenerator().getKeyStore();
     }
 }

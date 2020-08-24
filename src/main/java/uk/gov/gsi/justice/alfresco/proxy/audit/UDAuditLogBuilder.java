@@ -38,7 +38,9 @@ public class UDAuditLogBuilder {
             try {
                 ObjectMapper mapper = new ObjectMapper();
                 String json = buffer.getPayload().toString();
-                map = mapper.readValue(json, new TypeReference<Map<String, Object>>(){});
+                if (!json.isEmpty()){
+                    map = mapper.readValue(json, new TypeReference<Map<String, Object>>(){});
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }

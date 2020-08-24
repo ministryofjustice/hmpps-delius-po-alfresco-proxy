@@ -12,6 +12,7 @@ import static com.github.tomakehurst.wiremock.http.Fault.EMPTY_RESPONSE;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
@@ -56,10 +57,10 @@ public class HealthCheckSteps extends AbstractSteps implements En {
             final JsonObject healthCheckResponse = null;//JsonParser.parseString(jsonFile).getAsJsonObject();
             final String expectedResponse = gson.toJson(healthCheckResponse);
 
-            assertThat(world.getResponseEntity().getStatus(), is(200));
-            assertTrue(world.getResponseEntity().getHeaders().containsKey("Content-Type"));
-            assertThat(world.getResponseEntity().getHeaders().get("Content-Type"), hasItem("application/json"));
-            assertThat(world.getResponseEntity().getBody(), is(expectedResponse));
+            assertThat(world.getResponse().getStatus(), is(200));
+            assertTrue(world.getResponse().getHeaders().containsKey("Content-Type"));
+            assertThat(world.getResponse().getHeaders().get("Content-Type"), hasItem("application/json"));
+            assertNotNull(world.getResponse().getEntity());
 
             world.getWireMockServer().verify(getRequestedFor(urlEqualTo(alfrescoHealthEndpoint)));
         });
