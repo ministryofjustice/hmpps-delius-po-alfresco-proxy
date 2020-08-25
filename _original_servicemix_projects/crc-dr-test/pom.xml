@@ -5,15 +5,20 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<name>CRC Document Repository Client Test</name>
+    <groupId>uk.gov.gsi.justice.spg</groupId>
 	<artifactId>crc-dr-test</artifactId>
-
-	<parent>
-		<relativePath>../spg-dependency-versions/</relativePath>
-		<groupId>uk.gov.gsi.justice.spg</groupId>
-		<artifactId>spg-dependency-versions</artifactId>
-		<version>2.6.1.1</version>
-	</parent>
+    <version>2.6.1.1</version>
+<!--	<parent>-->
+<!--		<relativePath>../spg-dependency-versions/</relativePath>-->
+<!--		<groupId>uk.gov.gsi.justice.spg</groupId>-->
+<!--		<artifactId>spg-dependency-versions</artifactId>-->
+<!--		<version>2.6.1.1</version>-->
+<!--	</parent>-->
 	<packaging>jar</packaging>
+	<properties>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+	</properties>
 
 	<dependencies>
 		<dependency>
@@ -51,11 +56,11 @@
 			<artifactId>commons-lang3</artifactId>
 			<version>3.4</version>
 		</dependency>
-		<dependency>
-			<groupId>commons-logging</groupId>
-			<artifactId>commons-logging</artifactId>
-			<version>${commons.logging.version}</version>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>commons-logging</groupId>-->
+<!--			<artifactId>commons-logging</artifactId>-->
+<!--			<version>${commons.logging.version}</version>-->
+<!--		</dependency>-->
 
 		<dependency>
 			<groupId>commons-codec</groupId>
@@ -66,6 +71,17 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>1.2</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -166,24 +182,24 @@
 					</execution>
 					
 					
-					<execution>
-                        <id>default-testResources</id>
-                        <phase>testResources</phase>
-                        <goals>
-                            <goal>testResources</goal>
-                        </goals>
-                        <configuration>
-                            <resources>
-                                <resource>
-                                    <directory>${basedir}/src/test/resources</directory>
-                                    <excludes>
-                                        <exclude>eicar.txt</exclude>
-                                    </excludes>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-					
+<!--					<execution>-->
+<!--                        <id>default-testResources</id>-->
+<!--                        <phase>testResources</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>testResources</goal>-->
+<!--                        </goals>-->
+<!--                        <configuration>-->
+<!--                            <resources>-->
+<!--                                <resource>-->
+<!--                                    <directory>${basedir}/src/test/resources</directory>-->
+<!--                                    <excludes>-->
+<!--                                        <exclude>eicar.txt</exclude>-->
+<!--                                    </excludes>-->
+<!--                                </resource>-->
+<!--                            </resources>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
+<!--					-->
 
 				</executions>
 			</plugin>
@@ -196,7 +212,14 @@
 					<skipTests>true</skipTests>
 				</configuration>
 			</plugin>
-
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
 		</plugins>
 	</build>
 </project>
