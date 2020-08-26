@@ -20,23 +20,23 @@ data "template_file" "ecstask_execution_policy_template" {
 
 # Offender API task definition template
 data "template_file" "task_definition" {
-  template = "${file("templates/ecs/task_definition.tpl")}"
+  template = file("templates/ecs/task_definition.tpl")
 
   vars = {
-    region           = "${var.region}"
-    aws_account_id   = "${data.aws_caller_identity.current.account_id}"
-    environment_name = "${var.environment_name}"
-    project_name     = "${var.project_name}"
-    container_name   = "${local.container_name}"
-    image_url        = "${var.docker_image}"
-    image_version    = "${var.image_version}"
-    health_command   = "${var.internal_health_command}"
+    region           = var.region
+    aws_account_id   = data.aws_caller_identity.current.account_id
+    environment_name = var.environment_name
+    project_name     = var.project_name
+    container_name   = local.container_name
+    image_url        = var.docker_image
+    image_version    = var.image_version
+    health_command   = var.internal_health_command
     env_service_port = var.service_config_service_port
-    log_group_name   = "${aws_cloudwatch_log_group.task_log_group.name}"
+    log_group_name   = aws_cloudwatch_log_group.task_log_group.name
 
-    application_name         = "${var.application_name}"
-    alfresco_health_endpoint = "${var.alfresco_health_endpoint}"
-    alfresco_base_url        = "${var.alfresco_base_url}"
+    application_name         = var.application_name
+    alfresco_health_endpoint = var.alfresco_health_endpoint
+    alfresco_base_url        = var.alfresco_base_url
   }
 }
 

@@ -8,6 +8,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import uk.gov.gsi.justice.po.alfresco.proxy.bdd.ioc.TestConfig;
+import uk.gov.gsi.justice.po.alfresco.proxy.ioc.AppConfig;
 
 import javax.inject.Inject;
 
@@ -16,7 +18,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
-@SpringBootTest(classes = ApplicationBootstrap.class)
+@SpringBootTest(properties = {"application.name=ApplicationBootstrapTest", "alfresco.base.url=http://localhost:6067", "alfresco.health.endpoint=/alfresco/service/noms-spg/notificationStatus"},
+        classes = {AppConfig.class, TestConfig.class, ApplicationBootstrap.class})
 @AutoConfigureMockMvc
 class ApplicationBootstrapTest {
     @Inject

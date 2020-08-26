@@ -32,3 +32,8 @@ output "short_environment_name" {
 //    appinsights_instrumentationkey = "/${var.environment_name}/${var.project_name}/newtech/offenderapi/appinsights_key"
 //  }
 //}
+
+// Added for debugging
+//output "ecs_asg" {
+//  value = aws_autoscaling_group.ecs_asg
+//}

@@ -49,34 +49,34 @@ variable "dependencies_bucket_arn" {
 }
 
 variable "tags" {
-  type = map(string)
+  type = "map"
 }
 
 #load balancer account id - common accross all services within an environment
 variable "lb_account_id" {}
 
 variable "service_config_cpu" {
-  type = string
+  type    = string
   default = "1024"
 }
 
 variable "service_config_memory" {
-  type = string
+  type    = string
   default = "512"
 }
 
 variable "service_config_deployment_minimum_healthy_percent" {
-  type = number
+  type    = number
   default = 30
 }
 
 variable "service_config_ecs_target_cpu" {
-  type = string
+  type    = string
   default = "60"
 }
 
 variable "service_config_service_port" {
-  type = number
+  type    = number
   default = 8080
 }
 
@@ -118,7 +118,7 @@ variable "eng_role_arn" {}
 
 variable "is_wiremock" {
   description = "indicator to show if an environment contains official data (prod,preprod etc)"
-  default = false
+  default     = false
 }
 
 variable "bastion_inventory" {}
