@@ -27,6 +27,11 @@ echo "image tag => ${TAG}"
 $(pwd)/scripts/build-docker-image.sh
 $(pwd)/scripts/upload-sandpit-docker-image.sh
 
+date
+echo "Waiting for a couple of minutes to allow terraform apply to complete ecs deployment"
+sleep 120
+date
+
 terraform_role_arn="arn:aws:iam::723123699647:role/terraform"
 service_name="dlc-${my_aws_env}-spgw-alfproxy"
 cluster_arn="arn:aws:ecs:eu-west-2:723123699647:cluster/${service_name}"

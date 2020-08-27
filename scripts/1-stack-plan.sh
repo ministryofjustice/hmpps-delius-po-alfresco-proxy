@@ -11,6 +11,7 @@ function plan_stack() {
     fi
     rm -f ${environment_name}.plan
     sleep 1
+    terragrunt fmt
     terragrunt init
     terragrunt refresh
     terragrunt plan --out ${environment_name}.plan

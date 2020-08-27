@@ -14,7 +14,7 @@ export ENVIRONMENT_TERRAFORM_IAM_ROLE_ARN="arn:aws:iam::723123699647:role/terraf
 export ENGINEERING_TERRAFORM_IAM_ROLE_ARN="arn:aws:iam::895523100917:role/terraform"
 
 $(pwd)/scripts/get-deployed-image.sh
-image_tag=`cat image.tag | head -n 1 | tr -d '\n'`
+image_tag=`cat image.tag | head -n 1 | tr -d '\n' | tr -d '"'`
 rm -f image.tag
 echo "image_tag = ${image_tag}"
 
@@ -30,4 +30,4 @@ docker run -it --rm \
     -e CUSTOM_COMMON_PROPERTIES_DIR=/home/tools/data/terraform/env_configs/common \
     -e "TERM=xterm-256color" \
     --entrypoint "scripts/${1}" \
-    mojdigitalstudio/hmpps-terraform-builder-lite:latest
+    mojdigitalstudio/hmpps-terraform-builder-0-12:latest
