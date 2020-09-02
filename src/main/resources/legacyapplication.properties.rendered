@@ -1,0 +1,131 @@
+#rendered by copying legacyapplication.properties.placeholder to potest 1 iso server and running
+envsubst < legacyapplication.properties.placeholder
+
+#the following is outputted:
+
+
+
+#these configs are how the existing alfresco proxy (aka proxy-ud) are populated
+#this file is here to assist with the next stage of development where we implement the code required to talk to alfresco
+
+##################################################################################################
+#PO Configs POSTUB,MTC,STC
+
+
+############## BEGIN Configuration for PO POSTUB
+endpoint.certificate.alias.POSTUB=signing.{{ lookup('env','SPG_CRC_FQDN') }}
+
+#legacy dynamic spg style
+#certificate.signing.{{ lookup('env','SPG_CRC_FQDN') }}=C00,C01,C15,C22,C23
+#CALLING_VIA_PROXY_URL_REWRITE.signing.{{ lookup('env','SPG_CRC_FQDN') }}=
+
+#new way = we'll need to modify the code so that it can associate between the certificate alias and the allowed crcs
+endpoint.allowed.crc.list.POSTUB=C00,C01,C15,C22,C23
+CALLING_VIA_PROXY_URL_REWRITE.POSTUB=
+
+
+
+############## BEGIN Configuration for PO MTC
+endpoint.certificate.alias.MTC=spg-iso-ifsr3.omnia.mtcnovo.net
+endpoint.allowed.crc.list.MTC=C16,C17
+CALLING_VIA_PROXY_URL_REWRITE.MTC=
+
+
+############## BEGIN Configuration for PO STC
+endpoint.certificate.alias.STC=integration-testing-spg420.seetec.co.uk
+endpoint.allowed.crc.list.STC=C21
+CALLING_VIA_PROXY_URL_REWRITE.STC=
+
+##################################################################################################
+
+
+
+
+
+#*************************************************************************************************
+#original proxy-ud configs, settings referenced in existing code. These are mainly static variables.
+
+# SPG Unstructured Data REST Proxy Service
+##########################################
+spg.unstructured.proxy.inbound.address=/spg-proxy-ud
+spg.unstructured.proxy.outbound.address=/alfresco/service/noms-spg
+spg.unstructured.proxy.trustStoreFile=/opt/spg/servicemix/etc/keystores/oneTrustKeystore.jks
+
+#this should be a fixed value, or derived from SSM STORE
+spg.unstructured.proxy.trustStore.password=*masked*
+
+
+
+
+###### SPG Proxy Log configuration ####
+
+saveLocation=data/spg-proxy-audit
+
+# Camel Tracer Interceptor (used historically for debugging streams)
+context.tracer=false
+stream.caching.enable=true
+stream.caching.spool.threshold=0
+
+#ClamAV configuration
+spg.unstructured.proxy.clamav.address=localhost
+spg.unstructured.proxy.clamav.port=3310
+spg.unstructured.proxy.clamav.timeout=60000
+spg.unstructured.proxy.clamav.scanForViruses=true
+
+spg.unstructured.proxy.published.wadl.address=https://:9001/cxf/spg-proxy-ud
+
+log.security = true
+display.payload = false
+header.blacklist =
+#*************************************************************************************************
+
+
+
+
+
+
+###FYI env vars are......
+
+
+ .app.env_vars.list.po && .app.env_vars.list.spg
+PO_ACTIVE_CONNECTIONS=STC,MTC,POSTUB
+PO_MTC_CRC_LIST=C16,C17
+PO_MTC_ENDPOINT_URL=https://spg-ifsr3.omnia.mtcnovo.net:9001/CRC/CRCendpoint
+PO_MTC_NAME=MTC
+PO_MTC_SIGNING_COMMON_NAME=spg-iso-ifsr3.omnia.mtcnovo.net
+PO_MTC_TLS_COMMON_NAME=spg-ifsr3.omnia.mtcnovo.net
+PO_POSTUB_CRC_LIST=C00,C01,C15,C22,C23
+PO_POSTUB_ENDPOINT_URL=https://{{ lookup('env','SPG_CRC_FQDN') }}:9001/cxf/CRC-100
+PO_POSTUB_NAME=PO STUB
+PO_POSTUB_SIGNING_COMMON_NAME=signing.{{ lookup('env','SPG_CRC_FQDN') }}
+PO_POSTUB_TLS_COMMON_NAME={{ lookup('env','SPG_CRC_FQDN') }}
+PO_STC_CRC_LIST=C21
+PO_STC_ENDPOINT_URL=https://integration-testing-spg420.seetec.co.uk:9001/NOMSInbound.svc
+PO_STC_NAME=SEETEC
+PO_STC_SIGNING_COMMON_NAME=integration-testing-spg420.seetec.co.uk
+PO_STC_TLS_COMMON_NAME=integration-testing-spg420.seetec.co.uk
+PO_POSTUB_ENDPOINT_URL=https://{{ lookup('env','SPG_CRC_FQDN') }}:9001/cxf/CRC-100
+PO_POSTUB_SIGNING_COMMON_NAME=signing.{{ lookup('env','SPG_CRC_FQDN') }}
+PO_POSTUB_TLS_COMMON_NAME={{ lookup('env','SPG_CRC_FQDN') }}
+SPG_AWS_REGION=eu-west-2
+SPG_BUILD_S3_REPO=tf-eu-west-2-hmpps-delius-po-test1-spgw-s3bucket
+SPG_CERTIFICATE_BUCKET=tf-eu-west-2-hmpps-eng-dev-certificates-private-s3bucket
+SPG_CERTIFICATE_PATH=/unclassified-data/hmpps-delius-po-test1/current/
+SPG_CRC_FQDN=spgw-crc-ext.po-test.probation.service.justice.gov.uk
+SPG_DELIUS_MQ_URL=tcp://delius-jms.delius-po-test1.internal:61617
+SPG_DISABLED_META_LIST=C03,C04,C05,C06,C07,C15,C16,C17,C19,C20
+SPG_DOCUMENT_REST_SERVICE_ADMIN_URL=https://alfresco.po-test1.delius.probation.hmpps.dsd.io/alfresco/service/admin-spg
+SPG_DOCUMENT_REST_SERVICE_PUBLIC_URL=https://alfresco.po-test1.delius.probation.hmpps.dsd.io/alfresco/service/noms-spg
+SPG_ENVIRONMENT_CN=po-test.probation.service.justice.gov.uk
+SPG_ENVIRONMENT_CODE=po-test1
+SPG_GATEWAY_MQ_URL=tcp://localhost:61616
+SPG_GENERIC_BUILD_INV_DIR=/tmp/spg/ansible/inventories/generic-default
+SPG_HOST_TYPE=iso
+SPG_IMAGE_VERSION=SPG-2.6.1.1
+SPG_INTERNAL_SCHEMA_VERSION=0-9-14
+SPG_ISO_FQDN=spgw-ext.po-test.probation.service.justice.gov.uk
+SPG_JAVA_MAX_MEM=2442
+SPG_KEYSTORE=/opt/spg/servicemix/etc/keystores/onePrivateKeystore.jks
+SPG_KEYSTORE_PASSWORD=password
+SPG_MPX_FQDN=spgw-mpx-int.po-test1.delius.probation.hmpps.dsd.io
+SPG_TRUSTSTORE=/opt/spg/servicemix/etc/keystores/oneTrustKeystore.jks
