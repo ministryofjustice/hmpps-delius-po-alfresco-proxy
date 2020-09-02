@@ -119,7 +119,7 @@ public abstract class AbstractSteps extends AbstractBaseTest {
 
     protected void createDeleteStub(final String path) {
         setPath(path);
-        world.getWireMockServer().stubFor(WireMock.delete(urlEqualTo(baseUrl))
+        world.getWireMockServer().stubFor(WireMock.delete(urlEqualTo(path))
                 .willReturn(aResponse()
                         .withHeader("Content-Type", "application/json")
                         .withBody(gson.toJson(alfrescoNotificationStatus))));
