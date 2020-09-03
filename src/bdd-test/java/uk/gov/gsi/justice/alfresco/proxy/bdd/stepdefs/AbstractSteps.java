@@ -137,4 +137,8 @@ public abstract class AbstractSteps extends AbstractBaseTest {
     public void setPath(final String path) {
         this.path = path;
     }
+
+    public WebTargetBuilder getWebTargetBuilder() {
+        return webTargetBuilder;
+    }
 }
