@@ -153,3 +153,14 @@ cat << 'EOF' >> ~/update_ssh_users_from_github.sh
 ansible-playbook ~/bootstrap-users.yml
 
 EOF
+
+if [ ${is_wiremock} == true ]; then
+    # File limit settings
+    echo "fs.file-max = 100000" >> /etc/sysctl.conf
+    echo "soft nproc 65535" >> /etc/security/limits.conf
+    echo "hard nproc 65535" >> /etc/security/limits.conf
+    echo "soft nofile 65535" >> /etc/security/limits.conf
+    echo "hard nofile 65535" >> /etc/security/limits.conf
+    # Command to make above changes into effect immediately without logout and reboot.
+    sysctl -p
+fi

@@ -3,18 +3,18 @@ data "aws_caller_identity" "current" {}
 
 # Template files for offenderapi task role and execution role definitions
 data "template_file" "ecstasks_assumerole_template" {
-  template = "${file("${path.module}/templates/iam/ecstasks_assumerole_policy.tpl")}"
+  template = file("${path.module}/templates/iam/ecstasks_assumerole_policy.tpl")
   vars     = {}
 }
 
 data "template_file" "ecstask_execution_policy_template" {
-  template = "${file("${path.module}/templates/iam/ecstask_execution_policy.tpl")}"
+  template = file("${path.module}/templates/iam/ecstask_execution_policy.tpl")
 
   vars = {
-    region           = "${var.region}"
-    aws_account_id   = "${data.aws_caller_identity.current.account_id}"
-    environment_name = "${var.environment_name}"
-    project_name     = "${var.project_name}"
+    region           = var.region
+    aws_account_id   = data.aws_caller_identity.current.account_id
+    environment_name = var.environment_name
+    project_name     = var.project_name
   }
 }
 
