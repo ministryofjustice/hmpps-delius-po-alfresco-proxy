@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
+import org.testcontainers.images.builder.ImageFromDockerfile;
 import uk.gov.gsi.justice.alfresco.proxy.av.AntivirusScanner;
 import uk.gov.gsi.justice.alfresco.proxy.bdd.security.KeyStoreGenerator;
 import uk.gov.gsi.justice.alfresco.proxy.utils.TimestampProvider;
@@ -17,7 +18,7 @@ import static org.mockito.Mockito.mock;
 
 @Configuration
 public class TestConfig {
-    private final String clamAVImage = "mkodockx/docker-clamav:alpine";
+    private final String clamAVImage = "quay.io/ukhomeofficedigital/clamav:latest";
     private final int clamAVPort = 3310;
 
     @SuppressWarnings("rawtypes")
