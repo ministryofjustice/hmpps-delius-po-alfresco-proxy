@@ -65,3 +65,6 @@ sandpit-2-ecr-clean:
 
 sandpit-2-unlock:
 	scripts/local-unlock-stack.sh sandpit-2
+
+sandpit-2-destroy:
+	scripts/local-stack-action.sh sandpit-2 destroy
