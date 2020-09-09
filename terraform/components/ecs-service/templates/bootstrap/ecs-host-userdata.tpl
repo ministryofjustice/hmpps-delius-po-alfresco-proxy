@@ -160,6 +160,4 @@ if [ ${is_wiremock} == true ]; then
     echo "hard nproc 65535" >> /etc/security/limits.conf
     echo "soft nofile 65535" >> /etc/security/limits.conf
     echo "hard nofile 65535" >> /etc/security/limits.conf
-    # Command to make above changes into effect immediately without logout and reboot.
-    sysctl -p
 fi
