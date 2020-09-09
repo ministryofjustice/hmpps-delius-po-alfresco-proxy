@@ -158,6 +158,8 @@ if [ ${is_wiremock} == true ]; then
     # File limit settings
     echo "soft nproc 65535" >> /etc/security/limits.conf
     echo "hard nproc 65535" >> /etc/security/limits.conf
-    echo "soft nofile 65535" >> /etc/security/limits.conf
-    echo "hard nofile 65535" >> /etc/security/limits.conf
+    echo "* soft nofile 65535" >> /etc/security/limits.conf
+    echo "* hard nofile 65535" >> /etc/security/limits.conf
+    echo "root soft nofile 65535" >> /etc/security/limits.conf
+    echo "root hard nofile 65535" >> /etc/security/limits.conf
 fi
