@@ -80,6 +80,10 @@ variable "service_config_service_port" {
   default = 8080
 }
 
+variable "asg_desired_capacity" {
+  default = 5
+}
+
 # ECS Task App Autoscaling min and max thresholds
 variable "ecs_scaling_min_capacity" {
   default = 1
@@ -90,7 +94,7 @@ variable "ecs_scaling_max_capacity" {
 }
 
 variable "task_desired_count" {
-  default = 5
+  default = 1
 }
 
 variable "docker_image" {
