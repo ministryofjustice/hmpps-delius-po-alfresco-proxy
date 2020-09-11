@@ -5,7 +5,7 @@ resource "aws_autoscaling_group" "ecs_asg" {
   # Not setting desired count as that could cause scale in when deployment runs and lead to resource exhaustion
   max_size                  = var.ecs_scaling_max_capacity
   min_size                  = var.ecs_scaling_min_capacity
-  desired_capacity  = var.asg_desired_capacity
+  desired_capacity          = var.asg_desired_capacity
   health_check_grace_period = 0
   termination_policies      = ["NewestInstance"]
   vpc_zone_identifier       = local.private_subnet_ids
