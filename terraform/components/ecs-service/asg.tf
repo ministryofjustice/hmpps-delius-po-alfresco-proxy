@@ -27,21 +27,21 @@ resource "aws_autoscaling_group" "ecs_asg" {
 }
 
 # Autoscaling Policies and trigger alarms
-resource "aws_autoscaling_policy" "cpu_utilization_high_scaling_policy" {
-  name                   = "${local.service_name}-cpu_utilization_high_scaling_policy"
-  scaling_adjustment     = "1"
-  adjustment_type        = "ChangeInCapacity"
-  autoscaling_group_name = aws_autoscaling_group.ecs_asg.name
-  cooldown               = 700
-}
-
-resource "aws_autoscaling_policy" "cpu_utilization_low_scaling_policy" {
-  name                   = "${local.service_name}-cpu_utilization_low_scaling_policy"
-  scaling_adjustment     = "-1"
-  adjustment_type        = "ChangeInCapacity"
-  autoscaling_group_name = aws_autoscaling_group.ecs_asg.name
-  cooldown               = 700
-}
+//resource "aws_autoscaling_policy" "cpu_utilization_high_scaling_policy" {
+//  name                   = "${local.service_name}-cpu_utilization_high_scaling_policy"
+//  scaling_adjustment     = "1"
+//  adjustment_type        = "ChangeInCapacity"
+//  autoscaling_group_name = aws_autoscaling_group.ecs_asg.name
+//  cooldown               = 700
+//}
+//
+//resource "aws_autoscaling_policy" "cpu_utilization_low_scaling_policy" {
+//  name                   = "${local.service_name}-cpu_utilization_low_scaling_policy"
+//  scaling_adjustment     = "-1"
+//  adjustment_type        = "ChangeInCapacity"
+//  autoscaling_group_name = aws_autoscaling_group.ecs_asg.name
+//  cooldown               = 700
+//}
 
 
 # Hack to merge additional tag into existing map and convert to list for use with asg tags input
