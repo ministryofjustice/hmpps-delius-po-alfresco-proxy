@@ -7,7 +7,7 @@ resource "aws_ecs_task_definition" "task_definition" {
   memory                   = var.service_config_memory
   cpu                      = var.service_config_cpu
   requires_compatibilities = ["EC2"]
-  tags                     = merge(var.tags, map("Name", "${local.service_name}"))
+  tags                     = merge(var.tags, map("Name", local.service_name))
 
   placement_constraints {
     type       = "memberOf"

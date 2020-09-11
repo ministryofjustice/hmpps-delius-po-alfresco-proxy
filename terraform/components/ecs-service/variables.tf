@@ -90,7 +90,7 @@ variable "ecs_scaling_max_capacity" {
 }
 
 variable "task_desired_count" {
-  default = 1
+  default = 5
 }
 
 variable "docker_image" {
