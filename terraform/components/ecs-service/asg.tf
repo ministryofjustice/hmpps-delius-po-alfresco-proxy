@@ -12,9 +12,6 @@ resource "aws_autoscaling_group" "ecs_asg" {
 
   lifecycle {
     create_before_destroy = true
-    ignore_changes = [
-      desired_capacity,
-    ]
   }
 
   tags = concat(
