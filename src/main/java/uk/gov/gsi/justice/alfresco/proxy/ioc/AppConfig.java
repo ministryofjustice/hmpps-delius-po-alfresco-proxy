@@ -3,13 +3,12 @@ package uk.gov.gsi.justice.alfresco.proxy.ioc;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import uk.gov.gsi.justice.alfresco.proxy.av.AntivirusScanner;
-import uk.gov.gsi.justice.alfresco.proxy.service.OAuthRequestFilter;
+import uk.gov.gsi.justice.alfresco.proxy.utils.DefaultTimestampProvider;
 import uk.gov.gsi.justice.alfresco.proxy.utils.PropertyResolver;
+import uk.gov.gsi.justice.alfresco.proxy.utils.TimestampProvider;
 
 import java.security.KeyStore;
-import java.security.cert.Certificate;
 
 @Configuration
 public class AppConfig {
@@ -35,5 +34,10 @@ public class AppConfig {
     @Bean
     public KeyStore provideKeyStore() throws Exception {
         return null;
+    }
+
+    @Bean
+    public TimestampProvider provideTimestampProvider() {
+        return new DefaultTimestampProvider();
     }
 }

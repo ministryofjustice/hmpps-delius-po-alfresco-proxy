@@ -9,14 +9,13 @@ import org.glassfish.jersey.media.multipart.file.FileDataBodyPart;
 import javax.ws.rs.core.Response;
 import java.io.File;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.*;
-
+import static com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static javax.ws.rs.client.Entity.entity;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
 import static javax.ws.rs.core.MediaType.MULTIPART_FORM_DATA_TYPE;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static uk.gov.gsi.justice.alfresco.proxy.bdd.util.HttpHeadersMapProvider.getMultivaluedMap;
 
 public class AntiVirusSteps extends AbstractSteps implements En {
     private String filePath;
@@ -34,16 +33,15 @@ public class AntiVirusSteps extends AbstractSteps implements En {
 
             final File file = new File(getClass().getClassLoader().getResource(filePath).getFile());
 
-            final FileDataBodyPart filePart = new FileDataBodyPart("filedata",  file);
-           final MultiPart multiPart = new FormDataMultiPart().field("CRN","X030927").bodyPart(filePart);
+            final FileDataBodyPart filePart = new FileDataBodyPart("filedata", file);
+            final MultiPart multiPart = new FormDataMultiPart().field("CRN", "X030927").bodyPart(filePart);
 
             multiPart.setMediaType(MULTIPART_FORM_DATA_TYPE);
 
-            httpResponse = getWebTargetBuilder().provideWebTarget()
-                    .path(path)
+            httpResponse = webTarget.path(path)
                     .register(MultiPartFeature.class)
                     .request(APPLICATION_JSON_TYPE)
-                    .headers(getMultivaluedMap())
+                    .headers(headers)
                     .post(entity(multiPart, multiPart.getMediaType()));
         });
 

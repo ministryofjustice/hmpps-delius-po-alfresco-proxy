@@ -1,13 +1,13 @@
 Feature: The application's health status
 
-#  Scenario: The API in a stable state
-#    Given the PO Alfresco Proxy API is running
-#    And alfresco is healthy
-#    When I request the health of the PO Alfresco Proxy API
-#    Then a stable response per the JSON "expectations/stable_health.json" is returned
-#
-#  Scenario: The API in an unstable state
-#    Given the PO Alfresco Proxy API is running
-#    But alfresco is not healthy
-#    When I request the health of the PO Alfresco Proxy API
-#    Then an unstable response per the JSON "expectations/unstable_health.json" is returned
+  Scenario: The API in a stable state
+    Given the Alfresco Proxy API is running
+    And alfresco is healthy
+    When I request the health of the Alfresco Proxy API
+    Then a response stating that the service is "stable" is returned
+
+  Scenario: The API in an unstable state
+    Given the Alfresco Proxy API is running
+    But alfresco is not healthy
+    When I request the health of the Alfresco Proxy API
+    Then a response stating that the service is "unstable" is returned

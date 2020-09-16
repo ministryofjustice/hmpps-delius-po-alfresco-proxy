@@ -1,4 +1,4 @@
-package uk.gov.gsi.justice.alfresco.proxy.service;
+package uk.gov.gsi.justice.alfresco.proxy.http;
 
 import org.apache.cxf.jaxrs.ext.multipart.Multipart;
 import org.apache.cxf.jaxrs.ext.multipart.MultipartBody;
@@ -21,7 +21,12 @@ public interface SPGUnstructuredService {
 	@Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
 	Response ping();
-	
+
+	@GET
+	@Path("/api/health")
+	@Produces(MediaType.APPLICATION_JSON)
+	Response healthcheck();
+
 	/*
 	 * The Zaizi Webscripts API supports the following generic GET commands
 	 * 	search
