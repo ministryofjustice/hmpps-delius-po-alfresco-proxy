@@ -2,10 +2,21 @@ package uk.gov.gsi.justice.alfresco.proxy.bdd.stepdefs;
 
 import io.cucumber.java8.En;
 
+import static org.mockito.Mockito.when;
 import static uk.gov.gsi.justice.alfresco.proxy.bdd.util.StubPath.*;
 
 public class ProxyToAlfrescoSteps extends AbstractSteps implements En {
     public ProxyToAlfrescoSteps() {
+        Before(() -> {
+            if (!clamAV.isRunning()) {
+                clamAV.start();
+            }
+
+            when(clamAvConnectionParametersProvider.host()).thenReturn(clamAV.getContainerIpAddress());
+            when(clamAvConnectionParametersProvider.port()).thenReturn(clamAV.getFirstMappedPort());
+            when(clamAvConnectionParametersProvider.timeout()).thenReturn(clamAVTimeout);
+        });
+
         Given("^a document is available at \"([^\"]*)\"$", this::createGetStub);
         Given("^I want to fetch and reserve a document from alfresco$", () -> createPostStub(FETCH_AND_RESERVE_PATH.toString()));
         Given("^I want to reserve a document from alfresco$", () -> createPostStub(RESERVE_PATH.toString()));
