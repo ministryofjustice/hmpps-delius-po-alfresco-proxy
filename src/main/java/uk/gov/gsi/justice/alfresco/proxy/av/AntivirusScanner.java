@@ -3,6 +3,7 @@ package uk.gov.gsi.justice.alfresco.proxy.av;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import uk.gov.gsi.justice.alfresco.proxy.exceptions.AntivirusException;
+import uk.gov.gsi.justice.alfresco.proxy.utils.ClamAvConnectionParametersProvider;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -16,24 +17,26 @@ public class AntivirusScanner {
     private static final byte[] INSTREAM = "zINSTREAM\0".getBytes();
     private static final int RETRY_TIMES = 3;
 
-    private String host;
-    private int port;
-    private int timeout;
+    private final ClamAvConnectionParametersProvider clamAvConnectionParametersProvider;
 
-    public AntivirusScanner(String host, int port, int timeout) {
-        this.host = host;
-        this.port = port;
-        this.timeout = timeout;
+    public AntivirusScanner(final ClamAvConnectionParametersProvider clamAvConnectionParametersProvider) {
+        this.clamAvConnectionParametersProvider = clamAvConnectionParametersProvider;
     }
 
     public AntivirusResponse scanBytes(InputStream is) {
+        final int socketTimeout = clamAvConnectionParametersProvider.timeout();
         Socket socket = new Socket();
 
         try {
-            socket.connect(new InetSocketAddress(host, port));
-            socket.setSoTimeout(timeout);
+            socket.connect(
+                    new InetSocketAddress(
+                            clamAvConnectionParametersProvider.host(),
+                            clamAvConnectionParametersProvider.port()
+                    )
+            );
+            socket.setSoTimeout(socketTimeout);
         } catch (IOException e) {
-            log.error("Could not connect or set socket timeout to " + timeout + "ms", e);
+            log.error("Could not connect or set socket timeout to " + socketTimeout + "ms", e);
             return new AntivirusResponse(new AntivirusException("Could not connect to AV socket", e));
         }
         DataOutputStream dos = null;
@@ -65,7 +68,7 @@ public class AntivirusScanner {
                 }
 
                 if (read > 0) {
-                    for (int i = 1; i <= RETRY_TIMES; i++){
+                    for (int i = 1; i <= RETRY_TIMES; i++) {
                         try {
                             dos.writeInt(read);
                             dos.write(buffer, 0, read);
@@ -73,7 +76,7 @@ public class AntivirusScanner {
                         } catch (IOException e) {
                             log.debug("Error writing data to socket");
                             log.debug("Retry times writing data to socket: " + i);
-                            if (i == RETRY_TIMES){
+                            if (i == RETRY_TIMES) {
                                 log.debug("Reached maximum retry limit of " + RETRY_TIMES + " times.");
                                 return new AntivirusResponse(new AntivirusException("Error writing data to socket", e));
                             }

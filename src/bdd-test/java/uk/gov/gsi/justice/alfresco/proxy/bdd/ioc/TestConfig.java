@@ -9,9 +9,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
+import uk.gov.gsi.justice.alfresco.proxy.GsonProvider;
 import uk.gov.gsi.justice.alfresco.proxy.av.AntivirusScanner;
 import uk.gov.gsi.justice.alfresco.proxy.bdd.security.KeyStoreGenerator;
-import uk.gov.gsi.justice.alfresco.proxy.GsonProvider;
+import uk.gov.gsi.justice.alfresco.proxy.utils.ClamAvConnectionParametersProvider;
 import uk.gov.gsi.justice.alfresco.proxy.utils.TimestampProvider;
 
 import javax.annotation.PreDestroy;
@@ -41,6 +42,8 @@ public class TestConfig {
             .waitingFor(Wait.forListeningPort()
                     .withStartupTimeout(Duration.ofMinutes(5)));
 
+    private final ClamAvConnectionParametersProvider clamAvConnectionParametersProvider = mock(ClamAvConnectionParametersProvider.class);
+
     public TestConfig() {
         clamAV.start();
     }
@@ -51,7 +54,13 @@ public class TestConfig {
     }
 
     @Value("${spg.alfresco.proxy.inbound.address}")
-    protected String baseUrl;
+    private String baseUrl;
+
+    @Bean
+    @SuppressWarnings("rawtypes")
+    public GenericContainer provideClamAvContainer() {
+        return clamAV;
+    }
 
     @Bean
     public Gson providerGson() {
@@ -62,9 +71,13 @@ public class TestConfig {
     @Bean(name = "antivirusScanner")
     @Primary
     public AntivirusScanner provideAntivirusScanner() {
-        final String clamAVAddress = "localhost";
-        final int clamAVTimeout = 60000;
-        return new AntivirusScanner(clamAVAddress, clamAV.getFirstMappedPort(), clamAVTimeout);
+        return new AntivirusScanner(clamAvConnectionParametersProvider);
+    }
+
+    @Bean
+    @Primary
+    public ClamAvConnectionParametersProvider provideClamAvClientProvider() {
+        return clamAvConnectionParametersProvider;
     }
 
     @Bean

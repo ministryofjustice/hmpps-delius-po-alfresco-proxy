@@ -32,6 +32,8 @@ dependencies {
     implementation group: 'commons-logging', name: 'commons-logging', version: '1.2'
     implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.12'
 
+    implementation group: 'xyz.capybara', name: 'clamav-client', version: '2.0.2'
+
     // Testing
     testImplementation group: 'junit', name: 'junit', version: '4.13'
     testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.17.2'

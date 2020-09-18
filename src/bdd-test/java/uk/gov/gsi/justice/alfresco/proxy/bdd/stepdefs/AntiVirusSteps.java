@@ -16,6 +16,7 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
 import static javax.ws.rs.core.MediaType.MULTIPART_FORM_DATA_TYPE;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.Mockito.when;
 
 public class AntiVirusSteps extends AbstractSteps implements En {
     private String filePath;
@@ -24,6 +25,16 @@ public class AntiVirusSteps extends AbstractSteps implements En {
     private Response httpResponse;
 
     public AntiVirusSteps() {
+        Before(() -> {
+            if (!clamAV.isRunning()) {
+                clamAV.start();
+            }
+
+            when(clamAvConnectionParametersProvider.host()).thenReturn(clamAV.getContainerIpAddress());
+            when(clamAvConnectionParametersProvider.port()).thenReturn(clamAV.getFirstMappedPort());
+            when(clamAvConnectionParametersProvider.timeout()).thenReturn(clamAVTimeout);
+        });
+
         Given("^I have a virus compromised document \"([^\"]*)\" to upload$", (final String filename) -> {
             this.filePath = "documents/" + filename;
         });

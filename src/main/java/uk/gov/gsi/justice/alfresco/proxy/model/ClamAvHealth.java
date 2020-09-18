@@ -2,23 +2,17 @@ package uk.gov.gsi.justice.alfresco.proxy.model;
 
 import java.util.Objects;
 
-public class AlfrescoHealth {
+public class ClamAvHealth {
     private final DependencyStatus status;
-    private final int code;
     private final String message;
 
-    public AlfrescoHealth(DependencyStatus status, int code, String message) {
+    public ClamAvHealth(DependencyStatus status, String message) {
         this.status = status;
-        this.code = code;
         this.message = message;
     }
 
     public DependencyStatus getStatus() {
         return status;
-    }
-
-    public int getCode() {
-        return code;
     }
 
     public String getMessage() {
@@ -29,22 +23,20 @@ public class AlfrescoHealth {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        AlfrescoHealth that = (AlfrescoHealth) o;
-        return code == that.code &&
-                status == that.status &&
-                Objects.equals(message, that.message);
+        ClamAvHealth that = (ClamAvHealth) o;
+        return status == that.status &&
+                message.equals(that.message);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(status, code, message);
+        return Objects.hash(status, message);
     }
 
     @Override
     public String toString() {
-        return "AlfrescoHealth{" +
+        return "ClamAvHealth{" +
                 "status=" + status +
-                ", code=" + code +
                 ", message='" + message + '\'' +
                 '}';
     }

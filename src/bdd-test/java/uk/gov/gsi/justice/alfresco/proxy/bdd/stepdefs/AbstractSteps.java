@@ -5,7 +5,7 @@ import com.github.tomakehurst.wiremock.client.WireMock;
 import org.glassfish.jersey.media.multipart.BodyPart;
 import org.glassfish.jersey.media.multipart.MultiPart;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
-import org.springframework.beans.factory.annotation.Value;
+import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.shaded.com.google.common.collect.ImmutableMap;
 import uk.gov.gsi.justice.alfresco.proxy.AbstractBaseTest;
 import uk.gov.gsi.justice.alfresco.proxy.bdd.util.World;
@@ -28,8 +28,9 @@ import static org.junit.Assert.assertTrue;
 import static uk.gov.gsi.justice.alfresco.proxy.bdd.util.World.INSTANCE;
 
 public abstract class AbstractSteps extends AbstractBaseTest {
-    @Value("${spg.alfresco.proxy.inbound.address}")
-    protected String baseUrl;
+    @Inject
+    @SuppressWarnings("rawtypes")
+    protected GenericContainer clamAV;
 
     @Inject
     protected WebTarget webTarget;

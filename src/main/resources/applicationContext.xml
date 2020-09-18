@@ -138,7 +138,7 @@
                 <when>
                     <simple>${header.operationName} == "healthcheck"</simple>
                     <setBody>
-                        <simple>${bean:alfrescoHealthChecker.checkHealth}</simple>
+                        <simple>${bean:alfrescoProxyHealthChecker.checkHealth}</simple>
                     </setBody>
                 </when>
                 <otherwise>

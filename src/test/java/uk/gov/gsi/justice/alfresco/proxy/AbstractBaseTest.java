@@ -3,6 +3,7 @@ package uk.gov.gsi.justice.alfresco.proxy;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Value;
+import uk.gov.gsi.justice.alfresco.proxy.utils.ClamAvConnectionParametersProvider;
 import uk.gov.gsi.justice.alfresco.proxy.utils.TimestampProvider;
 
 import javax.inject.Inject;
@@ -17,6 +18,9 @@ public abstract class AbstractBaseTest {
     protected String alfrescoHealthEndpoint;
     @Inject
     protected TimestampProvider timestampProvider;
+    @Inject
+    protected ClamAvConnectionParametersProvider clamAvConnectionParametersProvider;
+    protected final int clamAVTimeout = 60000;
     protected final Instant timestamp = Instant.now();
     protected final String stableText = "STABLE";
     protected JsonObject alfrescoStatus;
