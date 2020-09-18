@@ -12,7 +12,6 @@ import javax.ws.rs.core.Response;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.github.tomakehurst.wiremock.http.Fault.EMPTY_RESPONSE;
-import static java.util.concurrent.TimeUnit.SECONDS;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
 import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
 import static net.javacrumbs.jsonunit.assertj.JsonAssertions.json;
@@ -31,21 +30,12 @@ public class HealthCheckSteps extends AbstractSteps implements En {
 
     public HealthCheckSteps() {
         Before(() -> {
-            clamAV.stop();
-            SECONDS.sleep(5);
+            stopClamAV();
 
             when(timestampProvider.getTimestamp()).thenReturn(timestamp);
         });
 
-        After(() -> {
-            if (!clamAV.isRunning()) {
-                clamAV.start();
-            }
-
-            when(clamAvConnectionParametersProvider.host()).thenReturn(clamAV.getContainerIpAddress());
-            when(clamAvConnectionParametersProvider.port()).thenReturn(clamAV.getFirstMappedPort());
-            when(clamAvConnectionParametersProvider.timeout()).thenReturn(clamAVTimeout);
-        });
+        After(this::startClamAV);
 
         Given("^the Alfresco Proxy API is running$", () -> {
             final String statusUp = "expectations/ping_response.json";
@@ -71,11 +61,7 @@ public class HealthCheckSteps extends AbstractSteps implements En {
         });
 
         And("^clamAV is healthy$", () -> {
-            clamAV.start();
-
-            when(clamAvConnectionParametersProvider.host()).thenReturn(clamAV.getContainerIpAddress());
-            when(clamAvConnectionParametersProvider.port()).thenReturn(clamAV.getFirstMappedPort());
-            when(clamAvConnectionParametersProvider.timeout()).thenReturn(clamAVTimeout);
+            startClamAV();
 
             clamAvHealth = new ClamAvHealth(OK, "ClamAV 0.102.1/25722/Thu Feb 13 11:45:05 2020");
         });
@@ -88,8 +74,7 @@ public class HealthCheckSteps extends AbstractSteps implements En {
         });
 
         And("^clamAV is not healthy$", () -> {
-            clamAV.stop();
-            SECONDS.sleep(5);
+            stopClamAV();
 
             when(clamAvConnectionParametersProvider.host()).thenReturn("100.90.80.70");
             when(clamAvConnectionParametersProvider.port()).thenReturn(1234);
@@ -115,12 +100,6 @@ public class HealthCheckSteps extends AbstractSteps implements En {
                     x -> x.node("status").isEqualTo(status.toUpperCase()),
                     x -> x.node("dependencies.alfresco").isEqualTo(json(alfrescoHealthJson)),
                     x -> x.node("dependencies.clamAV").isEqualTo(json(clamAvHealthJson)),
-//                    x -> x.node("dependencies.clamAV").isObject().hasEntrySatisfying("message", new Condition<Object>("Start of message") {
-//                        @Override
-//                        public boolean matches(Object field) {
-//                            return field.toString().startsWith(clamAvHealthJson);
-//                        }
-//                    }),
                     x -> x.node("timestamp").isEqualTo(timestamp.toString())
             );
 
