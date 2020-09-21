@@ -24,6 +24,7 @@ phases:
       - ${CODEBUILD_SRC_DIR}/scripts/image-tag-postfix.sh
   build:
     commands:
+      - ls -la
       - ./gradlew clean test cucumber
   post_build:
     commands:
