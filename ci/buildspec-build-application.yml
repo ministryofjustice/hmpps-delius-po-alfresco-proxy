@@ -13,7 +13,7 @@ phases:
   install:
     runtime-versions:
       docker: 19
-      java: corretto8
+      java: openjdk8
     commands:
       - ln -snf /usr/share/zoneinfo/${TZ} /etc/localtime
       - echo ${TZ} > /etc/timezone
