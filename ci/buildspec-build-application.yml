@@ -24,7 +24,7 @@ phases:
       - ${CODEBUILD_SRC_DIR}/scripts/image-tag-postfix.sh
   build:
     commands:
-      - ./gradlew clean test cucumber jar
+      - ./gradlew clean test
   post_build:
     commands:
       - ${CODEBUILD_SRC_DIR}/scripts/archive-application-test-artifacts.sh
