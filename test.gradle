@@ -10,13 +10,9 @@ sourceSets {
 }
 
 test {
-    include '**/*Test'
-
-    beforeTest { descriptor ->
-        logger.lifecycle("Running test: " + descriptor)
-    }
-    onOutput { descriptor, event ->
-        logger.lifecycle("Test: " + descriptor + ":" + event.message)
+    testLogging {
+        events "passed", "skipped", "failed"
+        exceptionFormat = 'full'
     }
 }
 

@@ -36,7 +36,7 @@ public class ClamAvHealthCheckerTest {
     public void setUp() throws Exception {
         if (clamAV.isRunning()) {
             clamAV.stop();
-            SECONDS.sleep(10);
+            SECONDS.sleep(5);
         }
     }
 
