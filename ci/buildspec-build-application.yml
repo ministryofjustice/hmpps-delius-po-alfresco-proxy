@@ -12,7 +12,7 @@ env:
 phases:
   install:
     runtime-versions:
-      docker: 19
+      docker: 18
       java: openjdk8
     commands:
       - ln -snf /usr/share/zoneinfo/${TZ} /etc/localtime
