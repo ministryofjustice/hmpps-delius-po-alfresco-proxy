@@ -22,10 +22,9 @@ phases:
   pre_build:
     commands:
       - ${CODEBUILD_SRC_DIR}/scripts/image-tag-postfix.sh
-      - ./gradlew build --dry-run --configure-on-demand --daemon
   build:
     commands:
-      - ./gradlew clean test cucumber jar
+      - ./gradlew clean test
   post_build:
     commands:
       - ${CODEBUILD_SRC_DIR}/scripts/archive-application-test-artifacts.sh
