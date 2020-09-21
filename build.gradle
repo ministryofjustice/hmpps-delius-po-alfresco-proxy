@@ -23,24 +23,16 @@ compileJava {
     options.encoding = 'UTF-8'
 }
 
-bootRun {
-    systemProperty("APPLICATION_NAME", "SPG PO Alfresco Proxy")
-    systemProperty("SPG_ALFRESCO_HEALTH_ENDPOINT", "/afresco/s/admin-spg/healthcheck")
-    systemProperty("SPG_ALFRESCO_BASE_URL", "http://localhost:9090")
-}
+configurations.implementation.canBeResolved = true
 
-//bootJar {
-//    mainClassName = 'uk.gov.gsi.justice.po.alfresco.proxy.ApplicationBootstrap'
-//}
-//
-//springBoot {
-//    buildInfo {
-//        properties {
-//            group = "hmpps.delius.spg"
-//            name = "po-alfresco-proxy"
-//            version = "1.0"
-//        }
-//    }
-//}
+jar {
+    manifest {
+        attributes "Main-Class": "uk.gov.gsi.justice.alfresco.proxy.ApplicationBootstrap"
+    }
+    from {
+        configurations.implementation.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    archiveBaseName = "spgw-alfresco-proxy"
+}
 
 defaultTasks 'clean', 'test', 'cucumber'

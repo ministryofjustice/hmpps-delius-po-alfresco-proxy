@@ -17,6 +17,7 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static java.util.concurrent.TimeUnit.SECONDS;
 import static javax.ws.rs.client.Entity.entity;
 import static javax.ws.rs.core.MediaType.*;
 import static org.glassfish.jersey.client.ClientProperties.SUPPRESS_HTTP_COMPLIANCE_VALIDATION;
@@ -25,6 +26,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.when;
 import static uk.gov.gsi.justice.alfresco.proxy.bdd.util.World.INSTANCE;
 
 public abstract class AbstractSteps extends AbstractBaseTest {
@@ -39,6 +41,22 @@ public abstract class AbstractSteps extends AbstractBaseTest {
 
     private String path;
     protected final MultivaluedMap<String, Object> headers = buildHeaders();
+
+    protected void startClamAV() {
+        if (!clamAV.isRunning()) {
+            clamAV.start();
+        }
+        when(clamAvConnectionParametersProvider.host()).thenReturn(clamAV.getContainerIpAddress());
+        when(clamAvConnectionParametersProvider.port()).thenReturn(clamAV.getFirstMappedPort());
+        when(clamAvConnectionParametersProvider.timeout()).thenReturn(clamAVTimeout);
+    }
+
+    protected void stopClamAV() throws Exception {
+        if (clamAV.isRunning()) {
+            clamAV.stop();
+            SECONDS.sleep(5);
+        }
+    }
 
     protected void sendGetRequest(final String path) throws Exception {
         final Response response = webTarget.path(path)
@@ -130,7 +148,7 @@ public abstract class AbstractSteps extends AbstractBaseTest {
         world.getWireMockServer().verify(anyRequestedFor(urlEqualTo(path)));
     }
 
-    public void setPath(final String path) {
+    protected void setPath(final String path) {
         this.path = path;
     }
 
