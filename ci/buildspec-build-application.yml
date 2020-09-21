@@ -24,6 +24,8 @@ phases:
       - ${CODEBUILD_SRC_DIR}/scripts/image-tag-postfix.sh
   build:
     commands:
+      - echo "============================= Java version ============================="
+      - java -version
       - ./gradlew clean test cucumber jar
   post_build:
     commands:
