@@ -2,7 +2,7 @@ version: 0.2
 
 env:
   variables:
-    APPLICATION_NAME: 'SPG PO Alfresco Proxy'
+    APPLICATION_NAME: 'SPG Alfresco Proxy'
     SPG_ALFRESCO_HEALTH_ENDPOINT: '/afresco/s/admin-spg/healthcheck'
     SPG_ALFRESCO_BASE_URL: ''
     test_results_bucket: 'tf-eu-west-2-hmpps-eng-dev-ci-test-results-s3bucket'
@@ -23,7 +23,7 @@ phases:
       - gradle build --dry-run --configure-on-demand --daemon
   build:
     commands:
-      - gradle clean test cucumber bootJar
+      - gradle clean test cucumber jar
   post_build:
     commands:
       - ${CODEBUILD_SRC_DIR}/scripts/archive-application-test-artifacts.sh
