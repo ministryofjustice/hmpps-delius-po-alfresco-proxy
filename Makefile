@@ -5,7 +5,7 @@ build:
 	./gradlew clean test cucumber
 
 package:
-	./gradlew clean test cucumber jar
+	./gradlew clean test cucumber bootRepackage
 
 ##############
 # env builds #

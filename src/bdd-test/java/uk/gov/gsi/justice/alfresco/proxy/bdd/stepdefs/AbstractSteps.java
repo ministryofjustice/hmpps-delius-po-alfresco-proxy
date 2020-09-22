@@ -6,7 +6,6 @@ import org.glassfish.jersey.media.multipart.BodyPart;
 import org.glassfish.jersey.media.multipart.MultiPart;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.testcontainers.containers.GenericContainer;
-import org.testcontainers.shaded.com.google.common.collect.ImmutableMap;
 import uk.gov.gsi.justice.alfresco.proxy.AbstractBaseTest;
 import uk.gov.gsi.justice.alfresco.proxy.bdd.util.World;
 
@@ -17,6 +16,7 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static java.util.Collections.singletonMap;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static javax.ws.rs.client.Entity.entity;
 import static javax.ws.rs.core.MediaType.*;
@@ -84,7 +84,7 @@ public abstract class AbstractSteps extends AbstractBaseTest {
                 .path(path)
                 .request(APPLICATION_JSON_TYPE)
                 .headers(headers)
-                .post(entity(ImmutableMap.of("DOCUMENT_IDS", "1,2,3"), APPLICATION_JSON));
+                .post(entity(singletonMap("DOCUMENT_IDS", "1,2,3"), APPLICATION_JSON));
         world.setResponse(response);
     }
 
