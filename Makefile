@@ -1,6 +1,9 @@
 default: build
 .PHONY: build
 
+unit-test:
+	./gradlew clean test
+
 build:
 	./gradlew clean test cucumber
 

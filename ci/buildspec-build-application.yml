@@ -18,22 +18,22 @@ phases:
       - ${CODEBUILD_SRC_DIR}/scripts/image-tag-postfix.sh
   build:
     commands:
-      - make package
-  post_build:
-    commands:
-      - ${CODEBUILD_SRC_DIR}/scripts/archive-application-test-artifacts.sh
-reports:
-  UnitTestReports:
-    files:
-      - '**/*'
-    base-directory: 'build/test-results'
-    file-format: 'JunitXml'
-  IntegrationTestReports:
-    files:
-      - 'cucumber.json'
-    base-directory: 'build/cucumber'
-    file-format: 'CucumberJson'
-artifacts:
-  files:
-    - '**/*'
-  name: $Env:PROJECT_NAME-$(date +%Y-%m-%d-%H-%m-%S)
+      - make unit-test
+#  post_build:
+#    commands:
+#      - ${CODEBUILD_SRC_DIR}/scripts/archive-application-test-artifacts.sh
+#reports:
+#  UnitTestReports:
+#    files:
+#      - '**/*'
+#    base-directory: 'build/test-results'
+#    file-format: 'JunitXml'
+#  IntegrationTestReports:
+#    files:
+#      - 'cucumber.json'
+#    base-directory: 'build/cucumber'
+#    file-format: 'CucumberJson'
+#artifacts:
+#  files:
+#    - '**/*'
+#  name: $Env:PROJECT_NAME-$(date +%Y-%m-%d-%H-%m-%S)
