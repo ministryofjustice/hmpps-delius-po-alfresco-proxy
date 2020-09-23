@@ -42,9 +42,10 @@ public abstract class AbstractSteps extends AbstractBaseTest {
     private String path;
     protected final MultivaluedMap<String, Object> headers = buildHeaders();
 
-    protected void startClamAV() {
+    protected void startClamAV() throws Exception {
         if (!clamAV.isRunning()) {
             clamAV.start();
+            SECONDS.sleep(10);
         }
         when(clamAvConnectionParametersProvider.host()).thenReturn(clamAV.getContainerIpAddress());
         when(clamAvConnectionParametersProvider.port()).thenReturn(clamAV.getFirstMappedPort());
