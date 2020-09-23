@@ -20,7 +20,6 @@ public abstract class AbstractBaseTest {
     protected TimestampProvider timestampProvider;
     @Inject
     protected ClamAvConnectionParametersProvider clamAvConnectionParametersProvider;
-    protected final int clamAVTimeout = 60000;
     protected final Instant timestamp = Instant.now();
     protected final String stableText = "STABLE";
     protected JsonObject alfrescoStatus;

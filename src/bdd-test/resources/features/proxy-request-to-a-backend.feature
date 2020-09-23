@@ -22,6 +22,7 @@ Feature: Test CXF route
 
   Scenario: upload a new document to alfresco
     Given I want to upload a new document to alfresco
+    And ClamAV is healthy
     When I upload new document using "/uploadnew"
     Then the document should be successfully uploaded to alfresco
 
@@ -32,6 +33,7 @@ Feature: Test CXF route
 
   Scenario: upload and release document to alfresco
     Given I want to upload and release document to alfresco
+    And ClamAV is healthy
     When I upload a document using "/uploadandrelease/123"
     Then the document should be successfully uploaded and released
 
