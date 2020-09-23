@@ -34,6 +34,10 @@ dependencies {
 
     compile group: 'xyz.capybara', name: 'clamav-client', version: '2.0.2'
 
+    // Required by Java 9+ environments
+    compile group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '2.3.3'
+    compile group: 'org.glassfish.jaxb', name: 'jaxb-runtime', version: '2.3.3'
+
     // Testing
     testCompile group: 'junit', name: 'junit', version: '4.13'
     testCompile group: 'org.assertj', name: 'assertj-core', version: '3.17.2'
