@@ -1,38 +1,28 @@
 plugins {
-    id 'java'
+    id 'java-library'
     id 'idea'
     id "io.spring.dependency-management" version "1.0.9.RELEASE"
     id "org.springframework.boot" version "1.5.12.RELEASE"
     id "se.thinkcode.cucumber-runner" version "0.0.8"
 }
 
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+apply from: 'dependencies.gradle'
+apply from: 'test.gradle'
+
 repositories {
     mavenLocal()
     mavenCentral()
 }
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-
-apply from: 'dependencies.gradle'
-apply from: 'test.gradle'
-
 compileJava {
     options.compilerArgs += ['-Xdoclint:none', '-Xlint:unchecked']
     options.deprecation = true
     options.encoding = 'UTF-8'
-}
-
-configurations.implementation.canBeResolved = true
-
-jar {
-    manifest {
-        attributes "Main-Class": "uk.gov.gsi.justice.alfresco.proxy.ApplicationBootstrap"
-    }
-    from {
-        configurations.implementation.collect { it.isDirectory() ? it : zipTree(it) }
-    }
-    archiveBaseName = "spgw-alfresco-proxy"
 }
 
 defaultTasks 'clean', 'test', 'cucumber'

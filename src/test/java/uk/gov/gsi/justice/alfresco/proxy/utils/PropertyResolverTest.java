@@ -4,7 +4,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import uk.gov.gsi.justice.alfresco.proxy.bdd.ioc.TestConfig;
 import uk.gov.gsi.justice.alfresco.proxy.ioc.AppConfig;
 
 import javax.inject.Inject;
@@ -15,10 +14,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(
         properties = {"alfresco.base.url=http://my-test-url", "application.name=test-name"},
-        classes = {AppConfig.class, TestConfig.class}
+        classes = {AppConfig.class}
 )
 public class PropertyResolverTest {
-
     @Inject
     private PropertyResolver propertyResolver;
 
