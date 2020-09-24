@@ -56,6 +56,8 @@ public class AntiVirusSteps extends AbstractSteps implements En {
                     .request(APPLICATION_JSON_TYPE)
                     .headers(headers)
                     .post(entity(multiPart, multiPart.getMediaType()));
+
+            System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~> http response code " + httpResponse.getStatus());
         });
 
         Then("^I should receive a response with status code \"([^\"]*)\"$", (final Integer expectedStatusCode) -> {
