@@ -31,6 +31,12 @@ public class AntiVirusSteps extends AbstractSteps implements En {
             startClamAV();
 
             when(timestampProvider.getTimestamp()).thenReturn(timestamp);
+
+            System.out.println("============================== ClamAV parameters ==============================");
+            System.out.println("Host: " + clamAvConnectionParametersProvider.host());
+            System.out.println("Port: " + clamAvConnectionParametersProvider.port());
+            System.out.println("Timeout: " + clamAvConnectionParametersProvider.timeout());
+            System.out.println("===============================================================================");
         });
 
         Given("^I have a virus compromised document \"([^\"]*)\" to upload$", (final String filename) -> {
@@ -43,10 +49,9 @@ public class AntiVirusSteps extends AbstractSteps implements En {
 
             final FileDataBodyPart filePart = new FileDataBodyPart("filedata", file);
             final MultiPart multiPart = new FormDataMultiPart().field("CRN", "X030927").bodyPart(filePart);
-
             multiPart.setMediaType(MULTIPART_FORM_DATA_TYPE);
 
-            httpResponse = webTarget.path(path)
+            httpResponse = webTarget.path(this.uploadPath)
                     .register(MultiPartFeature.class)
                     .request(APPLICATION_JSON_TYPE)
                     .headers(headers)
