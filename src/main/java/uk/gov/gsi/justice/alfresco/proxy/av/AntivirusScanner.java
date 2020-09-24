@@ -11,6 +11,11 @@ import java.io.InputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
+/**
+ * @deprecated
+ * Use AntivirusClient instead
+ */
+@Deprecated
 public class AntivirusScanner {
     private static final Logger LOGGER = LoggerFactory.getLogger(AntivirusScanner.class);
     private static final int CHUNK_SIZE = 2048;

@@ -29,7 +29,7 @@ public class AntiVirusInterceptor extends AbstractPhaseInterceptor<Message> {
     public static final int VIRUS_FOUND_HTTP_CODE = 403;
     public static final int AV_ERROR_HTTP_CODE = 500;
 
-    private AntivirusScanner antivirusScanner;
+    private AntivirusClient antivirusClient;
     private UDInterchangeAuditLogService auditLogService;
     private boolean scanForViruses;
 
@@ -51,7 +51,7 @@ public class AntiVirusInterceptor extends AbstractPhaseInterceptor<Message> {
     }
 
     private void checkForViruses(InputStream is, Message message) {
-        AntivirusResponse antivirusResponse = antivirusScanner.scanBytes(is);
+        final AntivirusResponse antivirusResponse = antivirusClient.scan(is);
         if (antivirusResponse.getStatus() == FAILED) {
             auditLogService.createUDAlertRecord(SCANNING_FAILED + antivirusResponse);
 
@@ -86,8 +86,8 @@ public class AntiVirusInterceptor extends AbstractPhaseInterceptor<Message> {
         return fault;
     }
 
-    public void setAntivirusScanner(AntivirusScanner antivirusScanner) {
-        this.antivirusScanner = antivirusScanner;
+    public void setAntivirusClient(AntivirusClient antivirusClient) {
+        this.antivirusClient = antivirusClient;
     }
 
     public void setAuditLogService(UDInterchangeAuditLogService auditLogService) {

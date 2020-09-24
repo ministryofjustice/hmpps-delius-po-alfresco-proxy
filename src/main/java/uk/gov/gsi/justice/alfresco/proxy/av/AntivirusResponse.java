@@ -2,6 +2,8 @@ package uk.gov.gsi.justice.alfresco.proxy.av;
 
 import uk.gov.gsi.justice.alfresco.proxy.exceptions.AntivirusException;
 
+import java.util.Objects;
+
 public class AntivirusResponse {
     private static final String STREAM_PREFIX = "stream: ";
     private static final String RESPONSE_OK = "stream: OK";
@@ -23,6 +25,14 @@ public class AntivirusResponse {
         setStatusAndResult(avResult);
     }
 
+    public AntivirusResponse(Status status, AntivirusException antivirusException) {
+        this.status = status;
+        this.exception = antivirusException;
+    }
+
+    public AntivirusResponse(Status status) {
+        this.status = status;
+    }
 
     private void setStatusAndResult(String avResult) {
         if (avResult == null) {
@@ -46,6 +56,20 @@ public class AntivirusResponse {
 
     public AntivirusException getException() {
         return exception;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AntivirusResponse that = (AntivirusResponse) o;
+        return status == that.status &&
+                Objects.equals(exception, that.exception);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(status, exception);
     }
 
     @Override
