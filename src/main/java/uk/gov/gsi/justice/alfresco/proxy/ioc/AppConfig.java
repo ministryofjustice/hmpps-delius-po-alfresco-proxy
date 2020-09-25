@@ -30,11 +30,11 @@ public class AppConfig {
     public PropertyResolver providePropertyResolver() {
         return new PropertyResolver();
     }
-
-    @Bean(name = "antivirusScanner")
-    public AntivirusScanner provideAntivirusScanner() {
-        return new AntivirusScanner(clamAvConnectionParametersProvider);
-    }
+//
+//    @Bean(name = "antivirusScanner")
+//    public AntivirusScanner provideAntivirusScanner() {
+//        return new AntivirusScanner(clamAvConnectionParametersProvider);
+//    }
 
     @Bean
     public ClamAvConnectionParametersProvider provideClamAvConnectionParametersProvider() {
