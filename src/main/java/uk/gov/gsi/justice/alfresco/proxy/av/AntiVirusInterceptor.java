@@ -1,6 +1,7 @@
 package uk.gov.gsi.justice.alfresco.proxy.av;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.apache.cxf.interceptor.Fault;
 import org.apache.cxf.interceptor.LoggingMessage;
 import org.apache.cxf.jaxrs.ext.multipart.MultipartBody;
@@ -12,6 +13,7 @@ import uk.gov.gsi.justice.alfresco.proxy.audit.UDInterchangeAuditLogService;
 import uk.gov.gsi.justice.alfresco.proxy.audit.UDSPGLogFields;
 import uk.gov.gsi.justice.alfresco.proxy.interceptor.UDLoggingInInterceptor;
 import uk.gov.gsi.justice.alfresco.proxy.model.ClamAvHealth;
+import uk.gov.gsi.justice.alfresco.proxy.service.AlfrescoProxyHealthChecker;
 import uk.gov.gsi.justice.alfresco.proxy.utils.TimestampGenerator;
 
 import javax.ws.rs.core.Response;
@@ -31,6 +33,8 @@ public class AntiVirusInterceptor extends AbstractPhaseInterceptor<Message> {
     public static final int VIRUS_FOUND_HTTP_CODE = 403;
     public static final int AV_ERROR_HTTP_CODE = 500;
 
+    private AlfrescoProxyHealthChecker alfrescoProxyHealthChecker;
+
     private AntivirusClient antivirusClient;
     private UDInterchangeAuditLogService auditLogService;
     private boolean scanForViruses;
@@ -41,6 +45,13 @@ public class AntiVirusInterceptor extends AbstractPhaseInterceptor<Message> {
 
     @Override
     public void handleMessage(Message message) throws Fault {
+        try {
+            final String healthInfo = alfrescoProxyHealthChecker.checkHealth();
+            System.out.println("===============> " + healthInfo);
+        } catch (JsonProcessingException e) {
+            System.out.println("Health Check Error:: " + e.getMessage());
+        }
+
         if (scanForViruses && message != null && message.getAttachments() != null) {
             for (Attachment attachment : message.getAttachments()) {
                 try {
@@ -93,6 +104,10 @@ public class AntiVirusInterceptor extends AbstractPhaseInterceptor<Message> {
         Fault fault = new Fault(avResponse.getException());
         fault.setStatusCode(status.getStatusCode());
         return fault;
+    }
+
+    public void setAlfrescoProxyHealthChecker(AlfrescoProxyHealthChecker alfrescoProxyHealthChecker) {
+        this.alfrescoProxyHealthChecker = alfrescoProxyHealthChecker;
     }
 
     public void setAntivirusClient(AntivirusClient antivirusClient) {

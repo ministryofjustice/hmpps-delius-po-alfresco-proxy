@@ -69,6 +69,7 @@
             </bean>
 
             <bean class="uk.gov.gsi.justice.alfresco.proxy.av.AntiVirusInterceptor">
+                <property name="alfrescoProxyHealthChecker" ref="alfrescoProxyHealthChecker"/>
                 <property name="auditLogService" ref="auditLogService"/>
                 <property name="antivirusClient" ref="antivirusClient"/>
                 <property name="scanForViruses" value="${spg.alfresco.proxy.clamav.scanForViruses}"/>
