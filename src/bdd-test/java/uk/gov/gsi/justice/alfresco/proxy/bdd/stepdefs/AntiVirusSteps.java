@@ -35,7 +35,6 @@ public class AntiVirusSteps extends AbstractSteps implements En {
             System.out.println("============================== ClamAV parameters ==============================");
             System.out.println("Host: " + clamAvConnectionParametersProvider.host());
             System.out.println("Port: " + clamAvConnectionParametersProvider.port());
-            System.out.println("Timeout: " + clamAvConnectionParametersProvider.timeout());
             System.out.println("===============================================================================");
         });
 
@@ -51,7 +50,7 @@ public class AntiVirusSteps extends AbstractSteps implements En {
             final MultiPart multiPart = new FormDataMultiPart().field("CRN", "X030927").bodyPart(filePart);
             multiPart.setMediaType(MULTIPART_FORM_DATA_TYPE);
 
-            httpResponse = webTarget.path(this.uploadPath)
+            httpResponse = webTarget.path(path)
                     .register(MultiPartFeature.class)
                     .request(APPLICATION_JSON_TYPE)
                     .headers(headers)
