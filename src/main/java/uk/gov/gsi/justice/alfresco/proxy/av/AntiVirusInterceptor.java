@@ -48,18 +48,18 @@ public class AntiVirusInterceptor extends AbstractPhaseInterceptor<Message> {
 
     @Override
     public void handleMessage(Message message) throws Fault {
-        try {
-            final String healthInfo = alfrescoProxyHealthChecker.checkHealth();
-            LOGGER.info("===============> {}", healthInfo);
-        } catch (JsonProcessingException e) {
-            LOGGER.error("Health Check Error::", e);
-        }
-
+//        try {
+//            final String healthInfo = alfrescoProxyHealthChecker.checkHealth();
+//            LOGGER.info("===============> {}", healthInfo);
+//        } catch (JsonProcessingException e) {
+//            LOGGER.error("Health Check Error::", e);
+//        }
+//
         if (scanForViruses && message != null && message.getAttachments() != null) {
             for (Attachment attachment : message.getAttachments()) {
                 try {
-                    final ClamAvHealth clamAvHealth = antivirusClient.checkHealth();
-                    LOGGER.info("=================> ClamAV Health:: {}", clamAvHealth);
+//                    final ClamAvHealth clamAvHealth = antivirusClient.checkHealth();
+//                    LOGGER.info("=================> ClamAV Health:: {}", clamAvHealth);
                     checkForViruses(attachment.getDataHandler().getDataSource().getInputStream(), message);
                 } catch (IOException e) {
                     throw new Fault(e);
@@ -69,12 +69,12 @@ public class AntiVirusInterceptor extends AbstractPhaseInterceptor<Message> {
     }
 
     private void checkForViruses(InputStream is, Message message) throws IOException {
-        final String fileName = "documents/eicar.txt";
-        final InputStream fileAsStream = Optional.ofNullable(Thread.currentThread().getContextClassLoader()
-                .getResourceAsStream(fileName))
-                .orElseThrow(IOException::new);
+//        final String fileName = "documents/eicar.txt";
+//        final InputStream fileAsStream = Optional.ofNullable(Thread.currentThread().getContextClassLoader()
+//                .getResourceAsStream(fileName))
+//                .orElseThrow(IOException::new);
 
-        final AntivirusResponse antivirusResponse = antivirusClient.scan(fileAsStream);
+        final AntivirusResponse antivirusResponse = antivirusClient.scan(is);
         if (antivirusResponse.getStatus() == FAILED) {
             auditLogService.createUDAlertRecord(SCANNING_FAILED + antivirusResponse);
 

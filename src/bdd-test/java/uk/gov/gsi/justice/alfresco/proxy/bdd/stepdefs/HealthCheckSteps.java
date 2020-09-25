@@ -32,7 +32,7 @@ public class HealthCheckSteps extends AbstractSteps implements En {
         Before(() -> {
             System.out.println("============================== Inside HealthCheckSteps Before ==============================");
 
-            stopClamAV();
+            startClamAV();
 
             when(timestampProvider.getTimestamp()).thenReturn(timestamp);
         });
