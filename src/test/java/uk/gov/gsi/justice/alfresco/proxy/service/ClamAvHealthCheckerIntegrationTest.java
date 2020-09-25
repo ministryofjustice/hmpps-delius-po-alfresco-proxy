@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
+import uk.gov.gsi.justice.alfresco.proxy.av.AntivirusClient;
 import uk.gov.gsi.justice.alfresco.proxy.model.ClamAvHealth;
 import uk.gov.gsi.justice.alfresco.proxy.utils.ClamAvConnectionParametersProvider;
 
@@ -18,7 +19,7 @@ import static org.mockito.Mockito.when;
 import static uk.gov.gsi.justice.alfresco.proxy.model.DependencyStatus.FAULT;
 import static uk.gov.gsi.justice.alfresco.proxy.model.DependencyStatus.OK;
 
-public class ClamAvHealthCheckerTest {
+public class ClamAvHealthCheckerIntegrationTest {
     private final String clamAVImage = "quay.io/ukhomeofficedigital/clamav:latest";
     private final int clamAVPort = 3310;
 
@@ -29,8 +30,9 @@ public class ClamAvHealthCheckerTest {
                     .withStartupTimeout(Duration.ofMinutes(5)));
 
     private final ClamAvConnectionParametersProvider clamAvConnectionParametersProvider = mock(ClamAvConnectionParametersProvider.class);
+    private final AntivirusClient antivirusClient = new AntivirusClient(clamAvConnectionParametersProvider);
 
-    private final ClamAvHealthChecker sut = new ClamAvHealthChecker(clamAvConnectionParametersProvider);
+    private final ClamAvHealthChecker sut = new ClamAvHealthChecker(antivirusClient);
 
     @Before
     public void setUp() throws Exception {
@@ -48,7 +50,7 @@ public class ClamAvHealthCheckerTest {
     }
 
     @Test
-    public void testGetClamAvVersion() {
+    public void testClamAvHealthCheck() {
         clamAV.start();
         when(clamAvConnectionParametersProvider.host()).thenReturn(clamAV.getContainerIpAddress());
         when(clamAvConnectionParametersProvider.port()).thenReturn(clamAV.getFirstMappedPort());
@@ -61,7 +63,7 @@ public class ClamAvHealthCheckerTest {
     }
 
     @Test
-    public void testGetClamAvVersionWhenClamAvIsNotReachable() {
+    public void testClamAvHealthCheckFailsWhenClamAvIsNotReachable() {
         when(clamAvConnectionParametersProvider.host()).thenReturn("100.90.80.70");
         when(clamAvConnectionParametersProvider.port()).thenReturn(1234);
 

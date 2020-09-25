@@ -5,6 +5,7 @@ import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
 import uk.gov.gsi.justice.alfresco.proxy.TestFileReader;
 import uk.gov.gsi.justice.alfresco.proxy.exceptions.AntivirusException;
+import uk.gov.gsi.justice.alfresco.proxy.model.ClamAvHealth;
 import uk.gov.gsi.justice.alfresco.proxy.utils.ClamAvConnectionParametersProvider;
 
 import java.io.InputStream;
@@ -17,6 +18,8 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static uk.gov.gsi.justice.alfresco.proxy.model.DependencyStatus.FAULT;
+import static uk.gov.gsi.justice.alfresco.proxy.model.DependencyStatus.OK;
 
 public class AntivirusClientTest {
     private final String clamAvImage = "quay.io/ukhomeofficedigital/clamav:latest";
@@ -46,6 +49,28 @@ public class AntivirusClientTest {
     @After
     public void tearDown() {
         stopClamAV();
+    }
+
+    @Test
+    public void testGetClamAvVersion() {
+        final ClamAvHealth expectedResult = new ClamAvHealth(OK, "ClamAV 0.102.1/25722/Thu Feb 13 11:45:05 2020");
+
+        final ClamAvHealth actualResult = sut.checkHealth();
+
+        assertThat(actualResult, is(expectedResult));
+    }
+
+    @Test
+    public void testGetClamAvVersionWhenClamAvIsNotReachable() {
+        stopClamAV();
+        when(clamAvConnectionParametersProvider.host()).thenReturn("100.90.80.70");
+        when(clamAvConnectionParametersProvider.port()).thenReturn(1234);
+
+        final ClamAvHealth expectedResult = new ClamAvHealth(FAULT, "xyz.capybara.clamav.CommunicationException: Error while communicating with the server");
+
+        final ClamAvHealth actualResult = sut.checkHealth();
+
+        assertThat(actualResult, is(expectedResult));
     }
 
     @Test

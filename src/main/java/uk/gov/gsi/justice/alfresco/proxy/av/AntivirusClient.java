@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.gsi.justice.alfresco.proxy.av.AntivirusResponse.Status;
 import uk.gov.gsi.justice.alfresco.proxy.exceptions.AntivirusException;
+import uk.gov.gsi.justice.alfresco.proxy.model.ClamAvHealth;
 import uk.gov.gsi.justice.alfresco.proxy.utils.ClamAvConnectionParametersProvider;
 import xyz.capybara.clamav.ClamavClient;
 import xyz.capybara.clamav.commands.scan.result.ScanResult;
@@ -14,6 +15,9 @@ import java.io.InputStream;
 import java.util.Collection;
 import java.util.Map;
 
+import static uk.gov.gsi.justice.alfresco.proxy.model.DependencyStatus.FAULT;
+import static uk.gov.gsi.justice.alfresco.proxy.model.DependencyStatus.OK;
+
 @Named("antivirusClient")
 public class AntivirusClient {
     private final static Logger LOGGER = LoggerFactory.getLogger(AntivirusClient.class);
@@ -23,6 +27,21 @@ public class AntivirusClient {
     @Inject
     public AntivirusClient(ClamAvConnectionParametersProvider clamAvConnectionParametersProvider) {
         this.clamAvConnectionParametersProvider = clamAvConnectionParametersProvider;
+    }
+
+    public ClamAvHealth checkHealth() {
+        try {
+            final ClamavClient clamavClient = new ClamavClient(
+                    clamAvConnectionParametersProvider.host(),
+                    clamAvConnectionParametersProvider.port()
+            );
+            final String clamAvVersion = clamavClient.version();
+            LOGGER.info("ClamAV version:: {}", clamAvVersion);
+            return new ClamAvHealth(OK, clamAvVersion);
+        } catch (Exception e) {
+            LOGGER.error("Error getting ClamAV version::", e);
+            return new ClamAvHealth(FAULT, e.getMessage());
+        }
     }
 
     public AntivirusResponse scan(InputStream is) {
