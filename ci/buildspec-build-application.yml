@@ -20,7 +20,7 @@ phases:
     commands:
       - java -version
       - javac -version
-      - make package
+      - make integration-test
   post_build:
     commands:
       - ${CODEBUILD_SRC_DIR}/scripts/archive-application-test-artifacts.sh

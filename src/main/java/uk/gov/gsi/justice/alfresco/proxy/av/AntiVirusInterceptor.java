@@ -11,6 +11,7 @@ import org.apache.cxf.phase.Phase;
 import uk.gov.gsi.justice.alfresco.proxy.audit.UDInterchangeAuditLogService;
 import uk.gov.gsi.justice.alfresco.proxy.audit.UDSPGLogFields;
 import uk.gov.gsi.justice.alfresco.proxy.interceptor.UDLoggingInInterceptor;
+import uk.gov.gsi.justice.alfresco.proxy.model.ClamAvHealth;
 import uk.gov.gsi.justice.alfresco.proxy.utils.TimestampGenerator;
 
 import javax.ws.rs.core.Response;
@@ -43,6 +44,8 @@ public class AntiVirusInterceptor extends AbstractPhaseInterceptor<Message> {
         if (scanForViruses && message != null && message.getAttachments() != null) {
             for (Attachment attachment : message.getAttachments()) {
                 try {
+                    final ClamAvHealth clamAvHealth = antivirusClient.checkHealth();
+                    System.out.println("=================> ClamAV Health:: " + clamAvHealth);
                     checkForViruses(attachment.getDataHandler().getDataSource().getInputStream(), message);
                 } catch (IOException e) {
                     throw new Fault(e);

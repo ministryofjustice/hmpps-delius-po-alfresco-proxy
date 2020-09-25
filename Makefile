@@ -4,6 +4,9 @@ default: build
 unit-test:
 	./gradlew clean test
 
+integration-test:
+	./gradlew clean cucumber
+
 build:
 	./gradlew clean test cucumber
 
