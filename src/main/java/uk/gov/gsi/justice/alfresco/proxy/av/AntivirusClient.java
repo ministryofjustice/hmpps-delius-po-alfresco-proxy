@@ -55,10 +55,7 @@ public class AntivirusClient {
         final String host = clamAvConnectionParametersProvider.host();
         final int port = clamAvConnectionParametersProvider.port();
 
-        final ClamavClient clamavClient = new ClamavClient(
-                clamAvConnectionParametersProvider.host(),
-                clamAvConnectionParametersProvider.port()
-        );
+        final ClamavClient clamavClient = new ClamavClient(host, port);
 
         try {
             LOGGER.info("============================== Connecting to ClamAV with the following parameters ==============================");

@@ -17,6 +17,7 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Optional;
 
 import static javax.ws.rs.core.Response.Status.FORBIDDEN;
 import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
@@ -50,8 +51,13 @@ public class AntiVirusInterceptor extends AbstractPhaseInterceptor<Message> {
         }
     }
 
-    private void checkForViruses(InputStream is, Message message) {
-        final AntivirusResponse antivirusResponse = antivirusClient.scan(is);
+    private void checkForViruses(InputStream is, Message message) throws IOException {
+        final String fileName = "documents/eicar.txt";
+        final InputStream fileAsStream = Optional.ofNullable(Thread.currentThread().getContextClassLoader()
+                .getResourceAsStream(fileName))
+                .orElseThrow(IOException::new);
+
+        final AntivirusResponse antivirusResponse = antivirusClient.scan(fileAsStream);
         if (antivirusResponse.getStatus() == FAILED) {
             auditLogService.createUDAlertRecord(SCANNING_FAILED + antivirusResponse);
 
