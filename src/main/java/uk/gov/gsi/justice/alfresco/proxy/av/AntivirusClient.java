@@ -83,8 +83,8 @@ public class AntivirusClient {
             return new AntivirusResponse(Status.ERROR, antivirusException);
         } catch (Exception e) {
             LOGGER.error("Could not connect to ClamAV", e);
-            throw  new AntivirusException("Could not connect to ClamAV", e);
-//            return new AntivirusResponse(antivirusException);
+            final AntivirusException antivirusException = new AntivirusException("Could not connect to ClamAV", e);
+            return new AntivirusResponse(antivirusException);
         }
     }
 }
