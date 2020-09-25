@@ -9,6 +9,8 @@ import org.apache.cxf.message.Attachment;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.AbstractPhaseInterceptor;
 import org.apache.cxf.phase.Phase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.gov.gsi.justice.alfresco.proxy.audit.UDInterchangeAuditLogService;
 import uk.gov.gsi.justice.alfresco.proxy.audit.UDSPGLogFields;
 import uk.gov.gsi.justice.alfresco.proxy.interceptor.UDLoggingInInterceptor;
@@ -28,6 +30,7 @@ import static uk.gov.gsi.justice.alfresco.proxy.av.AntivirusResponse.Status.ERRO
 import static uk.gov.gsi.justice.alfresco.proxy.av.AntivirusResponse.Status.FAILED;
 
 public class AntiVirusInterceptor extends AbstractPhaseInterceptor<Message> {
+    private static final Logger LOGGER = LoggerFactory.getLogger(AntiVirusInterceptor.class);
     public static final String SCANNING_FAILED = "AV scanning failed: ";
     public static final String SCANNING_ERROR = "There was an internal error while contacting/processing data from AV: ";
     public static final int VIRUS_FOUND_HTTP_CODE = 403;
@@ -47,16 +50,16 @@ public class AntiVirusInterceptor extends AbstractPhaseInterceptor<Message> {
     public void handleMessage(Message message) throws Fault {
         try {
             final String healthInfo = alfrescoProxyHealthChecker.checkHealth();
-            System.out.println("===============> " + healthInfo);
+            LOGGER.info("===============> {}", healthInfo);
         } catch (JsonProcessingException e) {
-            System.out.println("Health Check Error:: " + e.getMessage());
+            LOGGER.error("Health Check Error::", e);
         }
 
         if (scanForViruses && message != null && message.getAttachments() != null) {
             for (Attachment attachment : message.getAttachments()) {
                 try {
                     final ClamAvHealth clamAvHealth = antivirusClient.checkHealth();
-                    System.out.println("=================> ClamAV Health:: " + clamAvHealth);
+                    LOGGER.info("=================> ClamAV Health:: {}", clamAvHealth);
                     checkForViruses(attachment.getDataHandler().getDataSource().getInputStream(), message);
                 } catch (IOException e) {
                     throw new Fault(e);
