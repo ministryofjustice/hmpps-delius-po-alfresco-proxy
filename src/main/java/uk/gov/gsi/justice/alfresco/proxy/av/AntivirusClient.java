@@ -60,13 +60,13 @@ public class AntivirusClient {
                 clamAvConnectionParametersProvider.port()
         );
 
-        final String clamAvVersion = clamavClient.version();
-        LOGGER.info("============================== Connecting to ClamAV with the following parameters ==============================");
-        LOGGER.info("Host: {}", host);
-        LOGGER.info("Port: {}", port);
-        LOGGER.info("ClamAV Version: {}", clamAvVersion);
-        LOGGER.info("================================================================================================================");
         try {
+            LOGGER.info("============================== Connecting to ClamAV with the following parameters ==============================");
+            LOGGER.info("Host: {}", host);
+            LOGGER.info("Port: {}", port);
+            final String clamAvVersion = clamavClient.version();
+            LOGGER.info("ClamAV Version: {}", clamAvVersion);
+            LOGGER.info("================================================================================================================");
             final ScanResult scanResult = clamavClient.scan(is);
 
             if (scanResult instanceof ScanResult.OK) {
@@ -83,8 +83,8 @@ public class AntivirusClient {
             return new AntivirusResponse(Status.ERROR, antivirusException);
         } catch (Exception e) {
             LOGGER.error("Could not connect to ClamAV", e);
-            final AntivirusException antivirusException = new AntivirusException("Could not connect to ClamAV", e);
-            return new AntivirusResponse(antivirusException);
+            throw  new AntivirusException("Could not connect to ClamAV", e);
+//            return new AntivirusResponse(antivirusException);
         }
     }
 }
