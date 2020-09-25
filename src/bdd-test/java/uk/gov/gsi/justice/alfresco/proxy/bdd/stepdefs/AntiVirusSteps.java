@@ -32,7 +32,7 @@ public class AntiVirusSteps extends AbstractSteps implements En {
 
             when(timestampProvider.getTimestamp()).thenReturn(timestamp);
 
-            System.out.println("============================== ClamAV parameters ==============================");
+            System.out.println("============================== Inside AntiVirusSteps Before ==============================");
             System.out.println("Host: " + clamAvConnectionParametersProvider.host());
             System.out.println("Port: " + clamAvConnectionParametersProvider.port());
             System.out.println("===============================================================================");
