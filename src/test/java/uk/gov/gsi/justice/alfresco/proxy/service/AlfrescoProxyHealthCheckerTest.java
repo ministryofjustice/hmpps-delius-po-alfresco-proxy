@@ -2,6 +2,7 @@ package uk.gov.gsi.justice.alfresco.proxy.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.junit.Before;
 import org.junit.Test;
 import uk.gov.gsi.justice.alfresco.proxy.model.AlfrescoHealth;
 import uk.gov.gsi.justice.alfresco.proxy.model.ApiHealth;
@@ -40,6 +41,11 @@ public class AlfrescoProxyHealthCheckerTest {
             alfrescoHealthChecker,
             clamAvHealthChecker
     );
+
+    @Before
+    public void prepare() {
+        when(timestampProvider.getTimestamp()).thenReturn(timestamp);
+    }
 
     @Test
     public void testWhenBothAlfrescoAndClamAvAreHealthy() throws Exception {
