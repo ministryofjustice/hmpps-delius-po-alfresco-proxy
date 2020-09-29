@@ -5,7 +5,6 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import uk.gov.gsi.justice.alfresco.proxy.av.AntivirusScanner;
 import uk.gov.gsi.justice.alfresco.proxy.utils.*;
 
 import java.security.KeyStore;
@@ -29,11 +28,6 @@ public class AppConfig {
     @Bean
     public PropertyResolver providePropertyResolver() {
         return new PropertyResolver();
-    }
-
-    @Bean(name = "antivirusScanner")
-    public AntivirusScanner provideAntivirusScanner() {
-        return new AntivirusScanner(clamAvConnectionParametersProvider);
     }
 
     @Bean

@@ -11,7 +11,6 @@ import uk.gov.gsi.justice.alfresco.proxy.audit.UDInterchangeAuditLogService;
 import uk.gov.gsi.justice.alfresco.proxy.audit.UDSPGLogFields;
 import uk.gov.gsi.justice.alfresco.proxy.av.AntivirusClient;
 import uk.gov.gsi.justice.alfresco.proxy.av.AntivirusResponse;
-import uk.gov.gsi.justice.alfresco.proxy.av.AntivirusScanner;
 import uk.gov.gsi.justice.alfresco.proxy.utils.TimestampGenerator;
 
 import javax.ws.rs.core.Response;
@@ -31,7 +30,6 @@ public class AntiVirusInterceptor extends AbstractPhaseInterceptor<Message> {
     public static final int AV_ERROR_HTTP_CODE = 500;
 
     private AntivirusClient antivirusClient;
-    private AntivirusScanner antivirusScanner;
     private UDInterchangeAuditLogService auditLogService;
     private boolean scanForViruses;
 
@@ -53,8 +51,7 @@ public class AntiVirusInterceptor extends AbstractPhaseInterceptor<Message> {
     }
 
     private void checkForViruses(InputStream is, Message message) {
-//        final AntivirusResponse antivirusResponse = antivirusClient.scan(is);
-        final AntivirusResponse antivirusResponse = antivirusScanner.scanBytes(is);
+        final AntivirusResponse antivirusResponse = antivirusClient.scan(is);
         if (antivirusResponse.getStatus() == FAILED) {
             auditLogService.createUDAlertRecord(SCANNING_FAILED + antivirusResponse);
 
@@ -91,10 +88,6 @@ public class AntiVirusInterceptor extends AbstractPhaseInterceptor<Message> {
 
     public void setAntivirusClient(AntivirusClient antivirusClient) {
         this.antivirusClient = antivirusClient;
-    }
-
-    public void setAntivirusScanner(AntivirusScanner antivirusScanner) {
-        this.antivirusScanner = antivirusScanner;
     }
 
     public void setAuditLogService(UDInterchangeAuditLogService auditLogService) {
