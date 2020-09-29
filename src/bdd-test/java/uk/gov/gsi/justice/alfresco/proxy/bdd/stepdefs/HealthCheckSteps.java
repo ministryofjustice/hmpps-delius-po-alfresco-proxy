@@ -29,16 +29,6 @@ public class HealthCheckSteps extends AbstractSteps implements En {
     private ClamAvHealth clamAvHealth;
 
     public HealthCheckSteps() {
-        Before(() -> {
-            System.out.println("============================== Inside HealthCheckSteps Before ==============================");
-
-            startClamAV();
-
-            when(timestampProvider.getTimestamp()).thenReturn(timestamp);
-        });
-
-        After(this::startClamAV);
-
         Given("^the Alfresco Proxy API is running$", () -> {
             final String statusUp = "expectations/ping_response.json";
             final String jsonFile = jsonReader.readFile(statusUp);
@@ -62,34 +52,25 @@ public class HealthCheckSteps extends AbstractSteps implements En {
             alfrescoHealth = new AlfrescoHealth(OK, 200, null);
         });
 
-        And("^clamAV is healthy$", () -> {
-            startClamAV();
-
-            clamAvHealth = new ClamAvHealth(OK, "ClamAV 0.102.1/25722/Thu Feb 13 11:45:05 2020");
-        });
-
-        But("^alfresco is not healthy$", () -> {
+        But("^alfresco is offline$", () -> {
             world.getWireMockServer().stubFor(get(urlEqualTo(alfrescoHealthEndpoint))
                     .willReturn(aResponse().withFault(EMPTY_RESPONSE)));
 
             alfrescoHealth = new AlfrescoHealth(FAULT, 0, "java.net.SocketException: SocketException invoking http://localhost:6067/afresco/s/admin-spg/healthcheck: Unexpected end of file from server");
         });
 
-        And("^clamAV is not healthy$", () -> {
-            stopClamAV();
-
-            when(clamAvConnectionParametersProvider.host()).thenReturn("100.90.80.70");
-            when(clamAvConnectionParametersProvider.port()).thenReturn(1234);
-            when(clamAvConnectionParametersProvider.timeout()).thenReturn(clamAVTimeout);
-
-            clamAvHealth = new ClamAvHealth(FAULT, "xyz.capybara.clamav.CommunicationException: Error while communicating with the server");
+        When("^I request the health of the Alfresco Proxy API$", () -> {
+            when(timestampProvider.getTimestamp()).thenReturn(timestamp);
+            sendGetRequest(apiHealthEndpoint);
         });
 
-        When("^I request the health of the Alfresco Proxy API$", () -> sendGetRequest(apiHealthEndpoint));
-
         Then("^a response stating that the service is \"([^\"]*)\" is returned$", (String status) -> {
+            clamAvHealth = clamAV.isRunning() ?
+                    new ClamAvHealth(OK, "ClamAV 0.102.1/25722/Thu Feb 13 11:45:05 2020") :
+                    new ClamAvHealth(FAULT, "xyz.capybara.clamav.CommunicationException: Error while communicating with the server");
+
             final String alfrescoHealthJson = gson.toJson(alfrescoHealth);
-            final String clamAvHealthJson = gson.toJson(clamAvHealth);
+//            final String clamAvHealthJson = gson.toJson(clamAvHealth);
 
             assertThat(world.getResponse().getStatus(), is(200));
             assertTrue(world.getResponse().getHeaders().containsKey("Content-Type"));
@@ -101,7 +82,7 @@ public class HealthCheckSteps extends AbstractSteps implements En {
                     x -> x.node("name").isEqualTo(serviceName),
                     x -> x.node("status").isEqualTo(status.toUpperCase()),
                     x -> x.node("dependencies.alfresco").isEqualTo(json(alfrescoHealthJson)),
-                    x -> x.node("dependencies.clamAV").isEqualTo(json(clamAvHealthJson)),
+                    x -> x.node("dependencies.clamAV.status").isEqualTo(clamAvHealth.getStatus()),
                     x -> x.node("timestamp").isEqualTo(timestamp.toString())
             );
 

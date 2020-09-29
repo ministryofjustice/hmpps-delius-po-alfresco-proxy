@@ -19,7 +19,6 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
 import static javax.ws.rs.core.MediaType.MULTIPART_FORM_DATA_TYPE;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.Mockito.when;
 
 public class AntiVirusSteps extends AbstractSteps implements En {
     private File file;
@@ -27,17 +26,6 @@ public class AntiVirusSteps extends AbstractSteps implements En {
     private Response httpResponse;
 
     public AntiVirusSteps() {
-        Before(() -> {
-            startClamAV();
-
-            when(timestampProvider.getTimestamp()).thenReturn(timestamp);
-
-            System.out.println("============================== Inside AntiVirusSteps Before ==============================");
-            System.out.println("Host: " + clamAvConnectionParametersProvider.host());
-            System.out.println("Port: " + clamAvConnectionParametersProvider.port());
-            System.out.println("===============================================================================");
-        });
-
         Given("^I have a virus compromised document \"([^\"]*)\" to upload$", (final String filename) -> {
             final String fileName = "documents/" + filename;
             file = getFileFromResource(fileName);
@@ -55,8 +43,6 @@ public class AntiVirusSteps extends AbstractSteps implements En {
                     .request(APPLICATION_JSON_TYPE)
                     .headers(headers)
                     .post(entity(multiPart, multiPart.getMediaType()));
-
-            System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~> http response code " + httpResponse.getStatus());
         });
 
         Then("^I should receive a response with status code \"([^\"]*)\"$", (final Integer expectedStatusCode) -> {

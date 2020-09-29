@@ -68,10 +68,10 @@
                 <property name="displayPayload" value="${display.payload}"/>
             </bean>
 
-            <bean class="uk.gov.gsi.justice.alfresco.proxy.av.AntiVirusInterceptor">
-                <property name="alfrescoProxyHealthChecker" ref="alfrescoProxyHealthChecker"/>
-                <property name="auditLogService" ref="auditLogService"/>
+            <bean class="uk.gov.gsi.justice.alfresco.proxy.interceptor.AntiVirusInterceptor">
                 <property name="antivirusClient" ref="antivirusClient"/>
+                <property name="antivirusScanner" ref="antivirusScanner"/>
+                <property name="auditLogService" ref="auditLogService"/>
                 <property name="scanForViruses" value="${spg.alfresco.proxy.clamav.scanForViruses}"/>
             </bean>
         </cxf:inInterceptors>

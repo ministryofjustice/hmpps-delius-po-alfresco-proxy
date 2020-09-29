@@ -1,7 +1,5 @@
-package uk.gov.gsi.justice.alfresco.proxy.av;
+package uk.gov.gsi.justice.alfresco.proxy.interceptor;
 
-
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.apache.cxf.interceptor.Fault;
 import org.apache.cxf.interceptor.LoggingMessage;
 import org.apache.cxf.jaxrs.ext.multipart.MultipartBody;
@@ -9,20 +7,17 @@ import org.apache.cxf.message.Attachment;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.AbstractPhaseInterceptor;
 import org.apache.cxf.phase.Phase;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import uk.gov.gsi.justice.alfresco.proxy.audit.UDInterchangeAuditLogService;
 import uk.gov.gsi.justice.alfresco.proxy.audit.UDSPGLogFields;
-import uk.gov.gsi.justice.alfresco.proxy.interceptor.UDLoggingInInterceptor;
-import uk.gov.gsi.justice.alfresco.proxy.model.ClamAvHealth;
-import uk.gov.gsi.justice.alfresco.proxy.service.AlfrescoProxyHealthChecker;
+import uk.gov.gsi.justice.alfresco.proxy.av.AntivirusClient;
+import uk.gov.gsi.justice.alfresco.proxy.av.AntivirusResponse;
+import uk.gov.gsi.justice.alfresco.proxy.av.AntivirusScanner;
 import uk.gov.gsi.justice.alfresco.proxy.utils.TimestampGenerator;
 
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
-import java.util.Optional;
 
 import static javax.ws.rs.core.Response.Status.FORBIDDEN;
 import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
@@ -30,15 +25,13 @@ import static uk.gov.gsi.justice.alfresco.proxy.av.AntivirusResponse.Status.ERRO
 import static uk.gov.gsi.justice.alfresco.proxy.av.AntivirusResponse.Status.FAILED;
 
 public class AntiVirusInterceptor extends AbstractPhaseInterceptor<Message> {
-    private static final Logger LOGGER = LoggerFactory.getLogger(AntiVirusInterceptor.class);
     public static final String SCANNING_FAILED = "AV scanning failed: ";
     public static final String SCANNING_ERROR = "There was an internal error while contacting/processing data from AV: ";
     public static final int VIRUS_FOUND_HTTP_CODE = 403;
     public static final int AV_ERROR_HTTP_CODE = 500;
 
-    private AlfrescoProxyHealthChecker alfrescoProxyHealthChecker;
-
     private AntivirusClient antivirusClient;
+    private AntivirusScanner antivirusScanner;
     private UDInterchangeAuditLogService auditLogService;
     private boolean scanForViruses;
 
@@ -48,18 +41,9 @@ public class AntiVirusInterceptor extends AbstractPhaseInterceptor<Message> {
 
     @Override
     public void handleMessage(Message message) throws Fault {
-//        try {
-//            final String healthInfo = alfrescoProxyHealthChecker.checkHealth();
-//            LOGGER.info("===============> {}", healthInfo);
-//        } catch (JsonProcessingException e) {
-//            LOGGER.error("Health Check Error::", e);
-//        }
-//
         if (scanForViruses && message != null && message.getAttachments() != null) {
             for (Attachment attachment : message.getAttachments()) {
                 try {
-//                    final ClamAvHealth clamAvHealth = antivirusClient.checkHealth();
-//                    LOGGER.info("=================> ClamAV Health:: {}", clamAvHealth);
                     checkForViruses(attachment.getDataHandler().getDataSource().getInputStream(), message);
                 } catch (IOException e) {
                     throw new Fault(e);
@@ -68,13 +52,9 @@ public class AntiVirusInterceptor extends AbstractPhaseInterceptor<Message> {
         }
     }
 
-    private void checkForViruses(InputStream is, Message message) throws IOException {
-//        final String fileName = "documents/eicar.txt";
-//        final InputStream fileAsStream = Optional.ofNullable(Thread.currentThread().getContextClassLoader()
-//                .getResourceAsStream(fileName))
-//                .orElseThrow(IOException::new);
-
-        final AntivirusResponse antivirusResponse = antivirusClient.scan(is);
+    private void checkForViruses(InputStream is, Message message) {
+//        final AntivirusResponse antivirusResponse = antivirusClient.scan(is);
+        final AntivirusResponse antivirusResponse = antivirusScanner.scanBytes(is);
         if (antivirusResponse.getStatus() == FAILED) {
             auditLogService.createUDAlertRecord(SCANNING_FAILED + antivirusResponse);
 
@@ -109,12 +89,12 @@ public class AntiVirusInterceptor extends AbstractPhaseInterceptor<Message> {
         return fault;
     }
 
-    public void setAlfrescoProxyHealthChecker(AlfrescoProxyHealthChecker alfrescoProxyHealthChecker) {
-        this.alfrescoProxyHealthChecker = alfrescoProxyHealthChecker;
-    }
-
     public void setAntivirusClient(AntivirusClient antivirusClient) {
         this.antivirusClient = antivirusClient;
+    }
+
+    public void setAntivirusScanner(AntivirusScanner antivirusScanner) {
+        this.antivirusScanner = antivirusScanner;
     }
 
     public void setAuditLogService(UDInterchangeAuditLogService auditLogService) {

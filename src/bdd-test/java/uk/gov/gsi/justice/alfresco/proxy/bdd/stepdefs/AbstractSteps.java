@@ -5,6 +5,7 @@ import com.github.tomakehurst.wiremock.client.WireMock;
 import org.glassfish.jersey.media.multipart.BodyPart;
 import org.glassfish.jersey.media.multipart.MultiPart;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
+import org.springframework.beans.factory.annotation.Value;
 import org.testcontainers.containers.GenericContainer;
 import uk.gov.gsi.justice.alfresco.proxy.AbstractBaseTest;
 import uk.gov.gsi.justice.alfresco.proxy.bdd.util.World;
@@ -37,6 +38,9 @@ public abstract class AbstractSteps extends AbstractBaseTest {
     @Inject
     protected WebTarget webTarget;
 
+    @Value("${spg.alfresco.proxy.clamav.timeout}")
+    private int clamAVTimeout;
+
     protected World world = INSTANCE;
 
     private String path;
@@ -56,6 +60,10 @@ public abstract class AbstractSteps extends AbstractBaseTest {
             clamAV.stop();
             SECONDS.sleep(5);
         }
+
+        when(clamAvConnectionParametersProvider.host()).thenReturn("100.90.80.70");
+        when(clamAvConnectionParametersProvider.port()).thenReturn(1234);
+        when(clamAvConnectionParametersProvider.timeout()).thenReturn(clamAVTimeout);
     }
 
     protected void sendGetRequest(final String path) throws Exception {

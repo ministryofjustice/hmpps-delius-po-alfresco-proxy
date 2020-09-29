@@ -10,7 +10,7 @@ public class AntivirusResponse {
     private static final String FOUND_SUFFIX = "FOUND";
     private static final String ERROR_SUFFIX = "ERROR";
 
-    enum Status {PASSED, FAILED, ERROR}
+    public enum Status {PASSED, FAILED, ERROR}
 
     private Status status;
     private String result;

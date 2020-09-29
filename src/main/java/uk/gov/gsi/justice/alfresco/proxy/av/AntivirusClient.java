@@ -30,13 +30,6 @@ public class AntivirusClient {
     }
 
     public ClamAvHealth checkHealth() {
-        final String host = clamAvConnectionParametersProvider.host();
-        final int port = clamAvConnectionParametersProvider.port();
-        LOGGER.info("============================== Connecting to ClamAV with the following parameters ==============================");
-        LOGGER.info("Host: {}", host);
-        LOGGER.info("Port: {}", port);
-        LOGGER.info("================================================================================================================");
-
         try {
             final ClamavClient clamavClient = new ClamavClient(
                     clamAvConnectionParametersProvider.host(),
@@ -52,18 +45,12 @@ public class AntivirusClient {
     }
 
     public AntivirusResponse scan(InputStream is) {
-        final String host = clamAvConnectionParametersProvider.host();
-        final int port = clamAvConnectionParametersProvider.port();
-
-        final ClamavClient clamavClient = new ClamavClient(host, port);
+        final ClamavClient clamavClient = new ClamavClient(
+                clamAvConnectionParametersProvider.host(),
+                clamAvConnectionParametersProvider.port()
+        );
 
         try {
-            LOGGER.info("============================== Connecting to ClamAV with the following parameters ==============================");
-            LOGGER.info("Host: {}", host);
-            LOGGER.info("Port: {}", port);
-            final String clamAvVersion = clamavClient.version();
-            LOGGER.info("ClamAV Version: {}", clamAvVersion);
-            LOGGER.info("================================================================================================================");
             final ScanResult scanResult = clamavClient.scan(is);
 
             if (scanResult instanceof ScanResult.OK) {

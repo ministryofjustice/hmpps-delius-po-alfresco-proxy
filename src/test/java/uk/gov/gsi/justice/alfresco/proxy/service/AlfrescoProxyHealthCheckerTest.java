@@ -47,7 +47,6 @@ public class AlfrescoProxyHealthCheckerTest {
         final AlfrescoHealth alfrescoHealth = new AlfrescoHealth(OK, 200, "");
         final ClamAvHealth clamAvHealth = new ClamAvHealth(OK, "ClamAV is healthy");
 
-        when(timestampProvider.getTimestamp()).thenReturn(timestamp);
         when(alfrescoHealthChecker.checkDependencyHealth()).thenReturn(alfrescoHealth);
         when(clamAvHealthChecker.checkDependencyHealth()).thenReturn(clamAvHealth);
 
@@ -66,7 +65,6 @@ public class AlfrescoProxyHealthCheckerTest {
         final AlfrescoHealth alfrescoHealth = new AlfrescoHealth(FAULT, 404, "");
         final ClamAvHealth clamAvHealth = new ClamAvHealth(FAULT, "ClamAV is unhealthy");
 
-        when(timestampProvider.getTimestamp()).thenReturn(timestamp);
         when(alfrescoHealthChecker.checkDependencyHealth()).thenReturn(alfrescoHealth);
         when(clamAvHealthChecker.checkDependencyHealth()).thenReturn(clamAvHealth);
 
@@ -85,7 +83,6 @@ public class AlfrescoProxyHealthCheckerTest {
         final AlfrescoHealth alfrescoHealth = new AlfrescoHealth(OK, 202, "");
         final ClamAvHealth clamAvHealth = new ClamAvHealth(FAULT, "ClamAV is unhealthy");
 
-        when(timestampProvider.getTimestamp()).thenReturn(timestamp);
         when(alfrescoHealthChecker.checkDependencyHealth()).thenReturn(alfrescoHealth);
         when(clamAvHealthChecker.checkDependencyHealth()).thenReturn(clamAvHealth);
 
@@ -104,7 +101,6 @@ public class AlfrescoProxyHealthCheckerTest {
         final AlfrescoHealth alfrescoHealth = new AlfrescoHealth(FAULT, 0, "Alfresco is unhealthy");
         final ClamAvHealth clamAvHealth = new ClamAvHealth(OK, "ClamAV is healthy");
 
-        when(timestampProvider.getTimestamp()).thenReturn(timestamp);
         when(alfrescoHealthChecker.checkDependencyHealth()).thenReturn(alfrescoHealth);
         when(clamAvHealthChecker.checkDependencyHealth()).thenReturn(clamAvHealth);
 

@@ -3,7 +3,7 @@ package uk.gov.gsi.justice.alfresco.proxy.service;
 import org.apache.camel.component.cxf.CxfOperationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.gov.gsi.justice.alfresco.proxy.av.AntiVirusInterceptor;
+import uk.gov.gsi.justice.alfresco.proxy.interceptor.AntiVirusInterceptor;
 import uk.gov.gsi.justice.alfresco.proxy.exceptions.AntivirusException;
 
 import javax.ws.rs.core.MediaType;

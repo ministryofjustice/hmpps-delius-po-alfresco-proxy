@@ -67,12 +67,12 @@ public class TestConfig {
         final GsonProvider gsonProvider = new GsonProvider();
         return gsonProvider.getGson();
     }
-//
-//    @Bean(name = "antivirusScanner")
-//    @Primary
-//    public AntivirusScanner provideAntivirusScanner() {
-//        return new AntivirusScanner(clamAvConnectionParametersProvider);
-//    }
+
+    @Bean(name = "antivirusScanner")
+    @Primary
+    public AntivirusScanner provideAntivirusScanner() {
+        return new AntivirusScanner(clamAvConnectionParametersProvider);
+    }
 
     @Bean
     @Primary
