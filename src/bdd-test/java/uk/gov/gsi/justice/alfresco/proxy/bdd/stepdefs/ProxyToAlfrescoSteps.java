@@ -6,8 +6,6 @@ import static uk.gov.gsi.justice.alfresco.proxy.bdd.util.StubPath.*;
 
 public class ProxyToAlfrescoSteps extends AbstractSteps implements En {
     public ProxyToAlfrescoSteps() {
-        Before(this::startClamAV);
-
         Given("^a document is available at \"([^\"]*)\"$", this::createGetStub);
         Given("^I want to fetch and reserve a document from alfresco$", () -> createPostStub(FETCH_AND_RESERVE_PATH.toString()));
         Given("^I want to reserve a document from alfresco$", () -> createPostStub(RESERVE_PATH.toString()));

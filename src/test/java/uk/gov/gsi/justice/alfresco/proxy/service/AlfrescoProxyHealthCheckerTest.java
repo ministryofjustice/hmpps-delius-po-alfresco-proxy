@@ -2,6 +2,7 @@ package uk.gov.gsi.justice.alfresco.proxy.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.junit.Before;
 import org.junit.Test;
 import uk.gov.gsi.justice.alfresco.proxy.model.AlfrescoHealth;
 import uk.gov.gsi.justice.alfresco.proxy.model.ApiHealth;
@@ -41,13 +42,17 @@ public class AlfrescoProxyHealthCheckerTest {
             clamAvHealthChecker
     );
 
+    @Before
+    public void prepare() {
+        when(timestampProvider.getTimestamp()).thenReturn(timestamp);
+    }
+
     @Test
     public void testWhenBothAlfrescoAndClamAvAreHealthy() throws Exception {
         final String stable = "STABLE";
         final AlfrescoHealth alfrescoHealth = new AlfrescoHealth(OK, 200, "");
         final ClamAvHealth clamAvHealth = new ClamAvHealth(OK, "ClamAV is healthy");
 
-        when(timestampProvider.getTimestamp()).thenReturn(timestamp);
         when(alfrescoHealthChecker.checkDependencyHealth()).thenReturn(alfrescoHealth);
         when(clamAvHealthChecker.checkDependencyHealth()).thenReturn(clamAvHealth);
 
@@ -66,7 +71,6 @@ public class AlfrescoProxyHealthCheckerTest {
         final AlfrescoHealth alfrescoHealth = new AlfrescoHealth(FAULT, 404, "");
         final ClamAvHealth clamAvHealth = new ClamAvHealth(FAULT, "ClamAV is unhealthy");
 
-        when(timestampProvider.getTimestamp()).thenReturn(timestamp);
         when(alfrescoHealthChecker.checkDependencyHealth()).thenReturn(alfrescoHealth);
         when(clamAvHealthChecker.checkDependencyHealth()).thenReturn(clamAvHealth);
 
@@ -85,7 +89,6 @@ public class AlfrescoProxyHealthCheckerTest {
         final AlfrescoHealth alfrescoHealth = new AlfrescoHealth(OK, 202, "");
         final ClamAvHealth clamAvHealth = new ClamAvHealth(FAULT, "ClamAV is unhealthy");
 
-        when(timestampProvider.getTimestamp()).thenReturn(timestamp);
         when(alfrescoHealthChecker.checkDependencyHealth()).thenReturn(alfrescoHealth);
         when(clamAvHealthChecker.checkDependencyHealth()).thenReturn(clamAvHealth);
 
@@ -104,7 +107,6 @@ public class AlfrescoProxyHealthCheckerTest {
         final AlfrescoHealth alfrescoHealth = new AlfrescoHealth(FAULT, 0, "Alfresco is unhealthy");
         final ClamAvHealth clamAvHealth = new ClamAvHealth(OK, "ClamAV is healthy");
 
-        when(timestampProvider.getTimestamp()).thenReturn(timestamp);
         when(alfrescoHealthChecker.checkDependencyHealth()).thenReturn(alfrescoHealth);
         when(clamAvHealthChecker.checkDependencyHealth()).thenReturn(clamAvHealth);
 

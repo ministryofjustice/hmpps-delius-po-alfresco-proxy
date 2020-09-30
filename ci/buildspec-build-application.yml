@@ -18,6 +18,8 @@ phases:
       - ${CODEBUILD_SRC_DIR}/scripts/image-tag-postfix.sh
   build:
     commands:
+      - java -version
+      - javac -version
       - make package
   post_build:
     commands:

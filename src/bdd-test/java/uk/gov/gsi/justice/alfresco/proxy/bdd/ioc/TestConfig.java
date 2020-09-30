@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Primary;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
 import uk.gov.gsi.justice.alfresco.proxy.GsonProvider;
-import uk.gov.gsi.justice.alfresco.proxy.av.AntivirusScanner;
 import uk.gov.gsi.justice.alfresco.proxy.bdd.security.KeyStoreGenerator;
 import uk.gov.gsi.justice.alfresco.proxy.utils.ClamAvConnectionParametersProvider;
 import uk.gov.gsi.justice.alfresco.proxy.utils.TimestampProvider;
@@ -68,12 +67,6 @@ public class TestConfig {
         return gsonProvider.getGson();
     }
 
-    @Bean(name = "antivirusScanner")
-    @Primary
-    public AntivirusScanner provideAntivirusScanner() {
-        return new AntivirusScanner(clamAvConnectionParametersProvider);
-    }
-
     @Bean
     @Primary
     public ClamAvConnectionParametersProvider provideClamAvClientProvider() {
@@ -88,7 +81,7 @@ public class TestConfig {
 
     @Bean
     @Primary
-    public KeyStore provideKeyStore() throws Exception {
+    public KeyStore provideKeyStore() {
         return keyStore;
     }
 
