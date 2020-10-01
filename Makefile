@@ -58,3 +58,6 @@ sandpit-2-unlock:
 
 sandpit-2-destroy:
 	scripts/local-stack-action.sh sandpit-2 destroy
+
+sandpit-2-attach:
+	scripts/local-stack-action.sh sandpit-2 attach
