@@ -1,7 +1,8 @@
 resource "aws_lb" "environment" {
-  name               = "${local.service_name}-nlb"
-  internal           = "true"
-  load_balancer_type = "network"
+  name                             = "${local.service_name}-nlb"
+  internal                         = "true"
+  load_balancer_type               = "network"
+  enable_cross_zone_load_balancing = true
 
   enable_deletion_protection = "false"
 
