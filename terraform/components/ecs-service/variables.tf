@@ -49,7 +49,7 @@ variable "dependencies_bucket_arn" {
 }
 
 variable "tags" {
-  type = "map"
+  type = map(string)
 }
 
 #load balancer account id - common accross all services within an environment
