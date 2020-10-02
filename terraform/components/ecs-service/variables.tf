@@ -62,7 +62,7 @@ variable "service_config_cpu" {
 
 variable "service_config_memory" {
   type    = string
-  default = "512"
+  default = "2512"
 }
 
 variable "service_config_deployment_minimum_healthy_percent" {
