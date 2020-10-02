@@ -70,7 +70,6 @@ public class HealthCheckSteps extends AbstractSteps implements En {
                     new ClamAvHealth(FAULT, "xyz.capybara.clamav.CommunicationException: Error while communicating with the server");
 
             final String alfrescoHealthJson = gson.toJson(alfrescoHealth);
-//            final String clamAvHealthJson = gson.toJson(clamAvHealth);
 
             assertThat(world.getResponse().getStatus(), is(200));
             assertTrue(world.getResponse().getHeaders().containsKey("Content-Type"));
