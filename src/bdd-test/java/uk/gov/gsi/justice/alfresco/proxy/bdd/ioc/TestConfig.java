@@ -12,6 +12,7 @@ import org.testcontainers.containers.wait.strategy.Wait;
 import uk.gov.gsi.justice.alfresco.proxy.GsonProvider;
 import uk.gov.gsi.justice.alfresco.proxy.bdd.security.KeyStoreGenerator;
 import uk.gov.gsi.justice.alfresco.proxy.utils.ClamAvConnectionParametersProvider;
+import uk.gov.gsi.justice.alfresco.proxy.utils.PropertyResolver;
 import uk.gov.gsi.justice.alfresco.proxy.utils.TimestampProvider;
 
 import javax.annotation.PreDestroy;
@@ -101,5 +102,10 @@ public class TestConfig {
 
         return client.register(filterFeature)
                 .target(create(baseUrl));
+    }
+
+    @Bean
+    public PropertyResolver providePropertyResolver() {
+        return new PropertyResolver();
     }
 }

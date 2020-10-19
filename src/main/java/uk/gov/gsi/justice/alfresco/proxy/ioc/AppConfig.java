@@ -7,6 +7,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import uk.gov.gsi.justice.alfresco.proxy.utils.*;
 
+import javax.inject.Inject;
+import java.io.FileInputStream;
 import java.security.KeyStore;
 
 import static com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_AS_TIMESTAMPS;
@@ -21,6 +23,9 @@ public class AppConfig {
 
     @Value("${spg.alfresco.proxy.clamav.timeout}")
     private int clamAVTimeout;
+
+    @Inject
+    private PropertyResolver propertyResolver;
 
     private final ClamAvConnectionParametersProvider clamAvConnectionParametersProvider =
             new DefaultClamAvConnectionParametersProvider(clamAVAddress, clamAVPort, clamAVTimeout);
@@ -37,7 +42,12 @@ public class AppConfig {
 
     @Bean
     public KeyStore provideKeyStore() throws Exception {
-        return null;
+            final FileInputStream is = new FileInputStream("/opt/app/truststore/oneTrustKeystore.jks");
+
+            final KeyStore keystore = KeyStore.getInstance(KeyStore.getDefaultType());
+            keystore.load(is, propertyResolver.getProperty("spg.alfresco.proxy.trustStore.password").toCharArray());
+
+            return keystore;
     }
 
     @Bean

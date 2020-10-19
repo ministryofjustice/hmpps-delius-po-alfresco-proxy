@@ -31,6 +31,20 @@
             {
               "name": "SPG_ALFRESCO_BASE_URL",
               "value": "${alfresco_base_url}"
+            },
+            {
+              "name": "SPG_CERTIFICATE_BUCKET",
+              "value": "${spg_certificate_bucket}"
+            },
+            {
+              "name": "SPG_CERTIFICATE_PATH",
+              "value": "${spg_certificate_path}"
+            }
+        ],
+            "secrets": [
+            {
+                "name": "SPG_ALFRESCO_TRUSTSTORE_PASSWORD",
+                "valueFrom": "arn:aws:ssm:${region}:${aws_account_id}:parameter/${project_name}-${environment_type}/${project_name}/spg-newtech/truststore_password"
             }
         ],
         "volumesFrom": [],
