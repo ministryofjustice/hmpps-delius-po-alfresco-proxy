@@ -71,7 +71,7 @@ public class OAuthRequestFilter extends AbstractAuthFilter implements ContainerR
         Message message = JAXRSUtils.getCurrentMessage();
 
         //Make sure we don't verify health check messages
-        if (message.get(CXF_URI).equals("/api/health") || message.get(CXF_URI).equals("/")) {
+        if (message.get(CXF_URI).equals("/api/health")) {
             return;
         }
 

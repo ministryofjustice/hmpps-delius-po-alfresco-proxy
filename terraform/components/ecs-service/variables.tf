@@ -122,3 +122,6 @@ variable "is_wiremock" {
 }
 
 variable "bastion_inventory" {}
+
+variable "spg_certificate_bucket" {}
+variable "spg_certificate_path" {}

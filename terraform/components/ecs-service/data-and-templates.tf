@@ -15,6 +15,7 @@ data "template_file" "ecstask_execution_policy_template" {
     aws_account_id   = "${data.aws_caller_identity.current.account_id}"
     environment_name = "${var.environment_name}"
     project_name     = "${var.project_name}"
+    environment_type = "${var.environment_type}"
   }
 }
 
@@ -33,10 +34,14 @@ data "template_file" "task_definition" {
     health_command   = var.internal_health_command
     env_service_port = var.service_config_service_port
     log_group_name   = aws_cloudwatch_log_group.task_log_group.name
+    environment_type = var.environment_type
 
     application_name         = var.application_name
     alfresco_health_endpoint = var.alfresco_health_endpoint
     alfresco_base_url        = var.alfresco_base_url
+
+    spg_certificate_bucket = var.spg_certificate_bucket
+    spg_certificate_path   = var.spg_certificate_path
   }
 }
 
