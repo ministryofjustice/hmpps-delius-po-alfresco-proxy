@@ -7,7 +7,7 @@ import org.springframework.context.annotation.ImportResource;
 @SpringBootApplication(scanBasePackages = {"uk.gov.gsi.justice.alfresco.proxy"})
 @ImportResource({"classpath*:applicationContext.xml"})
 public class ApplicationBootstrap {
-    public static void main(String[] args) {
-        SpringApplication.run(ApplicationBootstrap.class, args);
-    }
+  public static void main(String[] args) {
+    SpringApplication.run(ApplicationBootstrap.class, args);
+  }
 }

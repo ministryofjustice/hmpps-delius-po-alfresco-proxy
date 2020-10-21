@@ -4,6 +4,7 @@ plugins {
     id "io.spring.dependency-management" version "1.0.9.RELEASE"
     id "org.springframework.boot" version "1.5.12.RELEASE"
     id "se.thinkcode.cucumber-runner" version "0.0.8"
+    id 'com.github.sherter.google-java-format' version '0.8'
 }
 
 java {
@@ -24,5 +25,8 @@ compileJava {
     options.deprecation = true
     options.encoding = 'UTF-8'
 }
+
+build.dependsOn(tasks.googleJavaFormat)
+verifyGoogleJavaFormat.mustRunAfter(tasks.googleJavaFormat)
 
 defaultTasks 'clean', 'test', 'cucumber'

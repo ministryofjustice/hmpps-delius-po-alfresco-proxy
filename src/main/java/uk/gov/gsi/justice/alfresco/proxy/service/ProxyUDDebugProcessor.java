@@ -6,8 +6,8 @@ import org.apache.camel.Processor;
 
 public class ProxyUDDebugProcessor implements Processor {
 
-    @Override
-    public void process(Exchange exchange) throws Exception {
-        Message inMessage = exchange.getIn();
-    }
+  @Override
+  public void process(Exchange exchange) throws Exception {
+    Message inMessage = exchange.getIn();
+  }
 }
