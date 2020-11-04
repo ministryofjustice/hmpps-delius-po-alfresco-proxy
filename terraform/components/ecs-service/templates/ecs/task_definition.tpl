@@ -43,6 +43,6 @@
             }
         ],
         "cpu": 0,
-        "memory": 512
+        "memoryReservation": 512
     }
 ]

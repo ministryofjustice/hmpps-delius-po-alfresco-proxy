@@ -4,8 +4,8 @@ resource "aws_ecs_task_definition" "task_definition" {
   execution_role_arn       = aws_iam_role.ecs_execute_role.arn
   container_definitions    = data.template_file.task_definition.rendered
   network_mode             = "awsvpc"
-  memory                   = var.service_config_memory
-  cpu                      = var.service_config_cpu
+//  memory                   = var.service_config_memory
+//  cpu                      = var.service_config_cpu
   requires_compatibilities = ["EC2"]
   tags                     = merge(var.tags, map("Name", local.service_name))
 
