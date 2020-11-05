@@ -159,14 +159,4 @@ if [ ${is_wiremock} == true ]; then
     echo "# only when it is safe from the network stack’s perspective." >> /etc/sysctl.conf
     echo "net.ipv4.tcp_tw_reuse = 1" >> /etc/sysctl.conf
     sysctl -p
-
-    # File limit settings
-    echo "* soft nproc 65535" >> /etc/security/limits.conf
-    echo "* hard nproc 65535" >> /etc/security/limits.conf
-    echo "* soft nofile 65535" >> /etc/security/limits.conf
-    echo "* hard nofile 65535" >> /etc/security/limits.conf
-    echo "root soft nproc 65535" >> /etc/security/limits.conf
-    echo "root hard nproc 65535" >> /etc/security/limits.conf
-    echo "root soft nofile 65535" >> /etc/security/limits.conf
-    echo "root hard nofile 65535" >> /etc/security/limits.conf
 fi

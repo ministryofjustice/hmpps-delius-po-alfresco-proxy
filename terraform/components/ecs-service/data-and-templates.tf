@@ -20,7 +20,7 @@ data "template_file" "ecstask_execution_policy_template" {
 
 # Offender API task definition template
 data "template_file" "task_definition" {
-  template = file("templates/ecs/task_definition.tpl")
+  template = file("templates/ecs/wiremock-task-definition.tpl")
 
   vars = {
     region           = var.region
