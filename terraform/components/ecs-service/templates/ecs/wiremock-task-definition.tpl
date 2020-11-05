@@ -5,7 +5,7 @@
         "essential": true,
         "interactive": true,
         "healthCheck": {
-            "command": [ "CMD-SHELL", "echo ""|nc localhost 8080" ],
+            "command": [ "CMD-SHELL", "echo ''|nc localhost 8080" ],
             "interval": 60,
             "retries": 2,
             "startPeriod": 60,
