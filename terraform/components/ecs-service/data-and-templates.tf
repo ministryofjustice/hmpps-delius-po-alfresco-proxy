@@ -19,9 +19,8 @@ data "template_file" "ecstask_execution_policy_template" {
   }
 }
 
-data "template_file" "alfresco_proxy_task_definition" {
-  count   = var.is_wiremock ? 0 : 1
-  template = file("templates/ecs/task_definition.tpl")
+data "template_file" "task_definition" {
+  template = var.is_wiremock ? file("${path.module}/templates/ecs/wiremock-task-definition.tpl") : file("${path.module}/templates/ecs/task_definition.tpl")
 
   vars = {
     region           = var.region
@@ -42,23 +41,6 @@ data "template_file" "alfresco_proxy_task_definition" {
 
     spg_certificate_bucket = var.spg_certificate_bucket
     spg_certificate_path   = var.spg_certificate_path
-  }
-}
-
-data "template_file" "wiremock_task_definition" {
-  count   = var.is_wiremock ? 1 : 0
-  template = file("${path.module}/templates/ecs/wiremock-task-definition.tpl")
-
-  vars = {
-    region           = var.region
-    aws_account_id   = data.aws_caller_identity.current.account_id
-    environment_name = var.environment_name
-    project_name     = var.project_name
-    container_name   = local.container_name
-    image_url        = var.docker_image
-    image_version    = var.image_version
-    env_service_port = var.service_config_service_port
-    log_group_name   = aws_cloudwatch_log_group.task_log_group.name
   }
 }
 

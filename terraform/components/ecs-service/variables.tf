@@ -55,16 +55,6 @@ variable "tags" {
 #load balancer account id - common accross all services within an environment
 variable "lb_account_id" {}
 
-variable "service_config_cpu" {
-  type    = string
-  default = "1024"
-}
-
-variable "service_config_memory" {
-  type    = string
-  default = "1512"
-}
-
 variable "service_config_deployment_minimum_healthy_percent" {
   type    = number
   default = 30
