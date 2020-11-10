@@ -46,7 +46,7 @@ data "template_file" "task_definition" {
   }
 }
 
-data "template_file" "task_definition" {
+data "template_file" "wiremock_task_definition" {
   count   = var.is_wiremock ? 1 : 0
   template = file("${path.module}templates/ecs/wiremock-task-definition.tpl")
 
