@@ -43,3 +43,4 @@ cmake-build-debug/
 hs_err_pid*
 /gradle-worker-*
 hsperfdata*
+/jna-*
