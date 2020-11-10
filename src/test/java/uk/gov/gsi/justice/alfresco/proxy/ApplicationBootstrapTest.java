@@ -8,7 +8,7 @@ import uk.gov.gsi.justice.alfresco.proxy.ioc.AppConfig;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(
-        properties = {"application.name=Alfresco-Proxy", "alfresco.base.url=http://localhost:6067", "alfresco.health.endpoint=/alfresco/service/noms-spg/notificationStatus"},
+        properties = {"application.name=Alfresco-Proxy", "alfresco.base.url=http://localhost:6067", "alfresco.health.endpoint=/afresco/s/admin-spg/healthcheck"},
         classes = {AppConfig.class, ApplicationBootstrap.class}
 )
 public class ApplicationBootstrapTest {

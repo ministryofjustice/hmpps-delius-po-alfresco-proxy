@@ -17,6 +17,12 @@ resource "aws_iam_role" "task_role" {
 }
 
 
+resource "aws_iam_role_policy" "ecs_task_role_policy" {
+  name   = "${local.service_name}-ecs-task-execute-policy"
+  role   = aws_iam_role.task_role.name
+  policy = data.template_file.iam_policy_app_alf_ext.rendered
+}
+
 resource "aws_iam_instance_profile" "iam_instance_profile" {
   name = "${local.rolename}-ec2-instance-profile"
   role = aws_iam_role.alf_iam_role.name

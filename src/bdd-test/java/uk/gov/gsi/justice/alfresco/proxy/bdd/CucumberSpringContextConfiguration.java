@@ -15,7 +15,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 /**
  * Class to use spring application context while running cucumber
  */
-@SpringBootTest(properties = {"application.name=SPG PO Alfresco Proxy", "alfresco.base.url=http://localhost:6067", "alfresco.health.endpoint=/alfresco/service/noms-spg/notificationStatus"},
+@SpringBootTest(properties = {"application.name=SPG Alfresco Proxy", "alfresco.base.url=http://localhost:6067", "alfresco.health.endpoint=/afresco/s/admin-spg/healthcheck"},
         classes = {AppConfig.class, TestConfig.class, ApplicationBootstrap.class})
 public class CucumberSpringContextConfiguration {
     private static final Logger LOG = LoggerFactory.getLogger(CucumberSpringContextConfiguration.class);

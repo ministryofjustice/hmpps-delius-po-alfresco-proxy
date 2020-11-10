@@ -16,7 +16,6 @@ import uk.gov.gsi.justice.alfresco.proxy.audit.UDInterchangeAuditLogService;
 import uk.gov.gsi.justice.alfresco.proxy.audit.UDSPGLogTypes;
 import uk.gov.gsi.justice.alfresco.proxy.exceptions.InterchangeSenderPermissionDeniedException;
 import uk.gov.gsi.justice.alfresco.proxy.exceptions.UDSPGExceptions;
-import uk.gov.gsi.justice.alfresco.proxy.utils.AuthUtils;
 import uk.gov.gsi.justice.alfresco.proxy.utils.PropertyResolver;
 import uk.gov.gsi.justice.alfresco.proxy.utils.TimestampGenerator;
 
@@ -58,6 +57,7 @@ public class OAuthRequestFilter extends AbstractAuthFilter implements ContainerR
     private static final String HEADER_REMOTE_USER = "X-DocRepository-Remote-User";
     private static final String HEADER_REAL_USER = "X-DocRepository-Real-Remote-User";
     private static final String HEADER_NOT_FOUND = "Not Found";
+    private static final String CXF_URI = "org.apache.cxf.request.uri";
 
     private String headerBlacklist;
     private boolean logSecurity;
@@ -65,16 +65,20 @@ public class OAuthRequestFilter extends AbstractAuthFilter implements ContainerR
     @Inject
     private KeyStore keyStore;
 
-
+    @Override
     public void filter(ContainerRequestContext context) {
-		Map<String, String> securityData = new LinkedHashMap<>();
-		String senderId = null;
-		Message message = null;
 
+        Message message = JAXRSUtils.getCurrentMessage();
+
+        //Make sure we don't verify health check messages
+        if (message.get(CXF_URI).equals("/api/health")) {
+            return;
+        }
+
+        Map<String, String> securityData = new LinkedHashMap<>();
+        String senderId = null;
 
         try {
-            message = JAXRSUtils.getCurrentMessage();
-
             String id = (String)message.get(LoggingMessage.ID_KEY);
             securityData.put(LOGGING_ID, id);
 

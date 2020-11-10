@@ -1,46 +1,28 @@
 plugins {
-    id 'java'
+    id 'java-library'
     id 'idea'
     id "io.spring.dependency-management" version "1.0.9.RELEASE"
     id "org.springframework.boot" version "1.5.12.RELEASE"
     id "se.thinkcode.cucumber-runner" version "0.0.8"
 }
 
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+apply from: 'dependencies.gradle'
+apply from: 'test.gradle'
+
 repositories {
     mavenLocal()
     mavenCentral()
 }
-
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-
-apply from: 'dependencies.gradle'
-apply from: 'test.gradle'
 
 compileJava {
     options.compilerArgs += ['-Xdoclint:none', '-Xlint:unchecked']
     options.deprecation = true
     options.encoding = 'UTF-8'
 }
-
-bootRun {
-    systemProperty("APPLICATION_NAME", "SPG PO Alfresco Proxy")
-    systemProperty("SPG_ALFRESCO_HEALTH_ENDPOINT", "/alfresco/service/noms-spg/notificationStatus")
-    systemProperty("SPG_ALFRESCO_BASE_URL", "http://localhost:9090")
-}
-
-//bootJar {
-//    mainClassName = 'uk.gov.gsi.justice.po.alfresco.proxy.ApplicationBootstrap'
-//}
-//
-//springBoot {
-//    buildInfo {
-//        properties {
-//            group = "hmpps.delius.spg"
-//            name = "po-alfresco-proxy"
-//            version = "1.0"
-//        }
-//    }
-//}
 
 defaultTasks 'clean', 'test', 'cucumber'

@@ -20,20 +20,7 @@
             }
         },
         "command": ["--verbose"],
-        "environment": [
-            {
-              "name": "APPLICATION_NAME",
-              "value": "${application_name}"
-            },
-            {
-              "name": "SPG_ALFRESCO_HEALTH_ENDPOINT",
-              "value": "${alfresco_health_endpoint}"
-            },
-            {
-              "name": "SPG_ALFRESCO_BASE_URL",
-              "value": "${alfresco_base_url}"
-            }
-        ],
+        "environment": [],
         "volumesFrom": [],
         "mountPoints": [],
         "portMappings": [

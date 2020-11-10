@@ -1,8 +1,9 @@
 package uk.gov.gsi.justice.alfresco.proxy.av;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.gov.gsi.justice.alfresco.proxy.exceptions.AntivirusException;
+import uk.gov.gsi.justice.alfresco.proxy.utils.ClamAvConnectionParametersProvider;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -10,30 +11,46 @@ import java.io.InputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
+/**
+ * @deprecated
+ * Use AntivirusClient instead
+ */
+@Deprecated
 public class AntivirusScanner {
-    private static Log log = LogFactory.getLog(AntivirusScanner.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AntivirusScanner.class);
     private static final int CHUNK_SIZE = 2048;
     private static final byte[] INSTREAM = "zINSTREAM\0".getBytes();
     private static final int RETRY_TIMES = 3;
 
-    private String host;
-    private int port;
-    private int timeout;
+    private final ClamAvConnectionParametersProvider clamAvConnectionParametersProvider;
 
-    public AntivirusScanner(String host, int port, int timeout) {
-        this.host = host;
-        this.port = port;
-        this.timeout = timeout;
+    public AntivirusScanner(final ClamAvConnectionParametersProvider clamAvConnectionParametersProvider) {
+        this.clamAvConnectionParametersProvider = clamAvConnectionParametersProvider;
     }
 
     public AntivirusResponse scanBytes(InputStream is) {
+        final String host = clamAvConnectionParametersProvider.host();
+        final int port = clamAvConnectionParametersProvider.port();
+        final int socketTimeout = clamAvConnectionParametersProvider.timeout();
+
+        LOGGER.info("============================== Connecting to ClamAV with the following parameters ==============================");
+        LOGGER.info("Host: {}", host);
+        LOGGER.info("Port: {}", port);
+        LOGGER.info("Timeout: {}", socketTimeout);
+        LOGGER.info("================================================================================================================");
+
         Socket socket = new Socket();
 
         try {
-            socket.connect(new InetSocketAddress(host, port));
-            socket.setSoTimeout(timeout);
+            socket.connect(
+                    new InetSocketAddress(
+                            host,
+                            port
+                    )
+            );
+            socket.setSoTimeout(socketTimeout);
         } catch (IOException e) {
-            log.error("Could not connect or set socket timeout to " + timeout + "ms", e);
+            LOGGER.error("Could not connect or set socket timeout to " + socketTimeout + "ms", e);
             return new AntivirusResponse(new AntivirusException("Could not connect to AV socket", e));
         }
         DataOutputStream dos = null;
@@ -42,14 +59,14 @@ public class AntivirusScanner {
             try {
                 dos = new DataOutputStream(socket.getOutputStream());
             } catch (IOException e) {
-                log.error("could not open socket OutputStream", e);
+                LOGGER.error("could not open socket OutputStream", e);
                 return new AntivirusResponse(new AntivirusException("Could not open socket OutputStream", e));
             }
 
             try {
                 dos.write(INSTREAM);
             } catch (IOException e) {
-                log.debug("Error writing INSTREAM command", e);
+                LOGGER.debug("Error writing INSTREAM command", e);
                 return new AntivirusResponse(new AntivirusException("Error writing INSTREAM command", e));
             }
 
@@ -60,21 +77,21 @@ public class AntivirusScanner {
 
                     read = is.read(buffer);
                 } catch (IOException e) {
-                    log.debug("Error reading from InputStream", e);
+                    LOGGER.debug("Error reading from InputStream", e);
                     return new AntivirusResponse(new AntivirusException("Error reading from InputStream", e));
                 }
 
                 if (read > 0) {
-                    for (int i = 1; i <= RETRY_TIMES; i++){
+                    for (int i = 1; i <= RETRY_TIMES; i++) {
                         try {
                             dos.writeInt(read);
                             dos.write(buffer, 0, read);
                             break;
                         } catch (IOException e) {
-                            log.debug("Error writing data to socket");
-                            log.debug("Retry times writing data to socket: " + i);
-                            if (i == RETRY_TIMES){
-                                log.debug("Reached maximum retry limit of " + RETRY_TIMES + " times.");
+                            LOGGER.debug("Error writing data to socket");
+                            LOGGER.debug("Retry times writing data to socket: " + i);
+                            if (i == RETRY_TIMES) {
+                                LOGGER.debug("Reached maximum retry limit of " + RETRY_TIMES + " times.");
                                 return new AntivirusResponse(new AntivirusException("Error writing data to socket", e));
                             }
                         }
@@ -86,13 +103,13 @@ public class AntivirusScanner {
                 dos.writeInt(0);
                 dos.flush();
             } catch (IOException e) {
-                log.debug("Error writing zero-length chunk to socket", e);
+                LOGGER.debug("Error writing zero-length chunk to socket", e);
             }
 
             try {
                 read = socket.getInputStream().read(buffer);
             } catch (IOException e) {
-                log.debug("Error reading result from socket", e);
+                LOGGER.debug("Error reading result from socket", e);
                 read = 0;
             }
             if (read > 0) {
@@ -106,7 +123,7 @@ public class AntivirusScanner {
                 }
                 socket.close();
             } catch (IOException e) {
-                log.debug("Exception closing socket", e);
+                LOGGER.debug("Exception closing socket", e);
             }
         }
         return new AntivirusResponse(response);

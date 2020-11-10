@@ -104,7 +104,7 @@ variable "docker_image" {
 variable "image_version" {}
 
 variable "internal_health_command" {
-  default = "curl -s http://localhost:8080/actuator/health"
+  default = "curl -s http://localhost:8080/api/health"
 }
 
 variable "application_name" {}
@@ -126,3 +126,6 @@ variable "is_wiremock" {
 }
 
 variable "bastion_inventory" {}
+
+variable "spg_certificate_bucket" {}
+variable "spg_certificate_path" {}

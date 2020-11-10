@@ -45,6 +45,7 @@
       ],
       "Resource": [
           "arn:aws:ssm:${region}:${aws_account_id}:parameter/${environment_name}/${project_name}/newtech/offenderapi/appinsights_key",
+          "arn:aws:ssm:${region}:${aws_account_id}:parameter/${project_name}-${environment_type}/${project_name}/spg-newtech/truststore_password",
           "arn:aws:kms:${region}:${aws_account_id}:alias/aws/ssm"
       ]
     }
