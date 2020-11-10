@@ -19,10 +19,9 @@ data "template_file" "ecstask_execution_policy_template" {
   }
 }
 
-# Offender API task definition template
-data "template_file" "task_definition" {
+data "template_file" "alfresco_proxy_task_definition" {
   count   = var.is_wiremock ? 0 : 1
-  template = file("${path.module}/templates/ecs/task_definition.tpl")
+  template = file("templates/ecs/task_definition.tpl")
 
   vars = {
     region           = var.region
