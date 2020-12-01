@@ -20,7 +20,7 @@ data "template_file" "ecstask_execution_policy_template" {
 }
 
 data "template_file" "task_definition" {
-  template = var.is_wiremock ? file("${path.module}/templates/ecs/wiremock-task-definition.tpl") : file("${path.module}/templates/ecs/task_definition.tpl")
+  template = var.is_wiremock ? file("./templates/ecs/wiremock-task-definition.tpl") : file("./templates/ecs/task-definition.tpl")
 
   vars = {
     region           = var.region
