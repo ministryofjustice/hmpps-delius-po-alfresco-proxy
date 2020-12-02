@@ -5,15 +5,13 @@ resource "aws_autoscaling_group" "ecs_asg" {
   # Not setting desired count as that could cause scale in when deployment runs and lead to resource exhaustion
   max_size                  = var.ecs_scaling_max_capacity
   min_size                  = var.ecs_scaling_min_capacity
+  desired_capacity          = var.asg_desired_capacity
   health_check_grace_period = 0
   termination_policies      = ["NewestInstance"]
   vpc_zone_identifier       = local.private_subnet_ids
 
   lifecycle {
     create_before_destroy = true
-    ignore_changes = [
-      desired_capacity,
-    ]
   }
 
   tags = concat(
@@ -30,6 +28,7 @@ resource "aws_autoscaling_group" "ecs_asg" {
 
 # Autoscaling Policies and trigger alarms
 resource "aws_autoscaling_policy" "cpu_utilization_high_scaling_policy" {
+  count                  = var.is_wiremock ? 0 : 1 # only create for alfresco-proxy itself
   name                   = "${local.service_name}-cpu_utilization_high_scaling_policy"
   scaling_adjustment     = "1"
   adjustment_type        = "ChangeInCapacity"
@@ -38,13 +37,13 @@ resource "aws_autoscaling_policy" "cpu_utilization_high_scaling_policy" {
 }
 
 resource "aws_autoscaling_policy" "cpu_utilization_low_scaling_policy" {
+  count                  = var.is_wiremock ? 0 : 1 # only create for alfresco-proxy itself
   name                   = "${local.service_name}-cpu_utilization_low_scaling_policy"
   scaling_adjustment     = "-1"
   adjustment_type        = "ChangeInCapacity"
   autoscaling_group_name = aws_autoscaling_group.ecs_asg.name
   cooldown               = 700
 }
-
 
 # Hack to merge additional tag into existing map and convert to list for use with asg tags input
 data "null_data_source" "tags" {

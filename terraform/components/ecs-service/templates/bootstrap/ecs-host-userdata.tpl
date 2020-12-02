@@ -153,3 +153,10 @@ cat << 'EOF' >> ~/update_ssh_users_from_github.sh
 ansible-playbook ~/bootstrap-users.yml
 
 EOF
+
+if [ ${is_wiremock} == true ]; then
+    echo "# Allow reuse of sockets in TIME_WAIT state for new connections" >> /etc/sysctl.conf
+    echo "# only when it is safe from the network stack’s perspective." >> /etc/sysctl.conf
+    echo "net.ipv4.tcp_tw_reuse = 1" >> /etc/sysctl.conf
+    sysctl -p
+fi

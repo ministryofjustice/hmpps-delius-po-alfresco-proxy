@@ -56,7 +56,19 @@
                 "protocol": "tcp"
             }
         ],
+        "ulimits": [
+            {
+              "name": "nproc",
+              "softLimit": 65535,
+              "hardLimit": 65535
+            },
+            {
+              "name": "nofile",
+              "softLimit": 65535,
+              "hardLimit": 65535
+            }
+        ],
         "cpu": 0,
-        "memory": 512
+        "memoryReservation": 512
     }
 ]
