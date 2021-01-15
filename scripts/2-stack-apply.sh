@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 set -e
 
-source ${HMPPS_BUILD_WORK_DIR}/env_configs/${environment_name}/${environment_name}.properties
-
 env | sort
 
 function apply_stack() {

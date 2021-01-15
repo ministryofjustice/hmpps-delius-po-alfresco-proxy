@@ -17,6 +17,7 @@ phases:
     commands:
       - export HMPPS_BUILD_WORK_DIR=${CODEBUILD_SRC_DIR}/terraform
       - export CUSTOM_COMMON_PROPERTIES_DIR=${CODEBUILD_SRC_DIR}/terraform/env_configs/common
+      - source ${CODEBUILD_SRC_DIR}/terraform/env_configs/${environment_name}/${environment_name}.properties
       - cd ${CODEBUILD_SRC_DIR}/terraform/components
       - ${CODEBUILD_SRC_DIR}/scripts/1-stack-plan.sh
       - cd ${CODEBUILD_SRC_DIR}
