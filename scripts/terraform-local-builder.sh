@@ -28,6 +28,7 @@ docker run -it --rm \
     -e TF_VAR_image_version="${image_tag}" \
     -e LOCK_ID="${lockId}" \
     -e CUSTOM_COMMON_PROPERTIES_DIR=/home/tools/data/terraform/env_configs/common \
+    -e ci_components_flag=${ci_components_flag} \
     -e "TERM=xterm-256color" \
     --entrypoint "scripts/${1}" \
     mojdigitalstudio/hmpps-terraform-builder-0-12:latest

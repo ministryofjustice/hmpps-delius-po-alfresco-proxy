@@ -23,6 +23,7 @@ image.tag
 
 #env configs are now pulled in from git env project
 **/env_configs
+**/ci_env_configs
 
 # CMake
 cmake-build-debug/
@@ -38,6 +39,7 @@ cmake-build-debug/
 *.tfstate.*
 *.plan
 *.out
+**/backend.tf
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*

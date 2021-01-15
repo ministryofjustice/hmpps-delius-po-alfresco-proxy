@@ -58,3 +58,10 @@ sandpit-2-unlock:
 
 sandpit-2-destroy:
 	scripts/local-stack-action.sh sandpit-2 destroy
+
+# Alfresco proxy Pipeline
+eng-ci-plan: ## Run sandpit-ci-plan with ci_components_flag=true
+	scripts/local-stack-action.sh dev plan true
+
+eng-ci-apply: ## Run sandpit-ci-plan with ci_components_flag=true
+	scripts/local-stack-action.sh dev apply true
