@@ -6,7 +6,7 @@ export src_root_dir=$(pwd)
 export ci_components_flag=${3:-false}
 
 
-if "$ci_components_flag"  ; then
+if [[ "$ci_components_flag" = true ]] ; then
   $(pwd)/scripts/clone-engineering-platform-env-configs.sh
 fi
 

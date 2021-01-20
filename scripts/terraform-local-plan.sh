@@ -2,7 +2,7 @@
 
 set -e
 
-if ${ci_components_flag}  ; then
+if [[ "$ci_components_flag" = true ]] ; then
     source ${HMPPS_BUILD_WORK_DIR}/ci_env_configs/dev.properties
     cd ${HMPPS_BUILD_WORK_DIR}/ci-components
 else
