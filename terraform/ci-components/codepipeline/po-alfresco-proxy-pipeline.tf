@@ -1,6 +1,5 @@
 module "spg-po-alfresco-proxy-pipeline" {
   source            = "git::https://github.com/ministryofjustice/hmpps-delius-spg-codepipeline.git//terraform/ci-components/codepipeline?ref=main"
-  environment_name  = "hmpps-sandpit"
   approval_required = false
   artefacts_bucket  = local.artefacts_bucket
   pipeline_name     = local.po_alfresco_proxy_pipeline_name
@@ -19,7 +18,7 @@ module "spg-po-alfresco-proxy-pipeline" {
       actions = [
         {
           action_name      = "Build-Application"
-          codebuild_name   = "spgw-java-application-builder${local.test_var}"
+          codebuild_name   = "spgw-java-application-builder"
           input_artifacts  = "SourceArtifact"
           output_artifacts = "BuildApplicationArtifacts"
           namespace        = "BuildApplicationVariables"
@@ -32,7 +31,7 @@ module "spg-po-alfresco-proxy-pipeline" {
       actions = [
         {
           action_name      = "Build-Docker-Image"
-          codebuild_name   = "spgw-docker-image-builder${local.test_var}"
+          codebuild_name   = "spgw-docker-image-builder"
           input_artifacts  = "BuildApplicationArtifacts"
           output_artifacts = "BuildDockerImageArtifacts"
           namespace        = "BuildDockerImageVariables"
@@ -45,7 +44,7 @@ module "spg-po-alfresco-proxy-pipeline" {
       actions = [
         {
           action_name      = "Pre-Build-Stack"
-          codebuild_name   = "spgw-pre-stack-builder${local.test_var}"
+          codebuild_name   = "spgw-pre-stack-builder"
           input_artifacts  = "SourceArtifact"
           output_artifacts = "PreBuildStackArtifacts"
           namespace        = "PreBuildStackVariable"
@@ -58,7 +57,7 @@ module "spg-po-alfresco-proxy-pipeline" {
       actions = [
         {
           action_name      = "Build-Stack"
-          codebuild_name   = "spgw-stack-builder-0-12${local.test_var}"
+          codebuild_name   = "spgw-stack-builder-0-12"
           input_artifacts  = "PreBuildStackArtifacts"
           output_artifacts = "BuildStackArtifacts"
           namespace        = null
@@ -104,7 +103,7 @@ module "spg-po-alfresco-proxy-pipeline" {
       actions = [
         {
           action_name      = "Deploy-Application"
-          codebuild_name   = "spgw-application-deployer${local.test_var}"
+          codebuild_name   = "spgw-application-deployer"
           input_artifacts  = "BuildDockerImageArtifacts"
           namespace        = "DeployApplicationVariables"
           output_artifacts = "DeployApplicationArtifacts"
@@ -117,7 +116,7 @@ module "spg-po-alfresco-proxy-pipeline" {
       actions = [
         {
           action_name      = "Clean-Up-Image-Repository"
-          codebuild_name   = "spgw-ecr-cleaner${local.test_var}"
+          codebuild_name   = "spgw-ecr-cleaner"
           input_artifacts  = "BuildDockerImageArtifacts"
           output_artifacts = "CleanUpImageRepositoryArtifacts"
           namespace        = null
@@ -130,7 +129,7 @@ module "spg-po-alfresco-proxy-pipeline" {
       actions = [
         {
           action_name      = "Run-Smoke-Tests"
-          codebuild_name   = "spgw-smoke-tests-runner${local.test_var}"
+          codebuild_name   = "spgw-smoke-tests-runner"
           input_artifacts  = "SourceSmokeTestsArtifacts"
           namespace        = "RunSmokeTestsVariables",
           output_artifacts = "RunSmokeTestsArtifacts"

@@ -60,8 +60,11 @@ sandpit-2-destroy:
 	scripts/local-stack-action.sh sandpit-2 destroy
 
 # Alfresco proxy Pipeline
-eng-ci-plan: ## Run sandpit-ci-plan with ci_components_flag=true
+eng-ci-plan: ## Run eng-ci-plan with ci_components_flag=true
 	scripts/local-stack-action.sh dev plan true
 
-eng-ci-apply: ## Run sandpit-ci-plan with ci_components_flag=true
+eng-ci-apply: ## Run eng-ci-apply with ci_components_flag=true
 	scripts/local-stack-action.sh dev apply true
+
+eng-ci-destroy: ## Run eng-ci-destroy with ci_components_flag=true
+	scripts/local-stack-action.sh dev destroy true
