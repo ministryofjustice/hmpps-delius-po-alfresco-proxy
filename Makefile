@@ -26,6 +26,12 @@ sandpit-apply:
 sandpit-show:
 	scripts/local-stack-action.sh sandpit show
 
+sandpit-destroy:
+	scripts/local-stack-action.sh sandpit destroy
+
+dev-destroy:
+	scripts/local-stack-action.sh dev destroy
+
 # Builds the application, docker image, uploads image to ECR and deploys to ECS
 sandpit-ecs-deploy:
 	scripts/local-ecs-deployer.sh sandpit
